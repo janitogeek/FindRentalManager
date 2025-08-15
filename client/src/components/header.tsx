@@ -19,7 +19,7 @@ export default function Header() {
         <div className="flex justify-between items-center py-4">
           <div className="flex items-center">
             <Link href="/" className="flex items-center group">
-              <span className="text-2xl font-bold text-primary">BookDirectStays</span>
+              <span className="text-2xl font-bold text-primary">FindRentalManager</span>
               <span className="text-2xl font-bold text-gray-700 transition-all group-hover:text-primary">.com</span>
             </Link>
           </div>
@@ -36,7 +36,7 @@ export default function Header() {
               href="/submit" 
               className={`font-medium ${location === '/submit' ? 'text-primary' : 'text-gray-700 hover:text-primary'}`}
             >
-              Add Your Direct Booking Site
+              List Your Management Company
             </Link>
             <Link 
               href="/partnerships" 
@@ -87,7 +87,7 @@ export default function Header() {
                 className={`block px-3 py-2 rounded-md text-base font-medium ${location === '/submit' ? 'bg-primary/10 text-primary' : 'text-gray-700 hover:bg-gray-100'}`}
                 onClick={closeMenu}
               >
-                Add Your Direct Booking Site
+                List Your Management Company
               </Link>
               <Link 
                 href="/partnerships"

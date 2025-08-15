@@ -13,10 +13,10 @@ export default function Partnerships() {
         <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
           <div className="max-w-4xl mx-auto text-center text-white">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-              Partner with BookDirectStays
+              Partner with FindRentalManager
             </h1>
             <p className="text-xl lg:text-2xl mb-8 opacity-90">
-              Join the movement transforming vacation rental bookings - empowering direct connections between guests and hosts worldwide
+              Join the movement transforming property management - empowering direct connections between property owners and rental managers worldwide
             </p>
             <div className="flex justify-center">
               <Button 

@@ -344,7 +344,7 @@ export default function Country() {
       {
         "@type": "ListItem",
         "position": 3,
-        "name": `${country?.name || countryName} Direct Booking Sites`,
+        "name": `${country?.name || countryName} Rental Management Companies`,
         "item": `https://bookdirectstays.com/country/${countrySlug}`
       }
     ]
@@ -397,7 +397,7 @@ export default function Country() {
           <nav className="mb-6">
             <div className="bg-blue-600 text-white px-4 py-2 rounded-lg inline-flex items-center gap-2 text-sm">
               <Link href="/find-host" className="hover:underline">
-                Find a Host
+                Find a Manager
               </Link>
               <span>›</span>
               <span className="flex items-center gap-1">
@@ -415,8 +415,8 @@ export default function Country() {
               <h1 className="text-3xl font-bold flex items-center gap-3 justify-center">
                 <span className="text-4xl">{getFlagByCountryName(country?.name || countryName)}</span>
                 <span>
-                  {country?.name || countryName} Direct Booking Sites
-                  <span className="text-gray-500 text-lg ml-2">({totalHosts} hosts)</span>
+                  {country?.name || countryName} Rental Management Companies
+                  <span className="text-gray-500 text-lg ml-2">({totalHosts} managers)</span>
                 </span>
               </h1>
             )}
@@ -436,7 +436,7 @@ export default function Country() {
                 }}
               className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg font-semibold"
               >
-                Find Hosts by City
+                Find Managers by City
               </Button>
           </div>
           

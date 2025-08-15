@@ -76,14 +76,14 @@ export default function FindHost() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl sm:text-5xl font-bold mb-6">
-              Find a Host by Country
+              Find a Manager by Country
             </h1>
             <p className="text-xl text-blue-100 mb-8">
-              Select a country to discover verified direct booking vacation rental hosts
+              Select a country to discover verified professional rental managers
             </p>
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 inline-block">
               <p className="text-lg">
-                <span className="font-semibold text-blue-200">Over 1000+</span> verified hosts across{" "}
+                <span className="font-semibold text-blue-200">Over 1000+</span> verified managers across{" "}
                 <span className="font-semibold text-blue-200">50+ countries</span> worldwide
               </p>
             </div>

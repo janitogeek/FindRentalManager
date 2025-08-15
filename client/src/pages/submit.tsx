@@ -728,8 +728,8 @@ export default function Submit() {
   return (
     <div className="container mx-auto px-4 py-12">
       <div className="max-w-3xl mx-auto">
-        <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">🚀 Boost your Direct Bookings!</h1>
-        <p className="text-gray-600 mb-8">Join our directory and connect with travelers looking to book directly.</p>
+        <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">🚀 List Your Management Company!</h1>
+        <p className="text-gray-600 mb-8">Join our directory and connect with property owners looking for professional rental management services.</p>
         <Form {...form}>
                       <form onSubmit={form.handleSubmit(onSubmit, onInvalid)} className="space-y-8">
 

@@ -333,7 +333,7 @@ export default function City() {
       {
         "@type": "ListItem",
         "position": 2,
-        "name": "Find a Host",
+        "name": "Find a Manager",
         "item": "https://bookdirectstays.com/find-host"
       },
       {
@@ -345,7 +345,7 @@ export default function City() {
       {
         "@type": "ListItem",
         "position": 4,
-        "name": `${cityName} Hosts`,
+        "name": `${cityName} Rental Managers`,
         "item": `https://bookdirectstays.com/country/${countrySlug}/${citySlug}`
       }
     ]
@@ -370,7 +370,7 @@ export default function City() {
               <ol className="flex items-center space-x-2 text-blue-200">
                 <li>
                   <Link href="/find-host" className="hover:text-white transition-colors">
-                    Find a Host
+                    Find a Manager
                   </Link>
                 </li>
                 <li className="text-blue-300">›</li>
@@ -386,10 +386,10 @@ export default function City() {
             
             <h1 className="text-4xl sm:text-5xl font-bold mb-6 flex items-center gap-4">
               <span className="text-5xl">{getFlagByCountryName(countryName)}</span>
-              <span>{cityName} Vacation Rental Hosts</span>
+              <span>{cityName} Rental Managers</span>
             </h1>
             <p className="text-xl text-blue-100 mb-8">
-              Direct booking vacation rental hosts in {cityName}, <span className="inline-flex items-center gap-1">{getFlagByCountryName(countryName)} {countryName}</span>
+              Professional rental managers in {cityName}, <span className="inline-flex items-center gap-1">{getFlagByCountryName(countryName)} {countryName}</span>
             </p>
             
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 inline-block">

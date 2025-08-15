@@ -129,19 +129,18 @@ export default function Home() {
         <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
-              Book Vacation Rentals Direct
+              Find Your Perfect Rental Manager
             </h1>
             <p className="text-3xl lg:text-4xl mb-8">
-              <span className="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent font-bold">No fees,</span> 
-              <span className="text-white"> just better stays</span> 
-              <span className="text-white"> - </span>
-              <span className="text-white font-bold underline">Save 10-30%</span>
+              <span className="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent font-bold">Earn 35% More,</span> 
+              <span className="text-white"> Stress 100% Less — </span> 
+              <span className="text-white">Go Pro with Your Rentals</span>
             </p>
             <p className="text-lg text-white/90 mb-12 max-w-2xl mx-auto font-medium">
-              Connect directly with professional hosts worldwide for better rates, more flexibility, and personalized service (—without the middleman markup.)
+              Connect directly with professional rental managers worldwide for better occupancy rates, more flexibility, and personalized property management
             </p>
             
-            {/* Find a Host Button - Smaller */}
+            {/* Find a Manager Button - Smaller */}
             <motion.div 
               className="relative max-w-xs mx-auto mb-8"
               variants={fadeInUpVariants}
@@ -159,7 +158,7 @@ export default function Home() {
                   onClick={() => setLocation("/find-host")}
                   className="w-full py-2 px-4 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-all shadow-xl text-sm font-semibold"
                 >
-                  Find a Host Now!
+                  Find a Manager Now!
                 </Button>
               </motion.div>
             </motion.div>
@@ -169,7 +168,7 @@ export default function Home() {
               <Card className="bg-white/10 backdrop-blur-sm border-white/20 text-white">
                 <CardContent className="p-3 text-center">
                   <div className="text-xl font-bold text-blue-200 mb-1">1000+</div>
-                  <div className="text-xs font-medium">Verified Professional Hosts</div>
+                  <div className="text-xs font-medium">Verified Professional Managers</div>
                 </CardContent>
               </Card>
               <Card className="bg-white/10 backdrop-blur-sm border-white/20 text-white">
@@ -476,16 +475,16 @@ export default function Home() {
          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
            <div className="max-w-4xl mx-auto text-center">
              <h2 className="text-3xl lg:text-4xl font-bold text-white mb-6">
-               Ready to Save on Your Next Vacation?
+               Ready to Find Your Perfect Rental Manager?
              </h2>
              <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-               Join thousands of travelers who save between 10% and 30% on average by booking directly with property managers.
+               Join thousands of property owners who increase their rental income by 35% on average with professional management services.
              </p>
              <Button 
                onClick={() => setLocation("/find-host")}
                className="bg-white text-blue-600 hover:bg-blue-50 px-8 py-4 rounded-full text-lg font-semibold"
              >
-               Start Searching Stays
+               Start Finding Managers
              </Button>
            </div>
          </div>
