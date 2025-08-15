@@ -54,6 +54,14 @@ export default function SubmissionProperty() {
   // Initialize click tracking when submission data is available
   const clickTracking = submission ? useClickTracking(submission.id) : null;
   
+  // Debug logging to see what data we're receiving
+  console.log('🔍 Submission data received:', {
+    brandName: submission?.brandName,
+    whyBookWithYou: submission?.whyBookWithYou,
+    whyRentWithYou: submission?.whyRentWithYou,
+    commissionOnRevenue: submission?.commissionOnRevenue
+  });
+  
   // Get flag emoji for country name
   const getFlagEmoji = (countryName: string) => {
     // Use the comprehensive flag mapping from utils
@@ -447,13 +455,13 @@ export default function SubmissionProperty() {
                   </CardHeader>
                   <CardContent className="p-6">
                     <div className="prose prose-gray max-w-none">
-                      {submission.whyRentWithYou ? (
+                      {submission.whyRentWithYou && submission.whyRentWithYou.trim() ? (
                         <p className="text-gray-700 whitespace-pre-line">
                           {submission.whyRentWithYou}
                         </p>
                       ) : (
                         <p className="text-gray-500 italic">
-                          Content from "Why Book With You? (for owners)" column in Airtable will appear here.
+                          No content available from "Why Book With You? (for owners)" column in Airtable.
                         </p>
                       )}
                     </div>
