@@ -26,7 +26,7 @@ export interface AirtableSubmission {
     'Email': string;
     'One-line Description': string;
     'Why Book With You': string;
-    'Why Rent With You': string;
+    'Why Book With You? (for owners)': string;
     'Plan': string;
     'Top Stats': string;
     'Countries': string | string[];
@@ -579,7 +579,7 @@ export const airtableService = {
       email: fields['Email'] || '',
       oneLineDescription: fields['One-line Description'] || '',
       whyBookWithYou: fields['Why Book With You'] || '',
-      whyRentWithYou: fields['Why Rent With You'] || '',
+      whyRentWithYou: fields['Why Book With You? (for owners)'] || '',
       plan: fields['Plan'] || '',
       topStats: fields['Top Stats'] || '',
       countries: parseArray(fields['Countries']),

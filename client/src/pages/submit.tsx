@@ -55,7 +55,8 @@ const formSchema = z.object({
     name: z.string()
   }).optional(),
   "One-line Description": z.string().min(5).max(70),
-  "Why Rent With You?": z.string().min(50, "Please provide at least 50 characters explaining why property owners should rent with you"),
+  "Why Book With You?": z.string().min(50, "Please provide at least 50 characters explaining why guests should book with you"),
+  "Why Book With You? (for owners)": z.string().min(50, "Please provide at least 50 characters explaining why property owners should choose your management services"),
   "Commission On Revenue": z.coerce.number().min(0).max(100, "Commission must be between 0% and 100%"),
   "Top Stats": z.string().min(1, "Please share your top stats (e.g., average rating, number of reviews, etc.)"),
   "Currency": z.string().min(1, "Please select a currency"),
@@ -190,7 +191,8 @@ export default function Submit() {
       "Highlight Image": { url: "", name: "" },
       "Rating (X/5) & Reviews (#) Screenshot": { url: "", name: "" },
       "One-line Description": "",
-      "Why Rent With You?": "",
+      "Why Book With You?": "",
+      "Why Book With You? (for owners)": "",
       "Commission On Revenue": 0,
       "Top Stats": "",
       "Currency": "",
@@ -513,7 +515,8 @@ export default function Submit() {
         }).join(", "),
         "Countries": extractedCountries.join(", "),
         "One-line Description": values["One-line Description"],
-        "Why Rent With You": values["Why Rent With You?"],
+        "Why Book With You": values["Why Book With You?"],
+        "Why Rent With You": values["Why Book With You? (for owners)"],
         "Commission On Revenue": values["Commission On Revenue"] || 0,
         "Top Stats": values["Top Stats"] || "",
         "Currency": values["Currency"] || "",
@@ -899,9 +902,26 @@ export default function Submit() {
                   <FormMessage />
                 </FormItem>
               )} />
-              <FormField control={form.control} name="Why Rent With You?" render={({ field }) => (
+              <FormField control={form.control} name="Why Book With You?" render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Why Rent With You?<RequiredAsterisk /></FormLabel>
+                  <FormLabel>Why Book With You?<RequiredAsterisk /></FormLabel>
+                  <FormDescription>
+                    Explain why guests should choose your management services (minimum 50 characters)
+                  </FormDescription>
+                  <FormControl>
+                    <Textarea 
+                      {...field} 
+                      placeholder="e.g. We provide 24/7 guest support, professional cleaning services, dynamic pricing optimization, and guaranteed monthly income for property owners..."
+                      className="min-h-[120px] resize-none"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+
+              <FormField control={form.control} name="Why Book With You? (for owners)" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Why Book With You? (for owners)<RequiredAsterisk /></FormLabel>
                   <FormDescription>
                     Explain why property owners should choose your management services (minimum 50 characters)
                   </FormDescription>

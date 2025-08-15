@@ -53,15 +53,8 @@ export default function SubmissionProperty() {
 
   // Initialize click tracking when submission data is available
   const clickTracking = submission ? useClickTracking(submission.id) : null;
-
-  // Debug logging
-  console.log('Submission data:', {
-    brandName: submission?.brandName,
-    whyRentWithYou: submission?.whyRentWithYou,
-    commissionOnRevenue: submission?.commissionOnRevenue,
-    type: typeof submission?.commissionOnRevenue
-  });
-
+  
+  // Get flag emoji for country name
   const getFlagEmoji = (countryName: string) => {
     // Use the comprehensive flag mapping from utils
     return getFlagByCountryName(countryName);
@@ -460,7 +453,7 @@ export default function SubmissionProperty() {
                         </p>
                       ) : (
                         <p className="text-gray-500 italic">
-                          Content from "Why Rent With You?" column in Airtable will appear here.
+                          Content from "Why Book With You? (for owners)" column in Airtable will appear here.
                         </p>
                       )}
                     </div>
