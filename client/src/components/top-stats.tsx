@@ -6,11 +6,11 @@ import { BarChart3 } from "lucide-react";
 interface TopStatsProps {
   topStats: string;
   brandName: string;
-  hostWebsite?: string;
+  pmcGeneralWebsite?: string;
   onOpenChange?: (open: boolean) => void;
 }
 
-export default function TopStats({ topStats, brandName, hostWebsite, onOpenChange }: TopStatsProps) {
+export default function TopStats({ topStats, brandName, pmcGeneralWebsite, onOpenChange }: TopStatsProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   // Don't render if no stats provided
@@ -81,7 +81,7 @@ export default function TopStats({ topStats, brandName, hostWebsite, onOpenChang
                 <div className="flex items-center gap-2 mb-3 pb-2 border-b border-gray-100">
                   <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                   <h4 className="text-sm font-semibold text-gray-800 truncate">
-                    📊 {brandName} Stats
+                    {brandName} Stats
                   </h4>
                 </div>
                 
@@ -92,10 +92,10 @@ export default function TopStats({ topStats, brandName, hostWebsite, onOpenChang
                 
                 {/* Disclaimer */}
                 <div className="text-xs text-gray-500 mt-3 pt-2 border-t border-gray-100 italic">
-                  This information was provided by the host and can be verified in{" "}
-                  {hostWebsite ? (
+                  This information was provided by the PMC and can be verified in{" "}
+                  {pmcGeneralWebsite ? (
                     <a 
-                      href={hostWebsite} 
+                      href={pmcGeneralWebsite} 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="text-blue-600 hover:text-blue-800 underline"

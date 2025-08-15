@@ -328,8 +328,8 @@ export default function SubmissionProperty() {
                   );
                 })()}
 
-                {/* Bottom Section: Social Links Left, Book Direct Right - Standardized Layout */}
-                <div className="flex items-center justify-between pt-4">
+                {/* Bottom Section: Social Links Left, Visit Website Right - Standardized Layout */}
+                <div className="flex items-center justify-between mt-auto pt-4">
                   {/* Social Links - Left */}
                   <div className="flex items-center gap-3">
                     {submission.instagram && (
@@ -394,18 +394,22 @@ export default function SubmissionProperty() {
                     )}
                   </div>
 
-                  {/* Book Direct - Right */}
-                  {submission.website && (
-                    <Button size="lg" asChild>
+                  {/* Visit Website - Right */}
+                  {submission.pmcGeneralWebsite && (
+                    <Button 
+                      asChild 
+                      variant="default" 
+                      size="sm"
+                    >
                       <a 
-                        href={submission.website} 
+                        href={submission.pmcGeneralWebsite} 
                         target="_blank" 
                         rel="noopener noreferrer"
-                        className="flex items-center gap-2"
-                        onClick={() => clickTracking?.trackWebsite()}
+                        className="flex items-center justify-center gap-2"
+                        onClick={() => clickTracking?.trackCompany()}
                       >
-                        <ExternalLink className="w-5 h-5" />
-                        Book Direct
+                        <ExternalLink className="w-4 h-4" />
+                        Visit Website
                       </a>
                     </Button>
                   )}
@@ -425,37 +429,21 @@ export default function SubmissionProperty() {
             {/* Left Column - Company Content (Desktop) */}
             <div className="flex flex-col gap-8 lg:flex-1">
               
-              {/* Why Book With - Mobile: 1st, Desktop: Left column 1st */}
-              {submission.whyBookWithYou && (
-                <Card className="order-1 lg:order-none">
-                  <CardHeader>
-                    <CardTitle>Why Book Direct with {submission.brandName}? (for guests)</CardTitle>
+              {/* Why Rent With - Mobile: 1st, Desktop: Left column 1st */}
+              <div className="lg:col-span-1 order-1 lg:order-1">
+                <Card className="h-full">
+                  <CardHeader className="bg-gradient-to-r from-blue-600 to-blue-500 text-white">
+                    <CardTitle>Why Rent With {submission.brandName}?</CardTitle>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="p-6">
                     <div className="prose prose-gray max-w-none">
                       <p className="text-gray-700 whitespace-pre-line">
-                        {submission.whyBookWithYou}
+                        {submission.whyRentWithYou || "Information about why property owners should choose this management company."}
                       </p>
                     </div>
                   </CardContent>
                 </Card>
-              )}
-
-              {/* Why Rent With - Mobile: 2nd, Desktop: Left column 2nd */}
-              {submission.whyRentWithYou && (
-                <Card className="order-2 lg:order-none">
-                  <CardHeader>
-                    <CardTitle>Why Rent with {submission.brandName}? (for owners)</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="prose prose-gray max-w-none">
-                      <p className="text-gray-700 whitespace-pre-line">
-                        {submission.whyRentWithYou}
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
+              </div>
 
               {/* Ideal For - Mobile: 3rd, Desktop: Left column 3rd */}
               {submission.idealFor && submission.idealFor.length > 0 && (
@@ -689,17 +677,17 @@ export default function SubmissionProperty() {
                   )}
                   
                   {/* Direct Booking Website Link */}
-                  {submission.website && (
+                  {submission.pmcGeneralWebsite && (
                     <Button asChild className="w-full">
                       <a 
-                        href={submission.website} 
+                        href={submission.pmcGeneralWebsite} 
                         target="_blank" 
                         rel="noopener noreferrer"
                         className="flex items-center justify-center gap-2"
-                        onClick={() => clickTracking?.trackWebsite()}
+                        onClick={() => clickTracking?.trackCompany()}
                       >
                         <ExternalLink className="w-4 h-4" />
-                        Book Direct
+                        Visit Website
                       </a>
                     </Button>
                   )}

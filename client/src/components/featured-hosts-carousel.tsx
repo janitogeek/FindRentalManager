@@ -509,6 +509,7 @@ export default function FeaturedHostsCarousel() {
                     </div>
                   )}
                   
+                  {/* Pricing Display */}
                   {(host.minPrice || host.maxPrice) && host.currency && (
                     <div className="flex items-center gap-1 font-medium text-blue-600">
                       <span className="text-gray-500">💰</span>
@@ -584,7 +585,7 @@ export default function FeaturedHostsCarousel() {
                     <TopStats 
                       topStats={host.topStats} 
                       brandName={host.brandName}
-                      hostWebsite={host.website}
+                      pmcGeneralWebsite={host.pmcGeneralWebsite}
                       onOpenChange={handlePopoverChange}
                     />
                   </div>
@@ -679,14 +680,14 @@ export default function FeaturedHostsCarousel() {
                   </div>
 
                   {/* Visit Website - Right */}
-                  {host.website && (
+                  {host.pmcGeneralWebsite && (
                     <Button 
                       asChild 
                       variant="default" 
                       size="sm"
                     >
                       <a 
-                        href={host.website} 
+                        href={host.pmcGeneralWebsite} 
                         target="_blank" 
                         rel="noopener noreferrer"
                         className="flex items-center justify-center gap-2"

@@ -400,7 +400,7 @@ export default function City() {
                 <span className="text-blue-100">•</span>
                 <span className="text-blue-100">Skip OTA fees</span>
                 <span className="text-blue-100">•</span>
-                <span className="text-blue-100">Book direct</span>
+                <span className="text-blue-100">Visit Website</span>
               </div>
             </div>
           </div>

@@ -386,7 +386,7 @@ export default function SubmissionPropertyCard({ submission, fromCity, fromCount
           </div>
         </div>
 
-        {/* Property Count & Pricing */}
+        {/* Property Count & Commission Display */}
         <div className="flex items-center justify-between mb-3 text-sm">
           {submission.numberOfListings && (
             <div className="flex items-center gap-1 text-gray-600">
@@ -404,8 +404,11 @@ export default function SubmissionPropertyCard({ submission, fromCity, fromCount
               </span>
             </div>
           )}
-          
-          {(submission.minPrice || submission.maxPrice) && submission.currency && (
+        </div>
+
+        {/* Pricing Display */}
+        {(submission.minPrice || submission.maxPrice) && submission.currency && (
+          <div className="flex items-center justify-end mb-3 text-sm">
             <div className="flex items-center gap-1 font-medium text-blue-600">
               <span className="text-gray-500">💰</span>
               <span>
@@ -418,8 +421,8 @@ export default function SubmissionPropertyCard({ submission, fromCity, fromCount
                 )}
               </span>
             </div>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* Types of Stays - Horizontal carousel when many, wrap when few */}
         {submission.typesOfStays && submission.typesOfStays.length > 0 && (
@@ -482,7 +485,7 @@ export default function SubmissionPropertyCard({ submission, fromCity, fromCount
             <TopStats 
               topStats={submission.topStats} 
               brandName={submission.brandName}
-              hostWebsite={submission.website}
+              pmcGeneralWebsite={submission.pmcGeneralWebsite}
             />
           </div>
         )}
@@ -576,14 +579,14 @@ export default function SubmissionPropertyCard({ submission, fromCity, fromCount
           </div>
 
           {/* Visit Website - Right */}
-          {submission.website && (
+          {submission.pmcGeneralWebsite && (
             <Button 
               asChild 
               variant="default" 
               size="sm"
             >
               <a 
-                href={submission.website} 
+                href={submission.pmcGeneralWebsite} 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-2"
