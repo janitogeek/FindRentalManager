@@ -610,7 +610,7 @@ export const airtableService = {
       currency: fields['Currency'] || undefined,
       googleReviewsLink: fields['Google Reviews Link'] || undefined,
       cancellationPolicy: fields['Cancellation Policy'] || undefined,
-      commissionOnRevenue: fields['Commission On Revenue'] || undefined,
+      commissionOnRevenue: fields['Commission On Revenue'] ? Number(fields['Commission On Revenue']) : undefined,
     };
 
 

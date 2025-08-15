@@ -54,6 +54,14 @@ export default function SubmissionProperty() {
   // Initialize click tracking when submission data is available
   const clickTracking = submission ? useClickTracking(submission.id) : null;
 
+  // Debug logging
+  console.log('Submission data:', {
+    brandName: submission?.brandName,
+    whyRentWithYou: submission?.whyRentWithYou,
+    commissionOnRevenue: submission?.commissionOnRevenue,
+    type: typeof submission?.commissionOnRevenue
+  });
+
   const getFlagEmoji = (countryName: string) => {
     // Use the comprehensive flag mapping from utils
     return getFlagByCountryName(countryName);
@@ -245,7 +253,16 @@ export default function SubmissionProperty() {
                     </div>
                   )}
                   
-
+                  {/* Commission Display - Above Pricing */}
+                  {submission.commissionOnRevenue && (
+                    <div className="flex items-center gap-1 font-medium text-green-600">
+                      <span className="text-gray-500">💼</span>
+                      <span>
+                        {submission.commissionOnRevenue}% Commission
+                      </span>
+                    </div>
+                  )}
+                  
                   {(submission.minPrice || submission.maxPrice) && submission.currency && (
                     <div className="flex items-center gap-1 font-medium text-blue-600">
                       <span className="text-gray-500">💰</span>
@@ -437,9 +454,15 @@ export default function SubmissionProperty() {
                   </CardHeader>
                   <CardContent className="p-6">
                     <div className="prose prose-gray max-w-none">
-                      <p className="text-gray-700 whitespace-pre-line">
-                        {submission.whyRentWithYou}
-                      </p>
+                      {submission.whyRentWithYou ? (
+                        <p className="text-gray-700 whitespace-pre-line">
+                          {submission.whyRentWithYou}
+                        </p>
+                      ) : (
+                        <p className="text-gray-500 italic">
+                          Content from "Why Rent With You?" column in Airtable will appear here.
+                        </p>
+                      )}
                     </div>
                   </CardContent>
                 </Card>
