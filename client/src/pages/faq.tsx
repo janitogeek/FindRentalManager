@@ -9,46 +9,44 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
+import { useState, useMemo } from "react";
 
 export default function FAQ() {
-  // For now, just use static FAQs directly to ensure they show up
-  const faqData = staticFaqs;
-  const isLoading = false;
+  const [activeTab, setActiveTab] = useState('owner');
 
-  // Group FAQs by category
-  const travelerFaqs = faqData?.filter((faq: any) => faq.category === "traveler") || [];
-  const hostFaqs = faqData?.filter((faq: any) => faq.category === "host") || [];
-
-  console.log("FAQ Data:", faqData);
-  console.log("Traveler FAQs:", travelerFaqs);
-  console.log("Host FAQs:", hostFaqs);
+  const filteredFAQs = useMemo(() => {
+    if (activeTab === 'owner') {
+      return staticFaqs.filter(faq => faq.category === 'owner');
+    } else if (activeTab === 'manager') {
+      return staticFaqs.filter(faq => faq.category === 'manager');
+    }
+    return staticFaqs;
+  }, [activeTab]);
 
   return (
-    <div className="container mx-auto px-4 py-12">
-      <div className="max-w-3xl mx-auto">
-        <h1 className="text-3xl font-bold mb-2">Frequently Asked Questions</h1>
-        <p className="text-gray-600 mb-8">
-          Find answers to common questions about BookDirectStays.com
-        </p>
+    <div className="min-h-screen bg-gray-50 py-12">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto">
+          {/* Header */}
+          <div className="text-center mb-12">
+            <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">
+              Frequently Asked Questions
+            </h1>
+            <p className="text-xl text-gray-600 mb-8">
+              Everything you need to know about finding professional property management services
+            </p>
+          </div>
 
-        <Tabs defaultValue="traveler" className="mb-12">
-          <TabsList className="w-full mb-6 grid grid-cols-2">
-            <TabsTrigger value="traveler">For Travelers</TabsTrigger>
-            <TabsTrigger value="host">For Property Managers</TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="traveler">
-            {isLoading ? (
-              // Loading skeleton
-              Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="mb-4">
-                  <Skeleton className="h-10 w-full mb-2" />
-                  <Skeleton className="h-20 w-full" />
-                </div>
-              ))
-            ) : (
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-12">
+            <TabsList className="w-full mb-8 max-w-md mx-auto grid grid-cols-2">
+              <TabsTrigger value="owner">For Property Owners</TabsTrigger>
+              <TabsTrigger value="manager">For Property Managers</TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="owner">
+              {/* Loading skeleton */}
               <Accordion type="single" collapsible className="w-full">
-                {travelerFaqs.map((faq: any) => (
+                {filteredFAQs.map((faq: any) => (
                   <AccordionItem key={faq.id} value={`faq-${faq.id}`}>
                     <AccordionTrigger className="text-left">
                       {faq.question}
@@ -59,21 +57,12 @@ export default function FAQ() {
                   </AccordionItem>
                 ))}
               </Accordion>
-            )}
-          </TabsContent>
-          
-          <TabsContent value="host">
-            {isLoading ? (
-              // Loading skeleton
-              Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="mb-4">
-                  <Skeleton className="h-10 w-full mb-2" />
-                  <Skeleton className="h-20 w-full" />
-                </div>
-              ))
-            ) : (
+            </TabsContent>
+            
+            <TabsContent value="manager">
+              {/* Loading skeleton */}
               <Accordion type="single" collapsible className="w-full">
-                {hostFaqs.map((faq: any) => (
+                {filteredFAQs.map((faq: any) => (
                   <AccordionItem key={faq.id} value={`faq-${faq.id}`}>
                     <AccordionTrigger className="text-left">
                       {faq.question}
@@ -84,27 +73,27 @@ export default function FAQ() {
                   </AccordionItem>
                 ))}
               </Accordion>
-            )}
-          </TabsContent>
-        </Tabs>
+            </TabsContent>
+          </Tabs>
 
-        <div className="bg-primary/5 border border-primary/20 rounded-lg p-6 text-center">
-          <h2 className="text-xl font-semibold mb-2">Have more questions?</h2>
-          <p className="mb-4">
-            If you can't find the answer you're looking for, please contact our support team or
-            consider adding your property to our directory.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild className="bg-blue-600 hover:bg-blue-700 text-white">
-              <Link href="/submit">
-                Add Your Direct Booking Site
-              </Link>
-            </Button>
-            <Button asChild variant="outline" className="border-blue-600 text-blue-600 hover:bg-blue-50">
-              <a href="mailto:info@bookdirectstays.com">
-                Contact Support
-              </a>
-            </Button>
+          <div className="bg-primary/5 border border-primary/20 rounded-lg p-6 text-center">
+            <h2 className="text-xl font-semibold mb-2">Have more questions?</h2>
+            <p className="mb-4">
+              If you can't find the answer you're looking for, please contact our support team or
+              consider listing your management company in our directory.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button asChild className="bg-blue-600 hover:bg-blue-700 text-white">
+                <Link href="/submit">
+                  List Your Management Company
+                </Link>
+              </Button>
+              <Button asChild variant="outline" className="border-blue-600 text-blue-600 hover:bg-blue-50">
+                <a href="mailto:info@findrentalmanager.com">
+                  Contact Support
+                </a>
+              </Button>
+            </div>
           </div>
         </div>
       </div>

@@ -18,10 +18,10 @@ export default function Testimonials() {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const tab = urlParams.get('tab');
-    if (tab === 'travelers' || tab === 'guests') {
-      setActiveTab('guests');
-    } else if (tab === 'hosts') {
-      setActiveTab('hosts');
+    if (tab === 'owners' || tab === 'guests') {
+      setActiveTab('owners');
+    } else if (tab === 'managers') {
+      setActiveTab('managers');
     }
   }, []);
   // Fetch testimonials
@@ -130,14 +130,14 @@ export default function Testimonials() {
       <div className="max-w-4xl mx-auto">
         <h1 className="text-3xl font-bold mb-2 text-center">Testimonials</h1>
         <p className="text-gray-600 mb-8 text-center">
-          See what our community of travelers and hosts are saying about BookDirectStays.com
+          See what our community of property owners and property managers are saying about BookDirectStays.com
         </p>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-12">
           <TabsList className="w-full mb-8 max-w-md mx-auto grid grid-cols-3">
             <TabsTrigger value="all">All</TabsTrigger>
-            <TabsTrigger value="guests">Travelers</TabsTrigger>
-            <TabsTrigger value="hosts">Hosts</TabsTrigger>
+            <TabsTrigger value="owners">Property Owners</TabsTrigger>
+            <TabsTrigger value="managers">Property Managers</TabsTrigger>
           </TabsList>
           
           <TabsContent value="all">
@@ -176,7 +176,7 @@ export default function Testimonials() {
             </div>
           </TabsContent>
           
-          <TabsContent value="guests">
+          <TabsContent value="owners">
             {/* Featured Testimonial - Full Width */}
             <div className="mb-8">
               <h3 className="text-xl font-bold text-gray-900 mb-4 text-center">✨ Featured Savings Story</h3>
@@ -212,7 +212,7 @@ export default function Testimonials() {
             </div>
           </TabsContent>
           
-          <TabsContent value="hosts">
+          <TabsContent value="managers">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {isLoading ? (
                 // Loading skeleton

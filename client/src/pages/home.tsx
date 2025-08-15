@@ -179,7 +179,7 @@ export default function Home() {
         </AnimatedSection>
 
       {/* Why Hire a Property Manager Section - 4 Pillars */}
-      <AnimatedSection className="py-20 bg-gray-50" delay={0.2}>
+      <AnimatedSection className="py-20 bg-white" delay={0.2}>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-6">
