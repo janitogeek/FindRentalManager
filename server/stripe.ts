@@ -141,6 +141,9 @@ const submitToAirtable = async (formData: any, paymentInfo: any) => {
     "Status": formData["Choose Your Listing Type"] === "Premium (€499.99/year)" 
       ? "Approved – Published" 
       : "Pending Review",
+    "Status Bis (PMC directory)": formData["Choose Your Listing Type"] === "Premium (€499.99/year)" 
+      ? "Approved – Published" 
+      : "Pending Review",
     "Payment Status": "Completed",
     "Stripe Customer ID": paymentInfo.customerId,
     "Stripe Subscription ID": paymentInfo.subscriptionId,

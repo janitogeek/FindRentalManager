@@ -130,11 +130,13 @@ class DataPreloader {
   /**
    * Clear all cached data
    */
-  private clearCache(): void {
+  public clearCache(): void {
     try {
       Object.values(CACHE_KEYS).forEach(key => {
         localStorage.removeItem(key);
       });
+      this.cachedData = null;
+      this.loadingPromise = null;
       console.log('🗑️ Cache cleared');
     } catch (error) {
       console.warn('🚨 Failed to clear cache:', error);
@@ -318,55 +320,41 @@ class DataPreloader {
   }
 
   /**
-   * Preload data (called from app initialization)
+   * Preload all data in the background
    */
-  async preloadData(): Promise<void> {
-    // If already loading, wait for existing process
+  async preloadData(): Promise<CachedData | null> {
+    // If already loading, wait for current process
     if (this.loadingPromise) {
-      console.log('⏳ Data preloading already in progress...');
-      await this.loadingPromise;
-      return;
+      console.log('⏳ Already loading data, waiting...');
+      const result = await this.loadingPromise;
+      return result;
     }
 
-    // First check if instant preload has already cached the data
-    const instantCacheReady = localStorage.getItem('bds_preload_ready');
-    if (instantCacheReady === 'true') {
-      console.log('⚡ INSTANT CACHE detected - using pre-cached data!');
+    // Check if we have instant cache data
+    const instantCacheData = localStorage.getItem(CACHE_KEYS.SUBMISSIONS_WITH_SLUGS);
+    if (instantCacheData) {
+      console.log('⚡ Found instant cache data, processing...');
       
-      // Try to load from cache first (instant cache should have created it)
-      this.cachedData = this.loadFromCache();
-      if (this.cachedData) {
-        console.log('✅ Instant cache data loaded successfully!');
-        return;
+      try {
+        const submissions = JSON.parse(instantCacheData);
+        this.loadingPromise = this.processSubmissionsData(submissions);
+        this.cachedData = await this.loadingPromise;
+        this.saveToCache(this.cachedData);
+        console.log('✅ Instant cache data processed and ready!');
+      } catch (error) {
+        console.error('❌ Failed to process instant cache:', error);
+      } finally {
+        this.isLoading = false;
+        this.loadingPromise = null;
       }
-      
-      // If instant cache flag is set but no processed data, process the raw instant cache
-      const rawCachedData = localStorage.getItem('bds_submissions_cache');
-      if (rawCachedData) {
-        console.log('🔄 Processing instant cache data...');
-        this.isLoading = true;
-        
-        try {
-          const submissions = JSON.parse(rawCachedData);
-          this.loadingPromise = this.processSubmissionsData(submissions);
-          this.cachedData = await this.loadingPromise;
-          this.saveToCache(this.cachedData);
-          console.log('✅ Instant cache data processed and ready!');
-        } catch (error) {
-          console.error('❌ Failed to process instant cache:', error);
-        } finally {
-          this.isLoading = false;
-          this.loadingPromise = null;
-        }
-        return;
-      }
+      return this.cachedData;
     }
 
     // Try to load from cache first
     this.cachedData = this.loadFromCache();
     if (this.cachedData) {
       console.log('⚡ Using cached data - instant load!');
-      return;
+      return this.cachedData;
     }
 
     // If no valid cache, start background processing
@@ -384,6 +372,8 @@ class DataPreloader {
       this.isLoading = false;
       this.loadingPromise = null;
     }
+    
+    return this.cachedData;
   }
 
   /**
@@ -464,13 +454,13 @@ class DataPreloader {
   }
 
   /**
-   * Force refresh data (clears cache and reloads)
+   * Force refresh data by clearing cache and reloading
    */
-  async forceRefresh(): Promise<void> {
+  public async forceRefresh(): Promise<CachedData | null> {
     console.log('🔄 Force refreshing data...');
     this.clearCache();
     this.cachedData = null;
-    await this.preloadData();
+    return await this.preloadData();
   }
 }
 

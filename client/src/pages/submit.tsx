@@ -516,7 +516,7 @@ export default function Submit() {
         "Countries": extractedCountries.join(", "),
         "One-line Description": values["One-line Description"],
         "Why Book With You": values["Why Book With You?"],
-        "Why Rent With You": values["Why Book With You? (for owners)"],
+        "Why Book With You? (for owners)": values["Why Book With You? (for owners)"],
         "Commission On Revenue": values["Commission On Revenue"] || 0,
         "Top Stats": values["Top Stats"] || "",
         "Currency": values["Currency"] || "",
@@ -733,10 +733,17 @@ export default function Submit() {
       <div className="max-w-3xl mx-auto">
         <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">🚀 List Your Management Company!</h1>
         <p className="text-gray-600 mb-8">Join our directory and connect with property owners looking for professional rental management services.</p>
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-8">
-          <p className="text-blue-800 text-sm">
-            <strong>Dual Visibility:</strong> Your listing will also appear on BookDirectStays.com to boost guest visibility and increase direct bookings for your managed properties.
-          </p>
+        {/* Dual Visibility Info Box */}
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+          <div className="flex items-start gap-3">
+            <span className="text-2xl">💼</span>
+            <div>
+              <h3 className="font-semibold text-blue-900 mb-2">Double Your Visibility!</h3>
+              <p className="text-blue-800 text-sm">
+                Your listing will also appear on <strong>BookDirectStays</strong> to boost guest visibility and increase direct bookings for your managed properties. Get exposure on both platforms with one submission!
+              </p>
+            </div>
+          </div>
         </div>
         <Form {...form}>
                       <form onSubmit={form.handleSubmit(onSubmit, onInvalid)} className="space-y-8">

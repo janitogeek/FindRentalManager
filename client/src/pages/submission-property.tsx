@@ -461,9 +461,9 @@ export default function SubmissionProperty() {
                 </Card>
               </div>
 
-              {/* Ideal For - Mobile: 3rd, Desktop: Left column 3rd */}
+              {/* Ideal For - Mobile: 2nd, Desktop: Left column 2nd */}
               {submission.idealFor && submission.idealFor.length > 0 && (
-                <Card className="order-3 lg:order-none">
+                <Card className="order-2 lg:order-none">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Users className="w-5 h-5 text-blue-600" />
@@ -482,9 +482,9 @@ export default function SubmissionProperty() {
                 </Card>
               )}
 
-              {/* Properties Features - Mobile: 4th, Desktop: Left column 4th */}
+              {/* Properties Features - Mobile: 3rd, Desktop: Left column 3rd */}
               {submission.propertiesFeatures && submission.propertiesFeatures.length > 0 && (
-                <Card className="order-4 lg:order-none">
+                <Card className="order-3 lg:order-none">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Home className="w-5 h-5 text-blue-600" />
@@ -504,9 +504,9 @@ export default function SubmissionProperty() {
                 </Card>
               )}
 
-              {/* Services & Convenience - Mobile: 5th, Desktop: Left column 5th */}
+              {/* Services & Convenience - Mobile: 4th, Desktop: Left column 4th */}
               {submission.servicesConvenience && submission.servicesConvenience.length > 0 && (
-                <Card className="order-5 lg:order-none">
+                <Card className="order-4 lg:order-none">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Wrench className="w-5 h-5 text-green-600" />
@@ -526,9 +526,9 @@ export default function SubmissionProperty() {
                 </Card>
               )}
 
-              {/* Lifestyle & Values - Mobile: 6th, Desktop: Left column 6th */}
+              {/* Lifestyle & Values - Mobile: 5th, Desktop: Left column 5th */}
               {submission.lifestyleValues && submission.lifestyleValues.length > 0 && (
-                <Card className="order-6 lg:order-none">
+                <Card className="order-5 lg:order-none">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Shield className="w-5 h-5 text-purple-600" />
@@ -547,9 +547,9 @@ export default function SubmissionProperty() {
                 </Card>
               )}
 
-              {/* Design Style - Mobile: 7th, Desktop: Left column 7th */}
+              {/* Design Style - Mobile: 6th, Desktop: Left column 6th */}
               {submission.designStyle && submission.designStyle.length > 0 && (
-                <Card className="order-7 lg:order-none">
+                <Card className="order-6 lg:order-none">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Palette className="w-5 h-5 text-indigo-600" />
@@ -568,9 +568,9 @@ export default function SubmissionProperty() {
                 </Card>
               )}
 
-              {/* Atmospheres - Mobile: 8th, Desktop: Left column 8th */}
+              {/* Atmospheres - Mobile: 7th, Desktop: Left column 7th */}
               {submission.atmospheres && submission.atmospheres.length > 0 && (
-                <Card className="order-8 lg:order-none">
+                <Card className="order-7 lg:order-none">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Coffee className="w-5 h-5 text-amber-600" />
@@ -589,9 +589,9 @@ export default function SubmissionProperty() {
                 </Card>
               )}
 
-              {/* Settings/Locations - Mobile: 10th, Desktop: Left column 8th */}
+              {/* Settings/Locations - Mobile: 8th, Desktop: Left column 8th */}
               {submission.settingsLocations && submission.settingsLocations.length > 0 && (
-                <Card className="order-10 lg:order-none">
+                <Card className="order-8 lg:order-none">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <TreePine className="w-5 h-5 text-emerald-600" />

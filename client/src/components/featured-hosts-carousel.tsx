@@ -117,7 +117,7 @@ export default function FeaturedHostsCarousel() {
           Our Featured Property Management Companies
         </h2>
       </div>
-      
+
       <div className="relative">
         <Swiper
           ref={swiperRef}
@@ -145,16 +145,16 @@ export default function FeaturedHostsCarousel() {
           className="featured-hosts-swiper"
         >
           {featuredSubmissions.map((host: Submission) => {
-            return (
-              <SwiperSlide key={host.id}>
+          return (
+          <SwiperSlide key={host.id}>
                 <SubmissionPropertyCard 
                   submission={host}
                   fromCountry="Featured"
                 />
-              </SwiperSlide>
-            );
-          })}
-        </Swiper>
+          </SwiperSlide>
+          );
+        })}
+      </Swiper>
       </div>
     </div>
   );

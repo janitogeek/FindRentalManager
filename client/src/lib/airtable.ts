@@ -48,6 +48,7 @@ export interface AirtableSubmission {
     'Highlight Image'?: Array<{ url: string; filename: string }>;
     'Rating Screenshot'?: Array<{ url: string; filename: string }>;
     'Status': string;
+    'Status Bis (PMC directory)'?: string;
     'Submission Date': string;
     // New fields
     'PMS Used'?: string;
@@ -93,6 +94,7 @@ export interface Submission {
   highlightImage?: string;
   ratingScreenshot?: string;
   status: string;
+  statusBis?: string;
   submissionDate: string;
   createdTime: string;
   // New fields
@@ -258,25 +260,30 @@ export const airtableService = {
         console.log('📝 First record fields:', allRecords[0].fields);
         console.log('📝 First record status:', JSON.stringify(allRecords[0].fields['Status']));
         
-        // Get all unique statuses
+        // Get all unique statuses from both fields
         const allStatuses = allRecords.map(r => r.fields['Status']).filter(Boolean);
-        const uniqueStatuses = [...new Set(allStatuses)];
-        console.log('📋 All unique statuses found:', uniqueStatuses);
+        const allStatusBis = allRecords.map(r => r.fields['Status Bis (PMC directory)']).filter(Boolean);
+        const uniqueStatuses = [...new Set([...allStatuses, ...allStatusBis])];
+        console.log('📋 All unique statuses found (Status + Status Bis):', uniqueStatuses);
         console.log('📋 All statuses (with quotes):', uniqueStatuses.map(s => `"${s}"`));
         
-        // Count each status
-        const statusCounts = allStatuses.reduce((acc: any, status) => {
-          acc[status] = (acc[status] || 0) + 1;
+        // Count each status from both fields
+        const statusCounts = [...allStatuses, ...allStatusBis].reduce((acc: any, status) => {
+          if (status) {
+            acc[status] = (acc[status] || 0) + 1;
+          }
           return acc;
         }, {});
-        console.log('📊 Status breakdown:', statusCounts);
+        console.log('📊 Status breakdown (Status + Status Bis):', statusCounts);
         
-        // Check if any match our target
+        // Check if any match our target in either field
         const targetStatus = "Approved – Published"; // em dash
-        const matchingRecords = allRecords.filter(r => r.fields['Status'] === targetStatus);
-        console.log(`🎯 Records with exact status "${targetStatus}":`, matchingRecords.length);
+        const matchingRecords = allRecords.filter(r => 
+          r.fields['Status'] === targetStatus || r.fields['Status Bis (PMC directory)'] === targetStatus
+        );
+        console.log(`🎯 Records with exact status "${targetStatus}" in either field:`, matchingRecords.length);
         
-        // Check for similar statuses
+        // Check for similar statuses in both fields
         const similarStatuses = uniqueStatuses.filter(status => 
           status && status.toLowerCase().includes('approved') && status.toLowerCase().includes('published')
         );
@@ -284,13 +291,13 @@ export const airtableService = {
       }
     }
 
-    // Now try the filtered query
-    const filterFormula = `{Status} = "Approved – Published"`;
+    // Now try the filtered query - check both Status and Status Bis (PMC directory)
+    const filterFormula = `OR({Status} = "Approved – Published", {Status Bis (PMC directory)} = "Approved – Published")`;
     const url = `${AIRTABLE_API_URL}?filterByFormula=${encodeURIComponent(filterFormula)}`;
     
     console.log('🔗 API URL:', url);
     console.log('📝 Filter formula:', filterFormula);
-    console.log('🎯 Looking for exact status: "Approved – Published" (with em dash)');
+    console.log('🎯 Looking for status "Approved – Published" in either Status or Status Bis (PMC directory) field');
 
     const response = await fetch(url, {
       headers: {
@@ -601,6 +608,7 @@ export const airtableService = {
       highlightImage: getAttachmentUrl(fields['Highlight Image']),
       ratingScreenshot: findRatingScreenshotUrl(),
       status: fields['Status'] || '',
+      statusBis: fields['Status Bis (PMC directory)'] || undefined,
       submissionDate: fields['Submission Date'] || '',
       createdTime: record.createdTime,
       // New fields
