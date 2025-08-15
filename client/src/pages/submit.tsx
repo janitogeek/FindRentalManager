@@ -57,6 +57,7 @@ const formSchema = z.object({
   "One-line Description": z.string().min(5).max(70),
   "Why Book With You?": z.string().min(50, "Please provide at least 50 characters explaining why guests should book with you"),
   "Why Rent With You?": z.string().min(50, "Please provide at least 50 characters explaining why property owners should rent with you"),
+  "Commission On Revenue": z.coerce.number().min(0).max(100, "Commission must be between 0% and 100%"),
   "Top Stats": z.string().min(1, "Please share your top stats (e.g., average rating, number of reviews, etc.)"),
   "Currency": z.string().min(1, "Please select a currency"),
   "Min Price": z.string().min(1, "Please enter a minimum price"),
@@ -192,6 +193,7 @@ export default function Submit() {
       "One-line Description": "",
       "Why Book With You?": "",
       "Why Rent With You?": "",
+      "Commission On Revenue": 0,
       "Top Stats": "",
       "Currency": "",
       "Min Price": "",
@@ -515,6 +517,7 @@ export default function Submit() {
         "One-line Description": values["One-line Description"],
         "Why Book With You": values["Why Book With You?"],
         "Why Rent With You": values["Why Rent With You?"],
+        "Commission On Revenue": values["Commission On Revenue"] || 0,
         "Top Stats": values["Top Stats"] || "",
         "Currency": values["Currency"] || "",
         "Min Price": values["Min Price"] ? parseInt(values["Min Price"]) : undefined,
@@ -730,6 +733,11 @@ export default function Submit() {
       <div className="max-w-3xl mx-auto">
         <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">🚀 List Your Management Company!</h1>
         <p className="text-gray-600 mb-8">Join our directory and connect with property owners looking for professional rental management services.</p>
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-8">
+          <p className="text-blue-800 text-sm">
+            <strong>Dual Visibility:</strong> Your listing will also appear on BookDirectStays.com to boost guest visibility and increase direct bookings for your managed properties.
+          </p>
+        </div>
         <Form {...form}>
                       <form onSubmit={form.handleSubmit(onSubmit, onInvalid)} className="space-y-8">
 
@@ -914,22 +922,42 @@ export default function Submit() {
               )} />
               <FormField control={form.control} name="Why Rent With You?" render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Why Rent With You? (for owners)<RequiredAsterisk /></FormLabel>
+                  <FormLabel>Why Property Owners Choose You?<RequiredAsterisk /></FormLabel>
+                  <FormDescription>
+                    Explain why property owners should choose your management services (minimum 50 characters)
+                  </FormDescription>
                   <FormControl>
                     <Textarea 
                       {...field} 
-                      placeholder="Tell property owners why they should partner with you for their vacation rental management. Include your expertise, marketing reach, revenue optimization, guest services, or other value propositions. Minimum 50 characters."
-                      className={`min-h-[120px] ${field.value ? 'border-blue-500 bg-blue-50' : ''}`}
+                      placeholder="e.g. We provide 24/7 guest support, professional cleaning services, dynamic pricing optimization, and guaranteed monthly income for property owners..."
+                      className="min-h-[120px] resize-none"
                     />
                   </FormControl>
-                  <div className="flex justify-between items-center">
-                    <FormMessage />
-                    <span className={`text-xs ${field.value && field.value.length < 50 ? 'text-red-500' : 'text-gray-500'}`}>
-                      {field.value?.length || 0}/50 characters minimum
-                    </span>
-                  </div>
+                  <FormMessage />
                 </FormItem>
               )} />
+
+              <FormField control={form.control} name="Commission On Revenue" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Commission on Revenue (%)<RequiredAsterisk /></FormLabel>
+                  <FormDescription>
+                    What percentage commission do you charge property owners on rental revenue?
+                  </FormDescription>
+                  <FormControl>
+                    <Input 
+                      {...field} 
+                      type="number" 
+                      min="0" 
+                      max="100" 
+                      step="0.1"
+                      placeholder="e.g. 15.0" 
+                      className={field.value ? 'border-blue-500 bg-blue-50' : ''} 
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+
               <FormField control={form.control} name="Top Stats" render={({ field }) => (
                 <FormItem>
                   <FormLabel>

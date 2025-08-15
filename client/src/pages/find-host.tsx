@@ -13,6 +13,7 @@ import { getFlagByCountryName } from "@/lib/utils";
 
 export default function FindHost() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
 
   // Fetch countries data from preloader (instant if cached)
   const { data: countriesData = [], isLoading: isCountriesLoading } = useQuery({
@@ -49,25 +50,58 @@ export default function FindHost() {
 
   const isLoading = isCountriesLoading;
 
-  // Filter countries based on search query
+  // Filter countries based on search query and selected countries
   const filteredCountries = useMemo(() => {
-    if (!searchQuery.trim()) {
-      return countriesWithCounts;
+    let filtered = countriesWithCounts;
+    
+    if (searchQuery.trim()) {
+      filtered = filtered.filter(country =>
+        country.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
     }
     
-    return countriesWithCounts.filter(country =>
-      country.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-  }, [countriesWithCounts, searchQuery]);
+    if (selectedCountries.length > 0) {
+      filtered = filtered.filter(country =>
+        selectedCountries.includes(country.name)
+      );
+    }
+    
+    return filtered;
+  }, [countriesWithCounts, searchQuery, selectedCountries]);
 
   const clearSearch = () => {
     setSearchQuery("");
+    setSelectedCountries([]);
+  };
+
+  const toggleCountrySelection = (countryName: string) => {
+    setSelectedCountries(prev => 
+      prev.includes(countryName) 
+        ? prev.filter(c => c !== countryName)
+        : [...prev, countryName]
+    );
   };
 
   const getFlagEmoji = (countryName: string) => {
     // Use the comprehensive flag mapping from utils
     return getFlagByCountryName(countryName);
   };
+
+  // Get combined countries display for multi-country search
+  const getCombinedCountriesDisplay = () => {
+    if (selectedCountries.length === 0) return null;
+    
+    const sortedCountries = selectedCountries.sort();
+    const combinedName = sortedCountries.join(' & ');
+    const totalCount = selectedCountries.reduce((sum, countryName) => {
+      const country = countriesWithCounts.find(c => c.name === countryName);
+      return sum + (country?.listingCount || 0);
+    }, 0);
+    
+    return { combinedName, totalCount };
+  };
+
+  const combinedDisplay = getCombinedCountriesDisplay();
 
   return (
     <main className="min-h-screen bg-gray-50">
@@ -91,76 +125,125 @@ export default function FindHost() {
         </div>
       </section>
 
+      {/* Multi-Country Selection */}
+      {combinedDisplay && (
+        <section className="py-8 bg-blue-700">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-4xl mx-auto text-center text-white">
+              <h2 className="text-2xl font-bold mb-4">
+                Discover verified vacation rental property management companies in {combinedDisplay.combinedName}
+              </h2>
+              <p className="text-lg text-blue-100 mb-4">
+                {combinedDisplay.totalCount} managers available across your selected countries
+              </p>
+              <Button 
+                onClick={() => setSelectedCountries([])}
+                variant="outline"
+                className="border-white text-white hover:bg-white hover:text-blue-700"
+              >
+                Clear Selection
+              </Button>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Countries Grid */}
       <section className="py-16">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-6xl mx-auto">
-            <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
-              Choose Your Destination
-            </h2>
-            
-            {/* Search Input */}
-            <div className="max-w-md mx-auto mb-8">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+          {/* Search and Filter Controls */}
+          <div className="max-w-4xl mx-auto mb-12">
+            <div className="flex flex-col sm:flex-row gap-4 mb-6">
+              <div className="flex-1 relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                 <Input
                   type="text"
-                  placeholder="Search for a country..."
+                  placeholder="Search for a country or countries..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 pr-10 py-3 text-lg"
+                  className="pl-10 pr-4 py-3 text-lg"
                 />
                 {searchQuery && (
                   <button
                     onClick={clearSearch}
                     className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
                   >
-                    <X className="h-5 w-5" />
+                    <X className="w-5 h-5" />
                   </button>
                 )}
               </div>
             </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {isLoading ? (
-                // Loading skeleton
-                Array.from({ length: 6 }).map((_, i) => (
-                  <Card key={i} className="hover:shadow-lg transition-shadow duration-300 border-0 shadow-md">
-                    <CardContent className="p-6">
-                      <div className="animate-pulse">
-                        <div className="flex items-center justify-between mb-4">
-                          <div className="flex items-center space-x-3">
-                            <div className="w-8 h-8 bg-gray-200 rounded"></div>
-                            <div className="h-6 bg-gray-200 rounded w-24"></div>
-                          </div>
-                          <div className="h-6 bg-gray-200 rounded w-16"></div>
+
+            {/* Country Selection Checkboxes */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 mb-6">
+              {countriesWithCounts.slice(0, 20).map((country) => (
+                <label
+                  key={country.slug}
+                  className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 p-2 rounded"
+                >
+                  <input
+                    type="checkbox"
+                    checked={selectedCountries.includes(country.name)}
+                    onChange={() => toggleCountrySelection(country.name)}
+                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <span className="text-sm text-gray-700">
+                    {country.flag} {country.name}
+                  </span>
+                </label>
+              ))}
+            </div>
+
+            {selectedCountries.length > 0 && (
+              <div className="text-center">
+                <p className="text-sm text-gray-600">
+                  Selected: {selectedCountries.join(', ')}
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* Countries Display */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {isLoading ? (
+              // Loading skeleton
+              Array.from({ length: 6 }).map((_, i) => (
+                <Card key={i} className="hover:shadow-lg transition-shadow duration-300 border-0 shadow-md">
+                  <CardContent className="p-6">
+                    <div className="animate-pulse">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-8 h-8 bg-gray-200 rounded"></div>
+                          <div className="h-6 bg-gray-200 rounded w-24"></div>
                         </div>
-                        <div className="h-4 bg-gray-200 rounded w-full mb-2"></div>
-                        <div className="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
-                        <div className="h-10 bg-gray-200 rounded w-full"></div>
+                        <div className="h-6 bg-gray-200 rounded w-16"></div>
                       </div>
-                    </CardContent>
-                  </Card>
-                ))
-              ) : filteredCountries.length === 0 ? (
-                <div className="col-span-full text-center py-12">
-                  <div className="text-gray-500">
-                    <Search className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-                    <h3 className="text-xl font-semibold mb-2">No countries found</h3>
-                    <p>Try searching for a different country name.</p>
-                    {searchQuery && (
-                      <Button 
-                        variant="outline" 
-                        onClick={clearSearch}
-                        className="mt-4"
-                      >
-                        Clear search
-                      </Button>
-                    )}
-                  </div>
+                      <div className="h-4 bg-gray-200 rounded w-full mb-2"></div>
+                      <div className="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
+                      <div className="h-10 bg-gray-200 rounded w-full"></div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))
+            ) : filteredCountries.length === 0 ? (
+              <div className="col-span-full text-center py-12">
+                <div className="text-gray-500">
+                  <Search className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+                  <h3 className="text-xl font-semibold mb-2">No countries found</h3>
+                  <p>Try searching for a different country name.</p>
+                  {searchQuery && (
+                    <Button 
+                      variant="outline" 
+                      onClick={clearSearch}
+                      className="mt-4"
+                    >
+                      Clear search
+                    </Button>
+                  )}
                 </div>
-              ) : (
-                filteredCountries.map((country) => (
+              </div>
+            ) : (
+              filteredCountries.map((country) => (
                 <Card key={country.id} className="hover:shadow-lg transition-shadow duration-300 border-0 shadow-md">
                   <CardContent className="p-6">
                     <Link href={`/country/${country.slug}`} className="block">
@@ -172,7 +255,7 @@ export default function FindHost() {
                           </h3>
                         </div>
                         <Badge variant="secondary" className="bg-blue-100 text-blue-800">
-                          {country.listingCount} hosts
+                          {country.listingCount} managers
                         </Badge>
                       </div>
                       <p className="text-gray-600 mb-4">
@@ -190,9 +273,8 @@ export default function FindHost() {
                     </Link>
                   </CardContent>
                 </Card>
-                ))
-              )}
-            </div>
+              ))
+            )}
           </div>
         </div>
       </section>
@@ -205,11 +287,11 @@ export default function FindHost() {
               Can't Find Your Country?
             </h2>
             <p className="text-xl text-gray-600 mb-8">
-              We're constantly adding new destinations. Submit your direct booking site to be featured.
+              We're constantly adding new destinations. Submit your management company to be featured.
             </p>
             <Button asChild size="lg" className="bg-blue-600 hover:bg-blue-700 text-white">
               <Link href="/submit">
-                Add Your Direct Booking Site
+                List Your Management Company
               </Link>
             </Button>
           </div>
