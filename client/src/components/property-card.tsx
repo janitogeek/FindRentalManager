@@ -169,7 +169,7 @@ export default function PropertyCard({ property }: PropertyCardProps) {
             </div>
           </div>
 
-          {/* Why Book With CTA */}
+          {/* Why Rent With CTA */}
           <div className="mb-6">
             <Button 
               asChild 
@@ -178,12 +178,12 @@ export default function PropertyCard({ property }: PropertyCardProps) {
               className="w-full flex items-center justify-center gap-2 bg-gray-100 hover:bg-gray-200 border-gray-300 text-gray-700 hover:text-gray-800"
             >
               <Link to={`/property/${slug}`}>
-                Why book with {property.name}?
+                Why rent with {property.name}?
               </Link>
             </Button>
           </div>
 
-          {/* Bottom Section: Social Links Left, Book Direct Right */}
+          {/* Bottom Section: Social Links Left, Visit Website Right */}
           <div className="flex items-center justify-between mt-auto pt-4">
             {/* Social Links - Left */}
             <div className="flex items-center gap-3">
@@ -222,7 +222,7 @@ export default function PropertyCard({ property }: PropertyCardProps) {
               )}
             </div>
 
-            {/* Book Direct - Right */}
+            {/* Visit Website - Right */}
             {property.website && (
               <Button 
                 asChild 
@@ -236,7 +236,7 @@ export default function PropertyCard({ property }: PropertyCardProps) {
                   className="flex items-center justify-center gap-2"
                 >
                   <ExternalLink className="w-4 h-4" />
-                  Book Direct
+                  Visit Website
                 </a>
               </Button>
             )}

@@ -14,7 +14,7 @@ export default function WhyBookWith({ companyName, content }: WhyBookWithProps) 
     <Card className="mb-8 shadow-md border-0">
       <CardHeader className="bg-gradient-to-r from-blue-600 to-blue-500 text-white">
         <CardTitle className="text-xl font-semibold">
-          Why Book With {companyName}
+          Why Rent With {companyName}
         </CardTitle>
       </CardHeader>
       <CardContent className="p-6">

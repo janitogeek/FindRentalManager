@@ -56,6 +56,7 @@ export interface AirtableSubmission {
     'Currency'?: string;
     'Google Reviews Link'?: string;
     'Cancellation Policy'?: string;
+    'Commission On Revenue'?: number;
   };
   createdTime: string;
 }
@@ -101,6 +102,7 @@ export interface Submission {
   currency?: string;
   googleReviewsLink?: string;
   cancellationPolicy?: string;
+  commissionOnRevenue?: number;
   // Unique slug for duplicate company names
   uniqueSlug?: string;
 }
@@ -608,6 +610,7 @@ export const airtableService = {
       currency: fields['Currency'] || undefined,
       googleReviewsLink: fields['Google Reviews Link'] || undefined,
       cancellationPolicy: fields['Cancellation Policy'] || undefined,
+      commissionOnRevenue: fields['Commission On Revenue'] || undefined,
     };
 
 

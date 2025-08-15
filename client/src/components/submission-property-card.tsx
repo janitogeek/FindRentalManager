@@ -395,6 +395,16 @@ export default function SubmissionPropertyCard({ submission, fromCity, fromCount
             </div>
           )}
           
+          {/* Commission Display - Above Pricing */}
+          {submission.commissionOnRevenue && (
+            <div className="flex items-center gap-1 font-medium text-green-600">
+              <span className="text-gray-500">💼</span>
+              <span>
+                {submission.commissionOnRevenue}% Commission
+              </span>
+            </div>
+          )}
+          
           {(submission.minPrice || submission.maxPrice) && submission.currency && (
             <div className="flex items-center gap-1 font-medium text-blue-600">
               <span className="text-gray-500">💰</span>
@@ -482,7 +492,7 @@ export default function SubmissionPropertyCard({ submission, fromCity, fromCount
           <div className="mb-4 min-h-[3rem]"></div>
         )}
 
-        {/* Why Book With CTA */}
+        {/* Why Rent With CTA */}
         <div className="mb-6">
           <Button 
             asChild 
@@ -494,12 +504,12 @@ export default function SubmissionPropertyCard({ submission, fromCity, fromCount
               href={buildPropertyUrl()}
               onClick={trackCompany}
             >
-              Why book with {submission.brandName}?
+              Why rent with {submission.brandName}?
             </Link>
           </Button>
         </div>
 
-        {/* Bottom Section: Social Links Left, Book Direct Right */}
+        {/* Bottom Section: Social Links Left, Visit Website Right */}
         <div className="flex items-center justify-between mt-auto pt-4">
           {/* Social Links - Left */}
           <div className="flex items-center gap-3">
@@ -565,7 +575,7 @@ export default function SubmissionPropertyCard({ submission, fromCity, fromCount
             )}
           </div>
 
-          {/* Book Direct - Right */}
+          {/* Visit Website - Right */}
           {submission.website && (
             <Button 
               asChild 
@@ -580,7 +590,7 @@ export default function SubmissionPropertyCard({ submission, fromCity, fromCount
                 onClick={trackWebsite}
               >
                 <ExternalLink className="w-4 h-4" />
-                Book Direct
+                Visit Website
               </a>
             </Button>
           )}

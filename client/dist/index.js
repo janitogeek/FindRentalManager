@@ -834,10 +834,17 @@ var submitToAirtable = async (formData, paymentInfo) => {
     "PMC General Website": formData["PMC General Website"],
     "Direct Booking Engine URL": formData["Direct Booking Engine URL"],
     "Number of Listings": formData["Number of Listings"],
-    "Countries": Array.isArray(formData["Countries"]) ? formData["Countries"].join(", ") : formData["Countries"],
-    "Cities / Regions": Array.isArray(formData["Cities / Regions"]) ? formData["Cities / Regions"].map((city) => city.name || city).join(", ") : formData["Cities / Regions"],
+    "Cities / Regions": Array.isArray(formData["Cities / Regions"]) ? formData["Cities / Regions"].map((city) => {
+      const cityDisplayName = city.displayName || city;
+      if (typeof cityDisplayName === "string" && cityDisplayName.includes(", ")) {
+        return cityDisplayName.split(", ")[0].trim();
+      }
+      return cityDisplayName;
+    }).join(", ") : formData["Cities / Regions"],
+    "Countries": Array.isArray(formData["Cities / Regions"]) ? Array.from(new Set(formData["Cities / Regions"].map((city) => city.countryName || "").filter(Boolean))).join(", ") : "",
     "One-line Description": formData["One-line Description"],
     "Why Book With You": formData["Why Book With You?"],
+    "Why Rent With You": formData["Why Rent With You?"],
     "Top Stats": formData["Top Stats"] || "",
     "Types of Stays": Array.isArray(formData["Types of Stays"]) ? formData["Types of Stays"] : [],
     "Ideal For": Array.isArray(formData["Ideal For"]) ? formData["Ideal For"] : [],
@@ -853,10 +860,6 @@ var submitToAirtable = async (formData, paymentInfo) => {
     "TikTok": formData["TikTok"] || "",
     "YouTube / Video Tour": formData["YouTube / Video Tour"] || "",
     "Plan": formData["Choose Your Listing Type"] === "Basic (\u20AC99.99/year)" ? "Basic Listing - \u20AC99.99/year" : formData["Choose Your Listing Type"] === "Premium (\u20AC499.99/year)" ? "Premium Listing - \u20AC499.99/year" : formData["Choose Your Listing Type"],
-    "Verification Purchased": "No",
-    // Removed verification logic
-    "Verification Status": "N/A",
-    // Removed verification logic
     "Submission Date": (/* @__PURE__ */ new Date()).toISOString().split("T")[0],
     "Status": formData["Choose Your Listing Type"] === "Premium (\u20AC499.99/year)" ? "Approved \u2013 Published" : "Pending Review",
     "Payment Status": "Completed",

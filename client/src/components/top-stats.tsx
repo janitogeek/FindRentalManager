@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
+import { BarChart3 } from "lucide-react";
 
 interface TopStatsProps {
   topStats: string;
@@ -46,9 +47,12 @@ export default function TopStats({ topStats, brandName, hostWebsite, onOpenChang
     <div className="border border-gray-200 rounded-lg p-3 bg-white">
       {/* Header with Toggle Button */}
       <div className="flex items-center justify-between">
-        <h4 className="text-sm font-medium text-gray-700 flex items-center gap-2">
-          📊 Stats Provided by the Host
-        </h4>
+        <div className="flex items-center gap-2">
+          <BarChart3 className="w-4 h-4 text-blue-600" />
+          <span className="text-sm font-medium text-gray-900">
+            📊 Stats Provided by the PMC
+          </span>
+        </div>
         
         <Popover open={isOpen} onOpenChange={handleOpenChange}>
           <PopoverTrigger asChild>

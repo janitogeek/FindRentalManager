@@ -55,7 +55,6 @@ const formSchema = z.object({
     name: z.string()
   }).optional(),
   "One-line Description": z.string().min(5).max(70),
-  "Why Book With You?": z.string().min(50, "Please provide at least 50 characters explaining why guests should book with you"),
   "Why Rent With You?": z.string().min(50, "Please provide at least 50 characters explaining why property owners should rent with you"),
   "Commission On Revenue": z.coerce.number().min(0).max(100, "Commission must be between 0% and 100%"),
   "Top Stats": z.string().min(1, "Please share your top stats (e.g., average rating, number of reviews, etc.)"),
@@ -191,7 +190,6 @@ export default function Submit() {
       "Highlight Image": { url: "", name: "" },
       "Rating (X/5) & Reviews (#) Screenshot": { url: "", name: "" },
       "One-line Description": "",
-      "Why Book With You?": "",
       "Why Rent With You?": "",
       "Commission On Revenue": 0,
       "Top Stats": "",
@@ -515,7 +513,6 @@ export default function Submit() {
         }).join(", "),
         "Countries": extractedCountries.join(", "),
         "One-line Description": values["One-line Description"],
-        "Why Book With You": values["Why Book With You?"],
         "Why Rent With You": values["Why Rent With You?"],
         "Commission On Revenue": values["Commission On Revenue"] || 0,
         "Top Stats": values["Top Stats"] || "",
@@ -902,27 +899,9 @@ export default function Submit() {
                   <FormMessage />
                 </FormItem>
               )} />
-              <FormField control={form.control} name="Why Book With You?" render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Why Book With You? (for guests)<RequiredAsterisk /></FormLabel>
-                  <FormControl>
-                    <Textarea 
-                      {...field} 
-                      placeholder="Tell potential guests why they should choose your properties over others. Include unique features, exceptional service, special amenities, or any other compelling reasons. Minimum 50 characters."
-                      className={`min-h-[120px] ${field.value ? 'border-blue-500 bg-blue-50' : ''}`}
-                    />
-                  </FormControl>
-                  <div className="flex justify-between items-center">
-                    <FormMessage />
-                    <span className={`text-xs ${field.value && field.value.length < 50 ? 'text-red-500' : 'text-gray-500'}`}>
-                      {field.value?.length || 0}/50 characters minimum
-                    </span>
-                  </div>
-                </FormItem>
-              )} />
               <FormField control={form.control} name="Why Rent With You?" render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Why Property Owners Choose You?<RequiredAsterisk /></FormLabel>
+                  <FormLabel>Why Rent With You?<RequiredAsterisk /></FormLabel>
                   <FormDescription>
                     Explain why property owners should choose your management services (minimum 50 characters)
                   </FormDescription>

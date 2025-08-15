@@ -76,7 +76,6 @@ export default function FeaturedHostsCarousel() {
       // Major countries with common variations
       'United States': '🇺🇸',
       'USA': '🇺🇸',
-      'United Kingdom': '🇬🇧',
       'UK': '🇬🇧',
       
       // Africa
@@ -500,6 +499,16 @@ export default function FeaturedHostsCarousel() {
                     </div>
                   )}
                   
+                  {/* Commission Display - Above Pricing */}
+                  {host.commissionOnRevenue && (
+                    <div className="flex items-center gap-1 font-medium text-green-600 mb-2">
+                      <span className="text-gray-500">💼</span>
+                      <span>
+                        {host.commissionOnRevenue}% Commission
+                      </span>
+                    </div>
+                  )}
+                  
                   {(host.minPrice || host.maxPrice) && host.currency && (
                     <div className="flex items-center gap-1 font-medium text-blue-600">
                       <span className="text-gray-500">💰</span>
@@ -586,7 +595,7 @@ export default function FeaturedHostsCarousel() {
                   <div className="mb-4 min-h-[3rem]"></div>
                 )}
 
-                {/* Why Book With CTA */}
+                {/* Why Rent With CTA */}
                 <div className="mb-6">
                   <Button 
                     asChild 
@@ -598,12 +607,12 @@ export default function FeaturedHostsCarousel() {
                       to={`/property/${host.uniqueSlug || generateSlug(host.brandName)}?from=featured`}
                       onClick={clickTracking.trackCompany}
                     >
-                      Why book with {host.brandName}?
+                      Why rent with {host.brandName}?
                     </Link>
                   </Button>
                 </div>
 
-                {/* Bottom Section: Social Links Left, Book Direct Right */}
+                {/* Bottom Section: Social Links Left, Visit Website Right */}
                 <div className="flex items-center justify-between mt-auto pt-4">
                   {/* Social Links - Left */}
                   <div className="flex items-center gap-3">
@@ -669,7 +678,7 @@ export default function FeaturedHostsCarousel() {
                     )}
                   </div>
 
-                  {/* Book Direct - Right */}
+                  {/* Visit Website - Right */}
                   {host.website && (
                     <Button 
                       asChild 
@@ -684,7 +693,7 @@ export default function FeaturedHostsCarousel() {
                         onClick={clickTracking.trackWebsite}
                       >
                         <ExternalLink className="w-4 h-4" />
-                        Book Direct
+                        Visit Website
                       </a>
                     </Button>
                   )}
