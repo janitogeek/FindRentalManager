@@ -438,7 +438,7 @@ export default function SubmissionProperty() {
                   <CardContent className="p-6">
                     <div className="prose prose-gray max-w-none">
                       <p className="text-gray-700 whitespace-pre-line">
-                        {submission.whyRentWithYou || "Information about why property owners should choose this management company."}
+                        {submission.whyRentWithYou}
                       </p>
                     </div>
                   </CardContent>

@@ -48,7 +48,6 @@ export default function TopStats({ topStats, brandName, pmcGeneralWebsite, onOpe
       {/* Header with Toggle Button */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <BarChart3 className="w-4 h-4 text-blue-600" />
           <span className="text-sm font-medium text-gray-900">
             📊 Stats Provided by the PMC
           </span>
