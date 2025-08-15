@@ -82,6 +82,11 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/find-manager" className="text-gray-300 hover:text-white">
+                  Find a Manager
+                </Link>
+              </li>
+              <li>
                 <Link href="/submit" className="text-gray-300 hover:text-white">
                   List Your Management Company
                 </Link>

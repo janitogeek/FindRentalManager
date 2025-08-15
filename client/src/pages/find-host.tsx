@@ -76,10 +76,10 @@ export default function FindHost() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl sm:text-5xl font-bold mb-6">
-              Find a Manager by Country
+              Choose Your Location(s)
             </h1>
             <p className="text-xl text-blue-100 mb-8">
-              Select a country to discover verified professional rental managers
+              Search for a country or countries to discover verified vacation rental property management companies
             </p>
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 inline-block">
               <p className="text-lg">
@@ -176,10 +176,16 @@ export default function FindHost() {
                         </Badge>
                       </div>
                       <p className="text-gray-600 mb-4">
-                        Discover verified vacation rental hosts offering direct booking in {country.name}
+                        Discover verified vacation rental property management companies in {country.name}
                       </p>
-                      <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
-                        View Hosts in {country.name}
+                      <Button 
+                        asChild 
+                        size="lg" 
+                        className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                      >
+                        <Link href={`/country/${country.slug}`}>
+                          View Managers in {country.name}
+                        </Link>
                       </Button>
                     </Link>
                   </CardContent>

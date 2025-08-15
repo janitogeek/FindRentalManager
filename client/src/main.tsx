@@ -49,7 +49,7 @@ const updatePageMeta = () => {
     const countrySlug = path.split('/')[2];
     const countryName = countrySlug.charAt(0).toUpperCase() + countrySlug.slice(1);
     title = `${countryName} Rental Management Companies | FindRentalManager.com`;
-    description = `Find professional rental managers in ${countryName}. Connect with verified property management companies. Increase your property's occupancy rates and rental income.`;
+    description = `Discover verified vacation rental property management companies in ${countryName}. Connect with professional managers to maximize your property's rental income.`;
   } else if (path === '/submit') {
     title = "List Your Management Company | FindRentalManager.com";
     description = "Add your rental management company to our global directory. Connect with property owners and grow your business. Free and featured listing options available.";

@@ -33,6 +33,12 @@ export default function Header() {
               Home
             </Link>
             <Link 
+              href="/find-manager" 
+              className={`font-medium ${location === '/find-manager' ? 'text-primary' : 'text-gray-700 hover:text-primary'}`}
+            >
+              Find a Manager
+            </Link>
+            <Link 
               href="/submit" 
               className={`font-medium ${location === '/submit' ? 'text-primary' : 'text-gray-700 hover:text-primary'}`}
             >
@@ -81,6 +87,13 @@ export default function Header() {
                 onClick={closeMenu}
               >
                 Home
+              </Link>
+              <Link 
+                href="/find-manager"
+                className={`block px-3 py-2 rounded-md text-base font-medium ${location === '/find-manager' ? 'bg-primary/10 text-primary' : 'text-gray-700 hover:bg-gray-100'}`}
+                onClick={closeMenu}
+              >
+                Find a Manager
               </Link>
               <Link 
                 href="/submit"

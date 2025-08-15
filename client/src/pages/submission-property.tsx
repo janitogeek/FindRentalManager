@@ -151,7 +151,7 @@ export default function SubmissionProperty() {
                              }, 500); // Increased timeout to ensure page loads
                            }}
                          >
-                           Our Featured Hosts
+                           Our Featured Property Management Companies
                          </Link>
                          <span>›</span>
                          <span className="flex items-center gap-1">
@@ -160,8 +160,8 @@ export default function SubmissionProperty() {
                        </>
                      ) : (
                        <>
-                         <Link href="/find-host" className="hover:underline">
-                           Find a Host
+                         <Link href="/find-manager" className="hover:underline">
+                           Find a Manager
                          </Link>
                          {(fromCountry || (submission.countries && submission.countries.length > 0)) && (
                            <>

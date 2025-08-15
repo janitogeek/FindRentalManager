@@ -39,7 +39,7 @@ function Router() {
       <div className="flex-grow">
         <Switch>
           <Route path="/" component={Home} />
-          <Route path="/find-host" component={FindHost} />
+          <Route path="/find-manager" component={FindHost} />
           <Route path="/country/:country/:city" component={City} />
           <Route path="/country/:country" component={Country} />
           <Route path="/submit" component={Submit} />

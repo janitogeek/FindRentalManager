@@ -334,7 +334,7 @@ export default function City() {
         "@type": "ListItem",
         "position": 2,
         "name": "Find a Manager",
-        "item": "https://bookdirectstays.com/find-host"
+        "item": "https://bookdirectstays.com/find-manager"
       },
       {
         "@type": "ListItem",
@@ -369,7 +369,7 @@ export default function City() {
             <nav className="mb-8">
               <ol className="flex items-center space-x-2 text-blue-200">
                 <li>
-                  <Link href="/find-host" className="hover:text-white transition-colors">
+                  <Link href="/find-manager" className="hover:text-white transition-colors">
                     Find a Manager
                   </Link>
                 </li>
@@ -552,7 +552,7 @@ export default function City() {
                 </Link>
               </Button>
               <Button asChild size="lg" variant="outline" className="border-blue-600 text-blue-600 hover:bg-blue-50">
-                <Link href="/find-host">
+                <Link href="/find-manager">
                   Explore Other Destinations
                 </Link>
               </Button>
