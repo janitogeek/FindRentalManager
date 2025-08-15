@@ -26,7 +26,7 @@ export interface AirtableSubmission {
     'Email': string;
     'One-line Description': string;
     'Why Book With You': string;
-    'Why Book With You? (for owners)': string;
+    'Why Rent With You': string;
     'Plan': string;
     'Top Stats': string;
     'Countries': string | string[];
@@ -260,44 +260,43 @@ export const airtableService = {
         console.log('📝 First record fields:', allRecords[0].fields);
         console.log('📝 First record status:', JSON.stringify(allRecords[0].fields['Status']));
         
-        // Get all unique statuses from both fields
-        const allStatuses = allRecords.map(r => r.fields['Status']).filter(Boolean);
+        // Get all unique statuses from Status Bis field (this is what determines publishing)
         const allStatusBis = allRecords.map(r => r.fields['Status Bis (PMC directory)']).filter(Boolean);
-        const uniqueStatuses = [...new Set([...allStatuses, ...allStatusBis])];
-        console.log('📋 All unique statuses found (Status + Status Bis):', uniqueStatuses);
-        console.log('📋 All statuses (with quotes):', uniqueStatuses.map(s => `"${s}"`));
+        const uniqueStatusBis = [...new Set(allStatusBis)];
+        console.log('📋 All unique Status Bis (PMC directory) statuses found:', uniqueStatusBis);
+        console.log('📋 All Status Bis statuses (with quotes):', uniqueStatusBis.map(s => `"${s}"`));
         
-        // Count each status from both fields
-        const statusCounts = [...allStatuses, ...allStatusBis].reduce((acc: any, status) => {
+        // Count each Status Bis status
+        const statusBisCounts = allStatusBis.reduce((acc: any, status) => {
           if (status) {
             acc[status] = (acc[status] || 0) + 1;
           }
           return acc;
         }, {});
-        console.log('📊 Status breakdown (Status + Status Bis):', statusCounts);
+        console.log('📊 Status Bis (PMC directory) breakdown:', statusBisCounts);
         
-        // Check if any match our target in either field
+        // Check if any match our target in Status Bis field
         const targetStatus = "Approved – Published"; // em dash
         const matchingRecords = allRecords.filter(r => 
-          r.fields['Status'] === targetStatus || r.fields['Status Bis (PMC directory)'] === targetStatus
+          r.fields['Status Bis (PMC directory)'] === targetStatus
         );
-        console.log(`🎯 Records with exact status "${targetStatus}" in either field:`, matchingRecords.length);
+        console.log(`🎯 Records with exact status "${targetStatus}" in Status Bis (PMC directory):`, matchingRecords.length);
         
-        // Check for similar statuses in both fields
-        const similarStatuses = uniqueStatuses.filter(status => 
+        // Check for similar statuses in Status Bis field
+        const similarStatusBis = uniqueStatusBis.filter(status => 
           status && status.toLowerCase().includes('approved') && status.toLowerCase().includes('published')
         );
-        console.log('🔍 Similar statuses containing "approved" and "published":', similarStatuses);
+        console.log('🔍 Similar Status Bis statuses containing "approved" and "published":', similarStatusBis);
       }
     }
 
-    // Now try the filtered query - check both Status and Status Bis (PMC directory)
-    const filterFormula = `OR({Status} = "Approved – Published", {Status Bis (PMC directory)} = "Approved – Published")`;
+    // Now try the filtered query - check Status Bis (PMC directory) field for publishing decisions
+    const filterFormula = `{Status Bis (PMC directory)} = "Approved – Published"`;
     const url = `${AIRTABLE_API_URL}?filterByFormula=${encodeURIComponent(filterFormula)}`;
     
     console.log('🔗 API URL:', url);
     console.log('📝 Filter formula:', filterFormula);
-    console.log('🎯 Looking for status "Approved – Published" in either Status or Status Bis (PMC directory) field');
+    console.log('🎯 Looking for status "Approved – Published" in Status Bis (PMC directory) field');
 
     const response = await fetch(url, {
       headers: {
@@ -318,11 +317,11 @@ export const airtableService = {
 
     if (records.length > 0) {
       console.log('🏠 First approved-published record:', records[0]);
-      console.log('📝 First record status:', records[0].fields['Status']);
-      console.log('✅ SUCCESS! Found records with em dash status!');
+      console.log('📝 First record Status Bis (PMC directory):', records[0].fields['Status Bis (PMC directory)']);
+      console.log('✅ SUCCESS! Found records with Status Bis (PMC directory) = "Approved – Published"!');
     } else {
-      console.log('❌ No records found with status "Approved – Published"');
-      console.log('🔍 This suggests a status string mismatch');
+      console.log('❌ No records found with Status Bis (PMC directory) = "Approved – Published"');
+      console.log('🔍 This suggests a status string mismatch or no approved records');
     }
 
     const transformedSubmissions = records.map((record, index) => {
@@ -332,6 +331,7 @@ export const airtableService = {
         
         const transformedSubmission = this.transformSubmission(record);
         console.log('✅ Successfully transformed submission:', transformedSubmission.brandName);
+        console.log('📝 Submission Status Bis (PMC directory):', record.fields['Status Bis (PMC directory)']);
         return transformedSubmission;
       } catch (error) {
         console.error(`❌ Error transforming approved-published record ${index + 1}:`, error);
@@ -586,7 +586,7 @@ export const airtableService = {
       email: fields['Email'] || '',
       oneLineDescription: fields['One-line Description'] || '',
       whyBookWithYou: fields['Why Book With You'] || '',
-      whyRentWithYou: fields['Why Book With You? (for owners)'] || '',
+      whyRentWithYou: fields['Why Rent With You'] || '',
       plan: fields['Plan'] || '',
       topStats: fields['Top Stats'] || '',
       countries: parseArray(fields['Countries']),

@@ -461,7 +461,7 @@ export default function SubmissionProperty() {
                         </p>
                       ) : (
                         <p className="text-gray-500 italic">
-                          No content available from "Why Book With You? (for owners)" column in Airtable.
+                          No content available from "Why Rent With You" column in Airtable.
                         </p>
                       )}
                     </div>

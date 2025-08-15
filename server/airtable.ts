@@ -44,7 +44,7 @@ export async function submitPropertyToAirtable(submission: InsertSubmission & { 
       'Countries': submission.countries,
       'One-line Description': submission.description,
       'Why Book With You': submission.whyBookWithYou || '',
-      'Why Book With You? (for owners)': submission.whyRentWithYou || '',
+      'Why Rent With You': submission.whyRentWithYou || '',
       'Commission On Revenue': submission.commissionOnRevenue || 0,
       'Logo': submission.logo,
       'Email': submission.email,
