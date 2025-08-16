@@ -101,9 +101,6 @@ export default function FindHost() {
               <h2 className="text-2xl font-bold mb-2 text-gray-900">
                 Choose Your Location
               </h2>
-              <p className="text-gray-600">
-                Select a country to discover verified vacation rental property management companies
-              </p>
             </div>
             
             <div className="flex flex-col sm:flex-row gap-4 mb-6">
