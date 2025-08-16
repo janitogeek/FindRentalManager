@@ -272,30 +272,15 @@ export default function Submit() {
         MaxPriceValue: values["Max Price"]
       });
       
-      // Store form data in localStorage for processing after payment
-      localStorage.setItem('submissionFormData', JSON.stringify(values));
+      // Redirect to Stripe Checkout instead of directly submitting to Airtable
+      await createCheckoutSession(
+        values, // Pass entire form data
+        values["Choose Your Listing Type"], // Plan selection
+        values["Submitted By (Email)"] // Customer email
+      );
       
-      // Create Stripe checkout session
-      const response = await fetch('/api/stripe/create-checkout-session', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          plan: values["Choose Your Listing Type"],
-          formData: values
-        }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to create checkout session');
-      }
-
-      const { url } = await response.json();
-      
-      // Redirect to Stripe checkout
-      window.location.href = url;
+      // The user will be redirected to Stripe Checkout
+      // Form will be processed via webhook after successful payment
       
     } catch (error) {
       console.error('Error creating checkout session:', error);

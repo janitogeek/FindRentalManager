@@ -22,7 +22,7 @@ export async function trackClick({ hostId, type, onSuccess, onError }: ClickTrac
   try {
     // Use fetch with no-cors to avoid blocking user navigation
     // This runs asynchronously in the background
-    fetch('/api/log-click', {
+    fetch('/api/main?endpoint=log-click', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
