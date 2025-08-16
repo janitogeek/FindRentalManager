@@ -262,7 +262,16 @@ export async function getCitySubmissionCounts(countryName: string): Promise<Reco
       if (submission.citiesRegions && submission.citiesRegions.length > 0 && 
           submission.countries && submission.countries.length > 0) {
         
-        // Extract just city names from the cities/regions data
+        // Check if this submission has the target country
+        const hasTargetCountry = submission.countries.some(country => 
+          country.toLowerCase() === countryName.toLowerCase()
+        );
+        
+        if (!hasTargetCountry) {
+          continue; // Skip submissions that don't have this country
+        }
+        
+        // Extract city names from the cities/regions data
         const cityNames = submission.citiesRegions.map((cityRegion: any) => {
           if (typeof cityRegion === 'string') {
             // If it's already "City, Region, Country" format, extract just the city
@@ -294,20 +303,17 @@ export async function getCitySubmissionCounts(countryName: string): Promise<Reco
           return cityRegion;
         }).filter(Boolean);
         
-        // Use cached/optimized GeoNames matching (with batching and delays)
-        const cityMatches = await matchCitiesToCountriesOptimized(cityNames, submission.countries);
-        
-        // Count cities that belong to the requested country
-        cityMatches.forEach(match => {
-          if (match.countryName.toLowerCase() === countryName.toLowerCase()) {
-            cityCounts[match.cityName] = (cityCounts[match.cityName] || 0) + 1;
-            console.log(`✅ MATCHED: ${match.cityName} belongs to ${countryName} (count: ${cityCounts[match.cityName]})`);
+        // For cities that belong to this country, count them directly
+        cityNames.forEach(cityName => {
+          if (cityName) {
+            cityCounts[cityName] = (cityCounts[cityName] || 0) + 1;
+            console.log(`✅ DIRECT COUNT: ${cityName} in ${countryName} (count: ${cityCounts[cityName]})`);
           }
         });
       }
     }
     
-    console.log(`🏙️ FINAL GEONAMES city counts for ${countryName}:`, cityCounts);
+    console.log(`🏙️ FINAL DIRECT city counts for ${countryName}:`, cityCounts);
     return cityCounts;
     
   } catch (error) {
