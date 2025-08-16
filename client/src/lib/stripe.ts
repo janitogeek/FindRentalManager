@@ -19,32 +19,35 @@ export const createCheckoutSession = async (params: { plan: string; email: strin
     console.log("📧 Email:", params.email);
     console.log("📦 Plan:", params.plan);
     
+    // Call our API to create checkout session with metadata
+    const response = await fetch('/api/stripe/create-checkout-session', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        plan: params.plan,
+        email: params.email,
+        metadata: params.metadata
+      }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Failed to create checkout session');
+    }
+
+    const { sessionId } = await response.json();
+    console.log('✅ Checkout session created:', sessionId);
+
+    // Redirect to Stripe checkout
     const stripe = await stripePromise;
     if (!stripe) {
       throw new Error('Stripe failed to load');
     }
 
-    const priceId = PRICE_IDS[params.plan as keyof typeof PRICE_IDS];
-    if (!priceId) {
-      throw new Error(`Invalid plan: ${params.plan}`);
-    }
-
-    // Create checkout session directly with Stripe.js
-    const baseUrl = window.location.origin;
-    
-    console.log('Creating Stripe checkout with:', { priceId, email: params.email, baseUrl });
-
     const { error } = await stripe.redirectToCheckout({
-      lineItems: [
-        {
-          price: priceId,
-          quantity: 1,
-        },
-      ],
-      mode: 'subscription',
-      successUrl: `${baseUrl}/submit/success?session_id={CHECKOUT_SESSION_ID}&plan=${encodeURIComponent(params.plan)}`,
-      cancelUrl: `${baseUrl}/submit?canceled=true`,
-      customerEmail: params.email,
+      sessionId: sessionId
     });
 
     if (error) {
