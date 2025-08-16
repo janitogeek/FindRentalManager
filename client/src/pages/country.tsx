@@ -390,6 +390,9 @@ export default function Country() {
 
       // Check price range filters
       if (filters.minPrice !== null || filters.maxPrice !== null) {
+        console.log(`🔍 Price filter active: min=${filters.minPrice}, max=${filters.maxPrice}`);
+        console.log(`📊 Submission pricing: min=${submission.minPrice}, max=${submission.maxPrice}, currency=${submission.currency}`);
+        
         // Only apply price filters if submission has pricing data
         if (submission.minPrice && submission.maxPrice && submission.currency) {
           const companyMin = submission.minPrice;
@@ -397,28 +400,80 @@ export default function Country() {
           
           // If user sets only min price, show companies where max price >= user min
           if (filters.minPrice !== null && filters.maxPrice === null) {
-            if (companyMax < filters.minPrice) return false;
+            if (companyMax < filters.minPrice) {
+              console.log(`❌ Filtered out ${submission.brandName}: companyMax (${companyMax}) < userMin (${filters.minPrice})`);
+              return false;
+            }
           }
           
           // If user sets only max price, show companies where min price <= user max
           if (filters.maxPrice !== null && filters.minPrice === null) {
-            if (companyMin > filters.maxPrice) return false;
+            if (companyMin > filters.maxPrice) {
+              console.log(`❌ Filtered out ${submission.brandName}: companyMin (${companyMin}) > userMax (${filters.maxPrice})`);
+              return false;
+            }
           }
           
           // If user sets both min and max, check for range overlap
           if (filters.minPrice !== null && filters.maxPrice !== null) {
             // No overlap if company max < user min OR company min > user max
             if (companyMax < filters.minPrice || companyMin > filters.maxPrice) {
+              console.log(`❌ Filtered out ${submission.brandName}: no overlap - company range [${companyMin}-${companyMax}] vs user range [${filters.minPrice}-${filters.maxPrice}]`);
               return false;
             }
           }
+          
+          console.log(`✅ ${submission.brandName} passed price filter`);
         } else {
           // If submission doesn't have pricing data, exclude it when price filters are active
+          console.log(`❌ Filtered out ${submission.brandName}: missing pricing data`);
           return false;
         }
       }
 
-        return true;
+      // Check commission range filters
+      if (filters.minCommission !== null || filters.maxCommission !== null) {
+        console.log(`🔍 Commission filter active: min=${filters.minCommission}%, max=${filters.maxCommission}%`);
+        console.log(`📊 Submission commission: ${submission.commissionOnRevenue}%`);
+        
+        // Only apply commission filters if submission has commission data
+        if (submission.commissionOnRevenue !== undefined && submission.commissionOnRevenue !== null) {
+          const companyCommission = submission.commissionOnRevenue;
+          
+          // If user sets only min commission, show companies where commission >= user min
+          if (filters.minCommission !== null && filters.maxCommission === null) {
+            if (companyCommission < filters.minCommission) {
+              console.log(`❌ Filtered out ${submission.brandName}: companyCommission (${companyCommission}%) < userMin (${filters.minCommission}%)`);
+              return false;
+            }
+          }
+          
+          // If user sets only max commission, show companies where commission <= user max
+          if (filters.maxCommission !== null && filters.minCommission === null) {
+            if (companyCommission > filters.maxCommission) {
+              console.log(`❌ Filtered out ${submission.brandName}: companyCommission (${companyCommission}%) > userMax (${filters.maxCommission}%)`);
+              return false;
+            }
+          }
+          
+          // If user sets both min and max, check for range overlap
+          if (filters.minCommission !== null && filters.maxCommission !== null) {
+            // No overlap if company commission < user min OR company commission > user max
+            if (companyCommission < filters.minCommission || companyCommission > filters.maxCommission) {
+              console.log(`❌ Filtered out ${submission.brandName}: companyCommission (${companyCommission}%) outside user range [${filters.minCommission}%-${filters.maxCommission}%]`);
+              return false;
+            }
+          }
+          
+          console.log(`✅ ${submission.brandName} passed commission filter`);
+        } else {
+          // If submission doesn't have commission data, exclude it when commission filters are active
+          console.log(`❌ Filtered out ${submission.brandName}: missing commission data`);
+          return false;
+        }
+      }
+
+      return true;
       });
     }
     
