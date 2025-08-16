@@ -945,7 +945,7 @@ export default function Submit() {
 
               <FormField control={form.control} name="Commission On Revenue" render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Commission on Revenue (%)<RequiredAsterisk /></FormLabel>
+                  <FormLabel>Commission On Revenue (%)<RequiredAsterisk /></FormLabel>
                   <FormDescription>
                     What percentage commission do you charge property owners on rental revenue?
                   </FormDescription>

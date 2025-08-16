@@ -184,18 +184,30 @@ export const createCheckoutSession = async (formData: any, plan: string, email: 
     
     console.log('Creating Stripe checkout with:', { priceId, email, baseUrl });
 
-    // Create checkout session directly with Stripe.js
+    // Create checkout session on the server to include metadata
+    const response = await fetch('/api/stripe/create-checkout-session', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        formData,
+        plan,
+        email,
+        processedFiles
+      }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Failed to create checkout session');
+    }
+
+    const { sessionId } = await response.json();
+    
+    // Redirect to Stripe checkout
     const { error } = await stripe.redirectToCheckout({
-      lineItems: [
-        {
-          price: priceId,
-          quantity: 1,
-        },
-      ],
-      mode: 'subscription',
-      successUrl: `${baseUrl}/submit/success?session_id={CHECKOUT_SESSION_ID}&plan=${encodeURIComponent(plan)}`,
-      cancelUrl: `${baseUrl}/submit?canceled=true`,
-      customerEmail: email,
+      sessionId: sessionId
     });
 
     if (error) {
