@@ -749,8 +749,8 @@ export default function Submit() {
             <div>
               <h3 className="font-semibold text-blue-900 mb-1">Double Your Visibility!</h3>
               <p className="text-blue-800 text-sm">
-                Your listing will also appear on <strong>FindRentalManager</strong> to boost visibility among property owners, 
-                helping you generate more leads and grow your portfolio. Get exposure on both platforms with one submission!
+                Your listing will also appear on <strong>BookDirectStays</strong> to boost visibility among guests, 
+                helping you generate more direct bookings. Get exposure on both platforms with one submission!
               </p>
             </div>
           </div>
