@@ -17,7 +17,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const { plan, email, metadata } = req.body;
+    const { plan, formData } = req.body;
     
     // Auto-detect the current deployment URL for development
     const host = req.headers.host;
@@ -27,8 +27,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     console.log('Using base URL:', baseUrl);
     
     // Validate input
-    if (!plan || !email) {
-      return res.status(400).json({ error: 'Plan and email are required' });
+    if (!plan || !formData) {
+      return res.status(400).json({ error: 'Plan and formData are required' });
     }
     
     const priceId = PRICE_IDS[plan as keyof typeof PRICE_IDS];
@@ -40,14 +40,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     // Validate email format
+    const email = formData["Submitted By (Email)"];
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    if (!email || !emailRegex.test(email)) {
       return res.status(400).json({ error: 'Invalid email format' });
     }
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
-      mode: 'subscription',
+      mode: 'payment',
       customer_email: email,
       line_items: [
         {
@@ -58,9 +59,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       success_url: `${baseUrl}/submit/success?session_id={CHECKOUT_SESSION_ID}&plan=${encodeURIComponent(plan)}`,
       cancel_url: `${baseUrl}/submit?canceled=true`,
       metadata: {
-        submissionData: JSON.stringify(metadata), // Store form data
         plan: plan,
         email: email,
+        brandName: formData["Brand Name"]
       },
       // Enable automatic tax calculation if needed
       automatic_tax: { enabled: false },
@@ -68,7 +69,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       allow_promotion_codes: true,
     });
 
-    res.json({ sessionId: session.id });
+    res.json({ url: session.url });
   } catch (error) {
     console.error('Stripe checkout error:', error);
     
