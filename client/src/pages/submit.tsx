@@ -266,9 +266,11 @@ export default function Submit() {
       
       // Redirect to Stripe Checkout instead of directly submitting to Airtable
       await createCheckoutSession(
-        values, // Pass entire form data
-        values["Choose Your Listing Type"], // Plan selection
-        values["Submitted By (Email)"] // Customer email
+        {
+          plan: values["Choose Your Listing Type"], // Plan selection
+          email: values["Submitted By (Email)"], // Customer email
+          metadata: values // Pass entire form data as metadata
+        }
       );
       
       // The user will be redirected to Stripe Checkout

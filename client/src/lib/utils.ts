@@ -268,6 +268,7 @@ export function getFlagByCountryName(countryName: string): string {
     'Portugal': '🇵🇹',
     'Romania': '🇷🇴',
     'Serbia': '🇷🇸',
+    'Sweden': '🇸🇪',
     'Ukraine': '🇺🇦',
     'Vatican City': '🇻🇦',
     'Kosovo': '🇽🇰',

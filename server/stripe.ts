@@ -2,7 +2,7 @@ import Stripe from 'stripe';
 import { Request, Response } from 'express';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2024-12-18.acacia',
+  apiVersion: '2025-06-30.basil',
 });
 
 // Stripe price IDs - configured with real price IDs from Stripe Dashboard
@@ -118,6 +118,7 @@ const submitToAirtable = async (formData: any, paymentInfo: any) => {
     "One-line Description": formData["One-line Description"],
     "Why Book With You": formData["Why Book With You? (for guests)"],
     "Why Rent With You": formData["Why Rent With You? (for owners)"],
+    "Commission On Revenue": formData["Commission On Revenue"] || 0,
     "Top Stats": formData["Top Stats"] || "",
     "Types of Stays": Array.isArray(formData["Types of Stays"]) ? formData["Types of Stays"] : [],
     "Ideal For": Array.isArray(formData["Ideal For"]) ? formData["Ideal For"] : [],
@@ -266,7 +267,7 @@ export const handleWebhook = async (req: Request, res: Response) => {
         type: event.type,
         // Log object type and ID if available
         object: event.data.object?.object || 'unknown',
-        objectId: event.data.object?.id || 'no-id'
+        objectId: (event.data.object as any)?.id || 'no-id'
       });
   }
 
@@ -304,8 +305,8 @@ export const getSubscription = async (req: Request, res: Response) => {
     res.json({
       id: subscription.id,
       status: subscription.status,
-      current_period_start: subscription.current_period_start,
-      current_period_end: subscription.current_period_end,
+      current_period_start: (subscription as any).current_period_start,
+      current_period_end: (subscription as any).current_period_end,
       plan: subscription.items.data[0]?.price.nickname || subscription.items.data[0]?.price.id,
       amount: subscription.items.data[0]?.price.unit_amount,
       currency: subscription.items.data[0]?.price.currency,
@@ -329,8 +330,8 @@ export const getCustomerSubscriptions = async (req: Request, res: Response) => {
     const formattedSubs = subscriptions.data.map(sub => ({
       id: sub.id,
       status: sub.status,
-      current_period_start: sub.current_period_start,
-      current_period_end: sub.current_period_end,
+      current_period_start: (sub as any).current_period_start,
+      current_period_end: (sub as any).current_period_end,
       plan: sub.items.data[0]?.price.nickname || sub.items.data[0]?.price.id,
       amount: sub.items.data[0]?.price.unit_amount,
       currency: sub.items.data[0]?.price.currency,

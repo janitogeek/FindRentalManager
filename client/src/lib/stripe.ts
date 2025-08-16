@@ -12,26 +12,26 @@ const PRICE_IDS = {
   'Premium (€499.99/year)': 'price_1RqeH2AMrMcYfFXQZos4UTzR', // Premium Listing Plan (Test) - €499.99/year
 };
 
-export const createCheckoutSession = async (formData: any, plan: string, email: string) => {
+export const createCheckoutSession = async (params: { plan: string; email: string; metadata: any }) => {
   try {
     console.log("💳💳💳 STRIPE CHECKOUT SESSION STARTING 💳💳💳");
-    console.log("📋 Form data received in Stripe:", formData);
+    console.log("📋 Form data received in Stripe:", params.metadata);
     console.log("💰 PRICING IN STRIPE FUNCTION:", {
-      Currency: formData["Currency"],
-      "Min Price": formData["Min Price"],
-      "Max Price": formData["Max Price"]
+      Currency: params.metadata["Currency"],
+      "Min Price": params.metadata["Min Price"],
+      "Max Price": params.metadata["Max Price"]
     });
-    console.log("📧 Email:", email);
-    console.log("📦 Plan:", plan);
+    console.log("📧 Email:", params.email);
+    console.log("📦 Plan:", params.plan);
     
     const stripe = await stripePromise;
     if (!stripe) {
       throw new Error('Stripe failed to load');
     }
 
-    const priceId = PRICE_IDS[plan as keyof typeof PRICE_IDS];
+    const priceId = PRICE_IDS[params.plan as keyof typeof PRICE_IDS];
     if (!priceId) {
-      throw new Error(`Invalid plan: ${plan}`);
+      throw new Error(`Invalid plan: ${params.plan}`);
     }
 
     // Process files before going to Stripe (since blob URLs expire after redirect)
@@ -66,10 +66,10 @@ export const createCheckoutSession = async (formData: any, plan: string, email: 
     let processedFiles: any = {};
 
     // Process logo
-    if (formData["Logo Upload"]?.url && formData["Logo Upload"]?.url.startsWith('blob:')) {
+    if (params.metadata["Logo Upload"]?.url && params.metadata["Logo Upload"]?.url.startsWith('blob:')) {
       try {
         console.log('Processing logo file...');
-        const logoFile = await getFileFromBlobUrl(formData["Logo Upload"].url, formData["Logo Upload"].name);
+        const logoFile = await getFileFromBlobUrl(params.metadata["Logo Upload"].url, params.metadata["Logo Upload"].name);
         processedFiles.logo = await processImageFile(logoFile);
         console.log('Logo processed successfully');
       } catch (error) {
@@ -78,10 +78,10 @@ export const createCheckoutSession = async (formData: any, plan: string, email: 
     }
 
     // Process highlight image
-    if (formData["Highlight Image"]?.url && formData["Highlight Image"]?.url.startsWith('blob:')) {
+    if (params.metadata["Highlight Image"]?.url && params.metadata["Highlight Image"]?.url.startsWith('blob:')) {
       try {
         console.log('Processing highlight image...');
-        const imageFile = await getFileFromBlobUrl(formData["Highlight Image"].url, formData["Highlight Image"].name);
+        const imageFile = await getFileFromBlobUrl(params.metadata["Highlight Image"].url, params.metadata["Highlight Image"].name);
         processedFiles.highlightImage = await processImageFile(imageFile);
         console.log('Highlight image processed successfully');
       } catch (error) {
@@ -90,10 +90,10 @@ export const createCheckoutSession = async (formData: any, plan: string, email: 
     }
 
     // Process rating screenshot
-    if (formData["Rating (X/5) & Reviews (#) Screenshot"]?.url && formData["Rating (X/5) & Reviews (#) Screenshot"]?.url.startsWith('blob:')) {
+    if (params.metadata["Rating (X/5) & Reviews (#) Screenshot"]?.url && params.metadata["Rating (X/5) & Reviews (#) Screenshot"]?.url.startsWith('blob:')) {
       try {
         console.log('Processing rating screenshot...');
-        const screenshotFile = await getFileFromBlobUrl(formData["Rating (X/5) & Reviews (#) Screenshot"].url, formData["Rating (X/5) & Reviews (#) Screenshot"].name);
+        const screenshotFile = await getFileFromBlobUrl(params.metadata["Rating (X/5) & Reviews (#) Screenshot"].url, params.metadata["Rating (X/5) & Reviews (#) Screenshot"].name);
         processedFiles.ratingScreenshot = await processImageFile(screenshotFile);
         console.log('Rating screenshot processed successfully');
       } catch (error) {
@@ -125,11 +125,11 @@ export const createCheckoutSession = async (formData: any, plan: string, email: 
 
     // Store form data with processed files in localStorage for processing after payment
     const submissionData = {
-      formData,
+      formData: params.metadata,
       processedFiles,
       timestamp: Date.now(),
-      plan,
-      email,
+      plan: params.plan,
+      email: params.email,
     };
 
     try {
@@ -182,7 +182,7 @@ export const createCheckoutSession = async (formData: any, plan: string, email: 
     // Auto-detect the current site URL for success/cancel redirects
     const baseUrl = window.location.origin;
     
-    console.log('Creating Stripe checkout with:', { priceId, email, baseUrl });
+    console.log('Creating Stripe checkout with:', { priceId, email: params.email, baseUrl });
 
     // Create checkout session directly with Stripe.js
     const { error } = await stripe.redirectToCheckout({
@@ -193,9 +193,9 @@ export const createCheckoutSession = async (formData: any, plan: string, email: 
         },
       ],
       mode: 'subscription',
-      successUrl: `${baseUrl}/submit/success?session_id={CHECKOUT_SESSION_ID}&plan=${encodeURIComponent(plan)}`,
+      successUrl: `${baseUrl}/submit/success?session_id={CHECKOUT_SESSION_ID}&plan=${encodeURIComponent(params.plan)}`,
       cancelUrl: `${baseUrl}/submit?canceled=true`,
-      customerEmail: email,
+      customerEmail: params.email,
     });
 
     if (error) {

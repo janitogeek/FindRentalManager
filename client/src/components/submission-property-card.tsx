@@ -19,7 +19,7 @@ interface SubmissionPropertyCardProps {
 
 export default function SubmissionPropertyCard({ submission, fromCity, fromCountry }: SubmissionPropertyCardProps) {
   // Use unique slug if available, otherwise generate one
-  const slug = (submission as any).uniqueSlug || generateSlug(submission.brandName);
+  const slug = submission.uniqueSlug || generateSlug(submission.brandName);
   
   // Build URL with unique slug to ensure each company has its own page
   const buildPropertyUrl = () => {
