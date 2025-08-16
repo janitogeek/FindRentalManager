@@ -21,13 +21,13 @@ export default function SubmissionPropertyCard({ submission, fromCity, fromCount
   // Use unique slug if available, otherwise generate one
   const slug = (submission as any).uniqueSlug || generateSlug(submission.brandName);
   
-  // Build URL with city/country parameters if available
+  // Build URL with unique slug to ensure each company has its own page
   const buildPropertyUrl = () => {
+    // Always use the unique slug to ensure unique routing
     let url = `/property/${slug}`;
     if (fromCity && fromCountry) {
       // Use the actual city and country names (not slugs) in URL parameters
       url += `?city=${encodeURIComponent(fromCity)}&country=${encodeURIComponent(fromCountry)}`;
-
     }
     return url;
   };
@@ -263,6 +263,7 @@ export default function SubmissionPropertyCard({ submission, fromCity, fromCount
       'Portugal': '🇵🇹',
       'Romania': '🇷🇴',
       'Serbia': '🇷🇸',
+      'Sweden': '🇸🇪',
       'Ukraine': '🇺🇦',
       'Vatican City': '🇻🇦',
       'Kosovo': '🇽🇰',

@@ -47,7 +47,7 @@ function Router() {
           <Route path="/partnerships" component={Partnerships} />
           <Route path="/faq" component={FAQ} />
           <Route path="/testimonials" component={Testimonials} />
-          <Route path="/property/:id" component={SubmissionProperty} />
+          <Route path="/property/:slug" component={SubmissionProperty} />
           <Route path="/listing/:id" component={Property} />
           <Route path="/admin/cms" component={CMSAdmin} />
           {/* Fallback to 404 */}

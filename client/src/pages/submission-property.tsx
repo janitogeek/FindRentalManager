@@ -16,9 +16,9 @@ import { getFlagByCountryName } from "@/lib/utils";
 
 
 export default function SubmissionProperty() {
-  const [, params] = useRoute('/property/:id');
+  const [, params] = useRoute('/property/:slug');
   const [, setLocation] = useLocation();
-  const submissionId = params?.id;
+  const submissionSlug = params?.slug;
   
   // Check navigation context from URL parameters
   const urlParams = new URLSearchParams(window.location.search);
@@ -26,8 +26,6 @@ export default function SubmissionProperty() {
   const fromCountry = urlParams.get('country');
   const fromFeatured = urlParams.get('from') === 'featured';
   
-
-
   // Get all preloaded submissions and find the specific one (instant if cached)
   const { data: allSubmissions = [], isLoading: isAllSubmissionsLoading } = useQuery({
     queryKey: ["/api/preloaded-submissions-for-property"],
@@ -37,16 +35,11 @@ export default function SubmissionProperty() {
 
   // Find the specific submission from preloaded data
   const submission = useMemo(() => {
-    if (!submissionId || !allSubmissions.length) return null;
+    if (!submissionSlug || !allSubmissions.length) return null;
     
-    // Check if it's an Airtable ID or a slug
-    if (isAirtableId(submissionId)) {
-      return allSubmissions.find(s => s.id === submissionId);
-    } else {
-      // Find by unique slug
-      return allSubmissions.find(s => (s as any).uniqueSlug === submissionId);
-    }
-  }, [allSubmissions, submissionId]);
+    // Find by unique slug
+    return allSubmissions.find(s => (s as any).uniqueSlug === submissionSlug);
+  }, [allSubmissions, submissionSlug]);
 
   const isLoading = isAllSubmissionsLoading || (!submission && allSubmissions.length > 0);
   const error = null; // No error handling needed for preloaded data
