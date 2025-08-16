@@ -706,6 +706,9 @@ async function submitPropertyToAirtable(submission) {
       "Number of Listings": submission.listingCount,
       "Countries": submission.countries,
       "One-line Description": submission.description,
+      "Why Book With You": submission.whyBookWithYou || "",
+      "Why Rent With You": submission.whyRentWithYou || "",
+      "Commission On Revenue": submission.commissionOnRevenue || 0,
       "Logo": submission.logo,
       "Email": submission.email,
       "Facebook": submission.facebook || "",
@@ -754,7 +757,7 @@ import { Router } from "express";
 // ../server/stripe.ts
 import Stripe from "stripe";
 var stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: "2024-12-18.acacia"
+  apiVersion: "2025-06-30.basil"
 });
 var PRICE_IDS = {
   "Basic (\u20AC99.99/year)": "price_1RqGFNAuRAOWZse80bVZnkJx",
@@ -845,6 +848,7 @@ var submitToAirtable = async (formData, paymentInfo) => {
     "One-line Description": formData["One-line Description"],
     "Why Book With You": formData["Why Book With You?"],
     "Why Rent With You": formData["Why Rent With You?"],
+    "Commission On Revenue": formData["Commission on Revenue (%)"] || 0,
     "Top Stats": formData["Top Stats"] || "",
     "Types of Stays": Array.isArray(formData["Types of Stays"]) ? formData["Types of Stays"] : [],
     "Ideal For": Array.isArray(formData["Ideal For"]) ? formData["Ideal For"] : [],
@@ -862,6 +866,7 @@ var submitToAirtable = async (formData, paymentInfo) => {
     "Plan": formData["Choose Your Listing Type"] === "Basic (\u20AC99.99/year)" ? "Basic Listing - \u20AC99.99/year" : formData["Choose Your Listing Type"] === "Premium (\u20AC499.99/year)" ? "Premium Listing - \u20AC499.99/year" : formData["Choose Your Listing Type"],
     "Submission Date": (/* @__PURE__ */ new Date()).toISOString().split("T")[0],
     "Status": formData["Choose Your Listing Type"] === "Premium (\u20AC499.99/year)" ? "Approved \u2013 Published" : "Pending Review",
+    "Status Bis (PMC directory)": formData["Choose Your Listing Type"] === "Premium (\u20AC499.99/year)" ? "Approved \u2013 Published" : "Pending Review",
     "Payment Status": "Completed",
     "Stripe Customer ID": paymentInfo.customerId,
     "Stripe Subscription ID": paymentInfo.subscriptionId,

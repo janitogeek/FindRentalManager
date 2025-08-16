@@ -101,7 +101,6 @@ const submitToAirtable = async (formData: any, paymentInfo: any) => {
     "PMC General Website": formData["PMC General Website"],
     "Direct Booking Engine URL": formData["Direct Booking Engine URL"],
     "Number of Listings": formData["Number of Listings"],
-
     "Cities / Regions": Array.isArray(formData["Cities / Regions"]) 
       ? formData["Cities / Regions"].map((city: any) => {
           const cityDisplayName = city.displayName || city;
@@ -116,9 +115,9 @@ const submitToAirtable = async (formData: any, paymentInfo: any) => {
       ? Array.from(new Set(formData["Cities / Regions"].map((city: any) => city.countryName || "").filter(Boolean))).join(", ")
       : "",
     "One-line Description": formData["One-line Description"],
-    "Why Book With You": formData["Why Book With You? (for guests)"],
-    "Why Rent With You": formData["Why Rent With You? (for owners)"],
-    "Commission On Revenue": formData["Commission On Revenue"] || 0,
+    "Why Book With You": formData["Why Book With You?"],
+    "Why Rent With You": formData["Why Rent With You?"],
+    "Commission On Revenue": formData["Commission on Revenue (%)"] || 0,
     "Top Stats": formData["Top Stats"] || "",
     "Types of Stays": Array.isArray(formData["Types of Stays"]) ? formData["Types of Stays"] : [],
     "Ideal For": Array.isArray(formData["Ideal For"]) ? formData["Ideal For"] : [],
@@ -225,7 +224,6 @@ export const handleWebhook = async (req: Request, res: Response) => {
       const subscription = event.data.object as Stripe.Subscription;
       console.log('New subscription created:', subscription.id);
       console.log('Plan:', subscription.items.data[0]?.price.nickname || subscription.items.data[0]?.price.id);
-      // TODO: Update user subscription status in your database
       break;
       
     case 'invoice.payment_succeeded':
@@ -233,8 +231,6 @@ export const handleWebhook = async (req: Request, res: Response) => {
       console.log('Subscription payment succeeded for:', invoice.customer);
       console.log('Amount paid:', invoice.amount_paid / 100, invoice.currency.toUpperCase());
       console.log('Invoice ID:', invoice.id);
-      
-      // TODO: Update subscription status, send receipt email
       break;
       
     case 'invoice.payment_failed':
@@ -242,20 +238,16 @@ export const handleWebhook = async (req: Request, res: Response) => {
       console.log('Subscription payment failed for:', failedInvoice.customer);
       console.log('Amount due:', failedInvoice.amount_due / 100, failedInvoice.currency.toUpperCase());
       console.log('Attempt count:', failedInvoice.attempt_count);
-      
-      // TODO: Handle failed payment - notify customer, update status
       break;
       
     case 'customer.subscription.updated':
       const updatedSub = event.data.object as Stripe.Subscription;
       console.log('Subscription updated:', updatedSub.id, 'Status:', updatedSub.status);
-      // TODO: Handle subscription changes (plan upgrade/downgrade, status changes)
       break;
       
     case 'customer.subscription.deleted':
       const deletedSub = event.data.object as Stripe.Subscription;
       console.log('Subscription cancelled:', deletedSub.id);
-      // TODO: Update user access, archive listings
       break;
 
     default:

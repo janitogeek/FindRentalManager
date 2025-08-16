@@ -435,3 +435,21 @@ export function extractCountryName(fullCityString: string): string {
   
   return ''; // Return empty if no country found
 }
+
+/**
+ * Gets the proper singular/plural form for manager counts
+ * @param count - The number of managers
+ * @returns "1 manager" or "X managers"
+ */
+export function getManagerCountText(count: number): string {
+  return count === 1 ? '1 manager' : `${count} managers`;
+}
+
+/**
+ * Gets the proper singular/plural form for manager counts (just the word)
+ * @param count - The number of managers
+ * @returns "manager" or "managers"
+ */
+export function getManagerWord(count: number): string {
+  return count === 1 ? 'manager' : 'managers';
+}

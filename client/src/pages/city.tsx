@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { apiRequest } from "@/lib/queryClient";
 import { airtableService } from "@/lib/airtable";
 import { dataPreloader } from "@/lib/data-preloader";
-import { getFlagByCountryName } from "@/lib/utils";
+import { getFlagByCountryName, getManagerCountText } from "@/lib/utils";
 
 export default function City() {
   const [, params] = useRoute('/country/:country/:city');
@@ -27,7 +27,9 @@ export default function City() {
     atmospheres: [],
     settingsLocations: [],
     minPrice: null,
-    maxPrice: null
+    maxPrice: null,
+    minCommission: null,
+    maxCommission: null
   });
   
   // Featured filter state
@@ -185,7 +187,7 @@ export default function City() {
           ...(submission.propertiesFeatures || []),
           ...(submission.servicesConvenience || []),
           ...(submission.lifestyleValues || []),
-          ...(submission.designStyle || []),
+          ...(submission.designStyles || []),
           ...(submission.atmospheres || []),
           ...(submission.settingsLocations || [])
         ].join(' ').toLowerCase();
@@ -235,7 +237,7 @@ export default function City() {
 
       // Check design style
       if (filters.designStyle.length > 0) {
-        const hasMatchingStyle = submission.designStyle?.some(style =>
+        const hasMatchingStyle = submission.designStyles?.some(style =>
           filters.designStyle.includes(style)
         );
         if (!hasMatchingStyle) return false;
@@ -395,7 +397,7 @@ export default function City() {
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 inline-block">
               <div className="flex items-center space-x-4">
                 <Badge className="bg-blue-500 text-white">
-                  {(listingsData?.total || 0) + filteredSubmissions.length} hosts
+                  {getManagerCountText((listingsData?.total || 0) + filteredSubmissions.length)}
                 </Badge>
                 <span className="text-blue-100">•</span>
                 <span className="text-blue-100">Skip OTA fees</span>
@@ -469,10 +471,10 @@ export default function City() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
                     <h3 className="text-xl font-semibold text-gray-700 mb-2">
-                      {filters.search ? `No hosts found matching "${filters.search}"` : `No hosts found in ${cityName}`}
+                      {filters.search ? `No managers found matching "${filters.search}"` : `No managers found in ${cityName}`}
                     </h3>
                     <p className="text-gray-500 mb-6">
-                      {filters.search ? "Try adjusting your search terms or filters." : "We couldn't find any direct booking hosts in this city yet."}
+                      {filters.search ? "Try adjusting your search terms or filters." : "We couldn't find any property managers in this city yet."}
                     </p>
                     <div className="flex flex-col sm:flex-row gap-3 justify-center">
                       <Button 
@@ -481,7 +483,7 @@ export default function City() {
                         className="border-blue-600 text-blue-600"
                       >
                         <Link href={`/country/${countrySlug}`} className="inline-flex items-center gap-1">
-                          View all {getFlagByCountryName(countryName)} {countryName} hosts
+                          View all {getFlagByCountryName(countryName)} {countryName} managers
                         </Link>
                       </Button>
                       <Button 

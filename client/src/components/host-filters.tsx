@@ -192,7 +192,7 @@ export default function HostFilters({ onFiltersChange }: HostFiltersProps) {
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2">
             <Filter className="h-5 w-5" />
-            Filter Hosts
+            Filter Managers
             {totalActiveFilters > 0 && (
               <Badge variant="secondary" className="bg-blue-100 text-blue-800">
                 {totalActiveFilters}
@@ -218,7 +218,7 @@ export default function HostFilters({ onFiltersChange }: HostFiltersProps) {
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
           <Input
             type="text"
-            placeholder="Search hosts by name, description, amenities..."
+            placeholder="Search managers by name, description, amenities..."
             value={filters.search}
             onChange={(e) => updateFilter('search', e.target.value, false)}
             className="pl-10 pr-10"

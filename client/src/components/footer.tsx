@@ -55,7 +55,7 @@ export default function Footer() {
           <div>
             <h3 className="text-xl font-bold mb-4">BookDirectStays.com</h3>
             <p className="text-gray-300 mb-4">
-              Connect directly with professional hosts worldwide and skip the middleman fees.
+              Connect directly with professional managers worldwide and skip the middleman fees.
             </p>
             <div className="flex space-x-4">
               <a href="#" className="text-gray-300 hover:text-white">

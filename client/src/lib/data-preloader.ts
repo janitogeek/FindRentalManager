@@ -377,6 +377,31 @@ class DataPreloader {
   }
 
   /**
+   * Get approved submissions for display
+   */
+  async getApprovedSubmissions(): Promise<Submission[]> {
+    try {
+      console.log('📊 Getting approved submissions for display...');
+      
+      // Get all submissions from Airtable
+      const submissions = await airtableService.getApprovedSubmissions();
+      
+      // Only return submissions with "Approved – Published" status
+      const approvedSubmissions = submissions.filter(submission => 
+        submission.status === "Approved – Published" ||
+        submission.statusBis === "Approved – Published"
+      );
+      
+      console.log(`✅ Found ${approvedSubmissions.length} approved submissions out of ${submissions.length} total`);
+      return approvedSubmissions;
+      
+    } catch (error) {
+      console.error('❌ Error getting approved submissions:', error);
+      return [];
+    }
+  }
+
+  /**
    * Get cached submissions (instant)
    */
   async getSubmissions(): Promise<Array<Submission & { uniqueSlug: string }>> {

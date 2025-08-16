@@ -9,7 +9,7 @@ import { Search, X } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { airtableService } from "@/lib/airtable";
 import { dataPreloader } from "@/lib/data-preloader";
-import { getFlagByCountryName } from "@/lib/utils";
+import { getFlagByCountryName, getManagerCountText } from "@/lib/utils";
 
 export default function FindHost() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -175,7 +175,7 @@ export default function FindHost() {
                             </h3>
                           </div>
                           <Badge variant="secondary" className="bg-blue-100 text-blue-800">
-                            {country.listingCount} managers
+                            {getManagerCountText(country.listingCount)}
                           </Badge>
                         </div>
                         <p className="text-gray-600 mb-4">
