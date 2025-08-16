@@ -102,7 +102,7 @@ export default function FindHost() {
                 Choose Your Location
               </h2>
               <p className="text-gray-600">
-                Search for a country to discover verified vacation rental property management companies
+                Select a country to discover verified vacation rental property management companies
               </p>
             </div>
             

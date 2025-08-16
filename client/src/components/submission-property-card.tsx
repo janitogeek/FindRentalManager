@@ -25,10 +25,22 @@ export default function SubmissionPropertyCard({ submission, fromCity, fromCount
   const buildPropertyUrl = () => {
     // Always use the unique slug to ensure unique routing
     let url = `/property/${slug}`;
-    if (fromCity && fromCountry) {
-      // Use the actual city and country names (not slugs) in URL parameters
-      url += `?city=${encodeURIComponent(fromCity)}&country=${encodeURIComponent(fromCountry)}`;
+    
+    // Add URL parameters for routing context
+    const params = new URLSearchParams();
+    
+    if (fromCity) {
+      params.append('city', fromCity);
     }
+    
+    if (fromCountry) {
+      params.append('country', fromCountry);
+    }
+    
+    if (params.toString()) {
+      url += `?${params.toString()}`;
+    }
+    
     return url;
   };
   

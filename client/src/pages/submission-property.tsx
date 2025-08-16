@@ -26,6 +26,14 @@ export default function SubmissionProperty() {
   const fromCountry = urlParams.get('country');
   const fromFeatured = urlParams.get('from') === 'featured';
   
+  // Debug breadcrumb routing
+  console.log('🔍 Breadcrumb routing debug:', {
+    fromCity,
+    fromCountry,
+    fromFeatured,
+    url: window.location.search
+  });
+  
   // Get all preloaded submissions and find the specific one (instant if cached)
   const { data: allSubmissions = [], isLoading: isAllSubmissionsLoading } = useQuery({
     queryKey: ["/api/preloaded-submissions-for-property"],

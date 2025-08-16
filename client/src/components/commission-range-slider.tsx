@@ -13,7 +13,7 @@ export default function CommissionRangeSlider({
   onRangeChange,
   className = ""
 }: CommissionRangeSliderProps) {
-  const [minCommission, setMinCommission] = useState(minValue || 10);
+  const [minCommission, setMinCommission] = useState(minValue || 0);
   const [maxCommission, setMaxCommission] = useState(maxValue || 50);
   const [isDragging, setIsDragging] = useState<'min' | 'max' | null>(null);
   
