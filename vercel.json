@@ -1,8 +1,5 @@
 {
   "version": 2,
-  "buildCommand": "cd client && npm run build",
-  "installCommand": "cd client && npm install",
-  "outputDirectory": "client/dist",
   "functions": {
     "api/**/*.ts": {
       "maxDuration": 30

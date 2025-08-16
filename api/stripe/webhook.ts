@@ -2,20 +2,31 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 import Stripe from 'stripe';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-06-30.basil',
+  apiVersion: '2023-10-16',
 });
 
 // Helper function to submit to Airtable
 const submitToAirtable = async (formData: any, paymentInfo: any) => {
+  console.log('🚀 Starting Airtable submission...');
+  console.log('📝 Form data received:', JSON.stringify(formData, null, 2));
+  
   const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY;
   const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID;
   const AIRTABLE_TABLE_NAME = 'Directory Submissions';
+
+  console.log('🔑 Environment variables check:', {
+    hasApiKey: !!AIRTABLE_API_KEY,
+    hasBaseId: !!AIRTABLE_BASE_ID,
+    apiKeyLength: AIRTABLE_API_KEY?.length || 0,
+    baseId: AIRTABLE_BASE_ID
+  });
 
   if (!AIRTABLE_API_KEY || !AIRTABLE_BASE_ID) {
     throw new Error('Airtable configuration missing in environment variables');
   }
 
   const airtableUrl = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE_NAME)}`;
+  console.log('🌐 Airtable URL:', airtableUrl);
   
   // Prepare submission data for Airtable
   const submissionData = {
@@ -74,7 +85,7 @@ const submitToAirtable = async (formData: any, paymentInfo: any) => {
     "Payment Date": new Date().toISOString()
   };
 
-  console.log('Submitting to Airtable:', submissionData);
+  console.log('📦 Prepared submission data:', JSON.stringify(submissionData, null, 2));
 
   const response = await fetch(airtableUrl, {
     method: 'POST',
@@ -87,39 +98,59 @@ const submitToAirtable = async (formData: any, paymentInfo: any) => {
     })
   });
 
+  console.log('📡 Airtable response status:', response.status);
+  console.log('📡 Airtable response headers:', Object.fromEntries(response.headers.entries()));
+
   if (!response.ok) {
-    const errorData = await response.json();
-    console.error('Airtable submission failed:', errorData);
-    throw new Error(`Airtable API error: ${errorData.error?.message || response.statusText}`);
+    const errorData = await response.text();
+    console.error('❌ Airtable submission failed:', errorData);
+    throw new Error(`Airtable API error: ${response.status} ${errorData}`);
   }
 
   const result = await response.json();
-  console.log('Successfully submitted to Airtable:', result.id);
+  console.log('✅ Successfully submitted to Airtable:', result.id);
   return result;
 };
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  console.log('🔔 Webhook received:', {
+    method: req.method,
+    url: req.url,
+    headers: req.headers,
+    bodySize: req.body ? JSON.stringify(req.body).length : 0
+  });
+
   if (req.method !== 'POST') {
+    console.log('❌ Method not allowed:', req.method);
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
   const sig = req.headers['stripe-signature']!;
+  console.log('🔐 Stripe signature present:', !!sig);
+  
   let event;
 
   try {
+    console.log('🔍 Verifying webhook signature...');
     event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET!);
+    console.log('✅ Webhook signature verified successfully');
   } catch (err) {
-    console.error('Webhook signature verification failed:', err);
+    console.error('❌ Webhook signature verification failed:', err);
     return res.status(400).json({ error: 'Webhook signature verification failed' });
   }
+
+  console.log('📝 Processing event:', event.type, event.id);
 
   // Handle the event
   switch (event.type) {
     case 'checkout.session.completed':
       const session = event.data.object as Stripe.Checkout.Session;
+      console.log('💳 Checkout session completed:', session.id);
+      console.log('📋 Session metadata:', session.metadata);
       
       // Process successful payment
       if (session.metadata?.submissionData) {
+        console.log('📝 Found submission data in metadata');
         const formData = JSON.parse(session.metadata.submissionData);
         
         try {
@@ -145,37 +176,39 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           // Don't fail the webhook response - Stripe will retry
           // but log the error for investigation
         }
+      } else {
+        console.log('⚠️ No submission data found in session metadata');
       }
       break;
       
     case 'customer.subscription.created':
       const subscription = event.data.object as Stripe.Subscription;
-      console.log('New subscription created:', subscription.id);
-      console.log('Plan:', subscription.items.data[0]?.price.nickname || subscription.items.data[0]?.price.id);
+      console.log('📅 New subscription created:', subscription.id);
+      console.log('📋 Plan:', subscription.items.data[0]?.price.nickname || subscription.items.data[0]?.price.id);
       break;
       
     case 'invoice.payment_succeeded':
       const invoice = event.data.object as Stripe.Invoice;
-      console.log('Subscription payment succeeded for:', invoice.customer);
-      console.log('Amount paid:', invoice.amount_paid / 100, invoice.currency.toUpperCase());
-      console.log('Invoice ID:', invoice.id);
+      console.log('💰 Subscription payment succeeded for:', invoice.customer);
+      console.log('💵 Amount paid:', invoice.amount_paid / 100, invoice.currency.toUpperCase());
+      console.log('🆔 Invoice ID:', invoice.id);
       break;
       
     case 'invoice.payment_failed':
       const failedInvoice = event.data.object as Stripe.Invoice;
-      console.log('Subscription payment failed for:', failedInvoice.customer);
-      console.log('Amount due:', failedInvoice.amount_due / 100, failedInvoice.currency.toUpperCase());
-      console.log('Attempt count:', failedInvoice.attempt_count);
+      console.log('💸 Subscription payment failed for:', failedInvoice.customer);
+      console.log('💸 Amount due:', failedInvoice.amount_due / 100, failedInvoice.currency.toUpperCase());
+      console.log('🔄 Attempt count:', failedInvoice.attempt_count);
       break;
       
     case 'customer.subscription.updated':
       const updatedSub = event.data.object as Stripe.Subscription;
-      console.log('Subscription updated:', updatedSub.id, 'Status:', updatedSub.status);
+      console.log('📝 Subscription updated:', updatedSub.id, 'Status:', updatedSub.status);
       break;
       
     case 'customer.subscription.deleted':
       const deletedSub = event.data.object as Stripe.Subscription;
-      console.log('Subscription cancelled:', deletedSub.id);
+      console.log('🗑️ Subscription cancelled:', deletedSub.id);
       break;
 
     default:
@@ -191,5 +224,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       });
   }
 
+  console.log('✅ Webhook processed successfully');
   res.json({ received: true });
 }
