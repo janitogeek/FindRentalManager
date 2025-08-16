@@ -91,25 +91,21 @@ export default function FindHost() {
         </div>
       </section>
 
-      {/* Choose Your Location Section */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-6 text-gray-900">
-              Choose Your Location
-            </h2>
-            <p className="text-xl text-gray-600 mb-8">
-              Search for a country to discover verified vacation rental property management companies
-            </p>
-          </div>
-        </div>
-      </section>
-
       {/* Countries Grid */}
       <section className="py-16">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           {/* Search and Filter Controls */}
           <div className="max-w-4xl mx-auto mb-12">
+            {/* Choose Your Location - Above Search Bar */}
+            <div className="text-center mb-6">
+              <h2 className="text-2xl font-bold mb-2 text-gray-900">
+                Choose Your Location
+              </h2>
+              <p className="text-gray-600">
+                Search for a country to discover verified vacation rental property management companies
+              </p>
+            </div>
+            
             <div className="flex flex-col sm:flex-row gap-4 mb-6">
               <div className="flex-1 relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />

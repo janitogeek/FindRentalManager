@@ -66,7 +66,7 @@ export function resolveCountryName(countryName: string): string {
     'albania': 'Albania',
     'thailand': 'Thailand',
     'australia': 'Australia',
-    'canada': 'CA',
+    'canada': 'Canada',
     'mexico': 'Mexico',
     'brazil': 'Brazil',
     'argentina': 'Argentina',
