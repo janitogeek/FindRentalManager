@@ -128,16 +128,30 @@ export default function Footer() {
                     <div>
             <h3 className="text-lg font-semibold mb-4">Top Cities</h3>
             <ul className="space-y-2">
-              {topCities.slice(0, 5).map((city) => (
-                <li key={`${city.name}-${city.country}`}>
-                  <Link 
-                    href={`/country/${slugify(city.country)}/${slugify(city.name)}`}
-                    className="text-gray-300 hover:text-white"
-                  >
-                    <div className="text-sm">{city.name}</div>
-                  </Link>
-                </li>
-              ))}
+              {topCities.slice(0, 5).map((city) => {
+                // Debug logging
+                console.log(`🏙️ Footer city: "${city.name}" → country: "${city.country}" → count: ${city.count}`);
+                
+                // Only show cities that have a valid country and count > 0
+                if (!city.country || city.count === 0) {
+                  console.log(`❌ Filtering out city "${city.name}" - missing country or count 0`);
+                  return null;
+                }
+                
+                const cityUrl = `/country/${slugify(city.country)}/${slugify(city.name)}`;
+                console.log(`✅ City "${city.name}" → URL: ${cityUrl}`);
+                
+                return (
+                  <li key={`${city.name}-${city.country}`}>
+                    <Link 
+                      href={cityUrl}
+                      className="text-gray-300 hover:text-white"
+                    >
+                      <div className="text-sm">{city.name}</div>
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           </div>
           
