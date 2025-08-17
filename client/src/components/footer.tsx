@@ -125,17 +125,16 @@ export default function Footer() {
             </ul>
           </div>
           
-          <div>
+                    <div>
             <h3 className="text-lg font-semibold mb-4">Top Cities</h3>
             <ul className="space-y-2">
               {topCities.slice(0, 5).map((city) => (
                 <li key={`${city.name}-${city.country}`}>
                   <Link 
-                    href={`/country/${slugify(city.country)}/${slugify(city.name)}`} 
+                    href={`/country/${slugify(city.country)}/${slugify(city.name)}`}
                     className="text-gray-300 hover:text-white"
                   >
                     <div className="text-sm">{city.name}</div>
-                    <div className="text-xs text-gray-400">{city.country}</div>
                   </Link>
                 </li>
               ))}
