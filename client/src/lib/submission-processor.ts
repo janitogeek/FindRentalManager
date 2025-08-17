@@ -636,26 +636,38 @@ export async function getTopCitiesWithCounts(): Promise<Array<{name: string, cou
         // Process each city in the submission
         submission.citiesRegions.forEach((cityRegion: any) => {
           if (typeof cityRegion === 'string') {
+            console.log(`🔍 Processing cityRegion: "${cityRegion}"`);
+            
             // Try to parse "City, Region, Country" format
             const parts = cityRegion.split(', ');
+            console.log(`📊 Parsed parts:`, parts);
+            
             if (parts.length >= 3) {
               const cityName = parts[0]; // First part is the city
               const countryName = parts[2]; // Last part is the country
               const cityKey = `${cityName}, ${countryName}`;
               
+              console.log(`🏙️ City: "${cityName}", Country: "${countryName}"`);
+              
               if (!cityCounts[cityKey]) {
-                cityCounts[cityKey] = { country: resolveCountryName(countryName), count: 0 };
+                const resolvedCountry = resolveCountryName(countryName);
+                console.log(`✅ Resolved country: "${countryName}" → "${resolvedCountry}"`);
+                cityCounts[cityKey] = { country: resolvedCountry, count: 0 };
               }
               cityCounts[cityKey].count += 1;
             } else {
+              console.log(`⚠️ Fallback: using countries field for "${cityRegion}"`);
               // Fallback: use countries field for city-country mapping
               if (submission.countries && submission.countries.length > 0) {
                 submission.countries.forEach(country => {
                   const cityName = cityRegion;
                   const cityKey = `${cityName}, ${country}`;
                   
+                  console.log(`🔄 Fallback mapping: "${cityName}" → "${country}"`);
+                  
                   if (!cityCounts[cityKey]) {
-                    cityCounts[cityKey] = { country: resolveCountryName(country), count: 0 };
+                    const resolvedCountry = resolveCountryName(country);
+                    cityCounts[cityKey] = { country: resolvedCountry, count: 0 };
                   }
                   cityCounts[cityKey].count += 1;
                 });
