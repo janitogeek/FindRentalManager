@@ -82,6 +82,48 @@ export default function Testimonials() {
             {/* Featured Success Stories Header */}
             <div className="mb-8">
               <h3 className="text-xl font-bold text-gray-900 mb-4 text-center">✨ Featured Success Stories</h3>
+              
+              {/* Leslie Voué Featured Testimonial */}
+              <div className="max-w-3xl mx-auto mb-8">
+                <Card className="shadow-lg border-2 border-purple-200 bg-gradient-to-br from-purple-50 to-indigo-50">
+                  <CardContent className="p-8">
+                    <div className="flex items-start space-x-4 mb-6">
+                      <Avatar className="h-16 w-16 border-2 border-purple-200">
+                        <AvatarFallback className="bg-purple-600 text-white font-bold text-lg">LV</AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between mb-2">
+                          <div>
+                            <h4 className="text-xl font-bold text-gray-900">Leslie Voué</h4>
+                            <p className="text-purple-700 font-semibold">Property Owner with Zenica Conciergerie</p>
+                          </div>
+                          <div className="text-right">
+                            <div className="flex items-center space-x-1 mb-1">
+                              {[...Array(5)].map((_, i) => (
+                                <span key={i} className="text-yellow-400 text-lg">★</span>
+                              ))}
+                            </div>
+                            <p className="text-sm text-gray-500">May 27, 2025</p>
+                          </div>
+                        </div>
+                        <div className="bg-white/70 rounded-lg p-4 border border-purple-100">
+                          <blockquote className="text-gray-800 leading-relaxed italic">
+                            "I have been using Zenica Conciergerie services for several months to manage my seasonal rentals, and I am delighted. Professionalism, responsiveness and attention to detail are always there. The accommodations are impeccable, travelers are well welcomed, and I can delegate with complete confidence. Thank you to the whole team for your seriousness and your kindness."
+                          </blockquote>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-center space-x-2 text-sm text-purple-700">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full bg-purple-100 font-medium">
+                        ✓ Verified Property Owner
+                      </span>
+                      <span className="inline-flex items-center px-3 py-1 rounded-full bg-green-100 text-green-700 font-medium">
+                        🏆 Professional Management Success
+                      </span>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
