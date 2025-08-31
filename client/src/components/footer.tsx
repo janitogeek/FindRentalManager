@@ -53,7 +53,7 @@ export default function Footer() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           <div>
-            <h3 className="text-xl font-bold mb-4">BookDirectStays.com</h3>
+            <h3 className="text-xl font-bold mb-4">FindRentalManager.com</h3>
             <p className="text-gray-300 mb-4">
               Connect directly with professional managers worldwide and skip the middleman fees.
             </p>
@@ -92,6 +92,11 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/about" className="text-gray-300 hover:text-white">
+                  About
+                </Link>
+              </li>
+              <li>
                 <Link href="/partnerships" className="text-gray-300 hover:text-white">
                   Partnerships
                 </Link>
@@ -125,33 +130,20 @@ export default function Footer() {
             </ul>
           </div>
           
-                    <div>
+          <div>
             <h3 className="text-lg font-semibold mb-4">Top Cities</h3>
             <ul className="space-y-2">
-              {topCities.slice(0, 5).map((city) => {
-                // Debug logging
-                console.log(`🏙️ Footer city: "${city.name}" → country: "${city.country}" → count: ${city.count}`);
-                
-                // Only show cities that have a valid country and count > 0
-                if (!city.country || city.count === 0) {
-                  console.log(`❌ Filtering out city "${city.name}" - missing country or count 0`);
-                  return null;
-                }
-                
-                const cityUrl = `/country/${slugify(city.country)}/${slugify(city.name)}`;
-                console.log(`✅ City "${city.name}" → URL: ${cityUrl}`);
-                
-                return (
-                  <li key={`${city.name}-${city.country}`}>
-                    <Link 
-                      href={cityUrl}
-                      className="text-gray-300 hover:text-white"
-                    >
-                      <div className="text-sm">{city.name}</div>
-                    </Link>
-                  </li>
-                );
-              })}
+              {topCities.slice(0, 5).map((city) => (
+                <li key={`${city.name}-${city.country}`}>
+                  <Link 
+                    href={`/country/${slugify(city.country)}/${slugify(city.name)}`} 
+                    className="text-gray-300 hover:text-white"
+                  >
+                    <div className="text-sm">{city.name}</div>
+                    <div className="text-xs text-gray-400">{city.country}</div>
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
           

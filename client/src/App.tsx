@@ -11,6 +11,7 @@ import Country from "@/pages/country";
 import City from "@/pages/city";
 import Submit from "@/pages/submit";
 import SubmitSuccess from "@/pages/submit-success";
+import About from "@/pages/About";
 import Partnerships from "@/pages/partnerships";
 import FAQ from "@/pages/faq";
 import Testimonials from "@/pages/testimonials";
@@ -44,6 +45,7 @@ function Router() {
           <Route path="/country/:country" component={Country} />
           <Route path="/submit" component={Submit} />
           <Route path="/submit/success" component={SubmitSuccess} />
+          <Route path="/about" component={About} />
           <Route path="/partnerships" component={Partnerships} />
           <Route path="/faq" component={FAQ} />
           <Route path="/testimonials" component={Testimonials} />
