@@ -25,9 +25,9 @@ export default function Testimonials() {
   }, []);
   // Fetch testimonials
   const { data: testimonials, isLoading } = useQuery({
-    queryKey: ["/api/testimonials"],
+    queryKey: ["/api/main", "testimonials"],
     queryFn: async () => {
-      const res = await apiRequest("GET", "/api/testimonials", undefined);
+      const res = await apiRequest("GET", "/api/main?endpoint=testimonials", undefined);
       return res.json();
     }
   });
