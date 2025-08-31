@@ -221,14 +221,17 @@ export default function About() {
             </h2>
             <div className="prose prose-lg max-w-none text-gray-700 mb-8">
               <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-l-4 border-blue-500 p-6 rounded-lg mb-8">
-                <h3 className="text-xl font-bold text-blue-900 mb-3">💡 Smart Investment in Dual Visibility</h3>
+                <h3 className="text-xl font-bold text-blue-900 mb-3">💡 Smart Investment for Your Business</h3>
                 <p className="text-blue-800 mb-4">
-                  <strong>List your management company on 2 websites for just €99.99/year</strong> - that's less than €0.28 per day, or roughly the cost of a coffee. Get listed on FindRentalManager.com AND{' '}
+                  <strong>List your company for just €99.99/year</strong> - that's less than €0.28 per day, or roughly the cost of a coffee.
+                  <span className="text-blue-600 text-sm block mt-1">*Website maintenance costs require this small fee</span>
+                </p>
+                <p className="text-blue-800 font-semibold">
+                  <strong>2 for 1 Deal:</strong> Get listed on both <strong>FindRentalManager.com</strong> and{' '}
                   <a href="https://bookdirectstays.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline font-semibold">
-                    BookDirectStays.com
-                  </a>
-                  {' '}<em>to reach both property owners seeking managers and travelers seeking direct bookings.</em>
-                  <span className="text-blue-600 text-sm block mt-1">*Vetting process and dual-website maintenance require this investment</span>
+                    <strong>BookDirectStays.com</strong>
+                  </a>{' '}
+                  for the same price!
                 </p>
               </div>
 
