@@ -454,6 +454,16 @@ export const testimonials: Testimonial[] = [
     role: "host",
     content: "As a property manager with 15 properties, BookDirectStays has helped me reduce my dependency on OTAs. The platform is user-friendly and the support team is responsive to my needs.",
     avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&q=80"
+  },
+  {
+    id: 7,
+    name: "Leslie Voué",
+    role: "guest",
+    content: "I have been using Zenica Conciergerie services for several months to manage my seasonal rentals, and I am delighted. Professionalism, responsiveness and attention to detail are always there. The accommodations are impeccable, travelers are well welcomed, and I can delegate with complete confidence. Thank you to the whole team for your seriousness and your kindness.",
+    avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&q=80",
+    company: "Zenica Conciergerie",
+    date: "2025-05-27",
+    rating: 5
   }
 ];
 

@@ -25,22 +25,10 @@ export default function SubmissionPropertyCard({ submission, fromCity, fromCount
   const buildPropertyUrl = () => {
     // Always use the unique slug to ensure unique routing
     let url = `/property/${slug}`;
-    
-    // Add URL parameters for routing context
-    const params = new URLSearchParams();
-    
-    if (fromCity) {
-      params.append('city', fromCity);
+    if (fromCity && fromCountry) {
+      // Use the actual city and country names (not slugs) in URL parameters
+      url += `?city=${encodeURIComponent(fromCity)}&country=${encodeURIComponent(fromCountry)}`;
     }
-    
-    if (fromCountry) {
-      params.append('country', fromCountry);
-    }
-    
-    if (params.toString()) {
-      url += `?${params.toString()}`;
-    }
-    
     return url;
   };
   
@@ -591,22 +579,22 @@ export default function SubmissionPropertyCard({ submission, fromCity, fromCount
             )}
           </div>
 
-          {/* Visit Website - Right */}
-          {submission.pmcGeneralWebsite && (
+          {/* Visit Direct Booking Website - Right */}
+          {submission.directBookingEngineUrl && (
             <Button 
               asChild 
               variant="default" 
               size="sm"
             >
               <a 
-                href={submission.pmcGeneralWebsite} 
+                href={submission.directBookingEngineUrl} 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-2"
                 onClick={trackWebsite}
               >
                 <ExternalLink className="w-4 h-4" />
-                Visit Website
+                Visit Direct Booking Website
               </a>
             </Button>
           )}

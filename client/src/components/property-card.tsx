@@ -222,7 +222,7 @@ export default function PropertyCard({ property }: PropertyCardProps) {
               )}
             </div>
 
-            {/* Visit Website - Right */}
+            {/* Visit Direct Booking Website - Right */}
             {property.website && (
               <Button 
                 asChild 
@@ -236,7 +236,7 @@ export default function PropertyCard({ property }: PropertyCardProps) {
                   className="flex items-center justify-center gap-2"
                 >
                   <ExternalLink className="w-4 h-4" />
-                  Visit Website
+                  Visit Direct Booking Website
                 </a>
               </Button>
             )}

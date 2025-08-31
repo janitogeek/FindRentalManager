@@ -26,14 +26,6 @@ export default function SubmissionProperty() {
   const fromCountry = urlParams.get('country');
   const fromFeatured = urlParams.get('from') === 'featured';
   
-  // Debug breadcrumb routing
-  console.log('🔍 Breadcrumb routing debug:', {
-    fromCity,
-    fromCountry,
-    fromFeatured,
-    url: window.location.search
-  });
-  
   // Get all preloaded submissions and find the specific one (instant if cached)
   const { data: allSubmissions = [], isLoading: isAllSubmissionsLoading } = useQuery({
     queryKey: ["/api/preloaded-submissions-for-property"],
@@ -143,7 +135,7 @@ export default function SubmissionProperty() {
       <nav className="bg-white border-b border-gray-200 px-4 py-3">
         <div className="container mx-auto">
                              <div className="bg-blue-600 text-white px-4 py-2 rounded-lg inline-flex items-center gap-2 text-sm">
-                     {(fromFeatured || fromCountry === 'Featured') ? (
+                     {fromFeatured ? (
                        <>
                          <Link 
                            href="/" 
@@ -413,22 +405,22 @@ export default function SubmissionProperty() {
                     )}
                   </div>
 
-                  {/* Visit Website - Right */}
-                  {submission.pmcGeneralWebsite && (
+                  {/* Visit Direct Booking Website - Right */}
+                  {submission.directBookingEngineUrl && (
                     <Button 
                       asChild 
                       variant="default" 
                       size="sm"
                     >
                       <a 
-                        href={submission.pmcGeneralWebsite} 
+                        href={submission.directBookingEngineUrl} 
                         target="_blank" 
                         rel="noopener noreferrer"
                         className="flex items-center justify-center gap-2"
                         onClick={() => clickTracking?.trackCompany()}
                       >
                         <ExternalLink className="w-4 h-4" />
-                        Visit Website
+                        Visit Direct Booking Website
                       </a>
                     </Button>
                   )}
