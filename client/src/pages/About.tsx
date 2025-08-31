@@ -57,7 +57,7 @@ export default function About() {
               The Global Directory for Trusted Vacation Rental Management
             </p>
             <p className="text-lg mb-8 opacity-90">
-              Finally sleep better at night. Connect with verified professional rental managers across 50+ countries who'll protect your investment, maximize your revenue, and handle everything so you don't have to.
+              Finally sleep better at night. Discover vetted professional rental managers across 50+ countries. We help you find legitimate companies with good reviews, professional systems, and direct booking websites - but you make the final decisions about your investment.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
@@ -103,11 +103,11 @@ export default function About() {
                     </p>
                   </div>
                   
-                  {/* 🔍 The Search Problem - Left-aligned */}
+                  {/* 🔍 The Search & Ranking Problem - Left-aligned */}
                   <div className="text-left hover:scale-105 transition-transform duration-300">
-                    <h3 className="text-2xl font-bold text-gray-900 mb-4">🔍 The Search Problem</h3>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-4">🔍 The Search & Ranking Problem</h3>
                     <p className="text-lg leading-relaxed text-gray-700">
-                      Finding trustworthy rental managers is nearly impossible. Most operate through word-of-mouth, outdated websites, or sketchy online directories with zero verification. How do you separate the professionals from the amateurs?
+                      Finding trustworthy rental managers is nearly impossible. Most operate through word-of-mouth or have websites that struggle to rank well in search engines due to limited SEO resources, local competition, and algorithm changes. Even professional managers with excellent service often remain invisible online, making it hard for property owners to discover them.
                     </p>
                   </div>
                   
@@ -115,15 +115,15 @@ export default function About() {
                   <div className="text-right hover:scale-105 transition-transform duration-300">
                     <h3 className="text-2xl font-bold text-gray-900 mb-4">✅ The Solution: FindRentalManager</h3>
                     <p className="text-lg leading-relaxed text-gray-700">
-                      That's why I created FindRentalManager. A curated directory where every rental management company is verified, vetted, and proven. No more gambling with your property's future - only pre-screened professionals who've earned their spot.
+                      That's why I created FindRentalManager. A curated directory where rental management companies are carefully vetted for legitimacy - we check they have decent reviews, use professional PMS systems, maintain direct booking websites, and demonstrate serious business practices. We don't guarantee outcomes, but we help property owners discover legitimate professionals who might otherwise remain hidden in search results.
                     </p>
                   </div>
                   
-                  {/* 🌟 Peace of Mind, Finally - Centered (Highlighted) */}
+                  {/* 🌟 Bridge the Visibility Gap - Centered (Highlighted) */}
                   <div className="text-center bg-gradient-to-r from-blue-50 to-purple-50 p-8 rounded-2xl border border-blue-200 hover:shadow-xl transition-all duration-500 hover:scale-105">
-                    <h3 className="text-3xl font-bold text-gray-900 mb-6">🌟 Peace of Mind, Finally</h3>
+                    <h3 className="text-3xl font-bold text-gray-900 mb-6">🌟 Bridge the Visibility Gap</h3>
                     <p className="text-xl leading-relaxed text-gray-700 max-w-4xl mx-auto">
-                      With my co-founder Elsa, we're building more than a directory - we're creating accountability. Every manager we list has proven track records, transparent pricing, and verifiable results. Your property deserves professional management. You deserve to sleep soundly knowing your investment is in expert hands.
+                      With my co-founder Elsa, we're building more than a directory - we're creating a bridge between quality managers and property owners. We carefully vet companies for legitimacy, professionalism, and basic business standards, then help them overcome the visibility challenges they face in search engines. It's about connecting the right people, not making promises about outcomes.
                     </p>
                   </div>
                 </div>
@@ -221,10 +221,14 @@ export default function About() {
             </h2>
             <div className="prose prose-lg max-w-none text-gray-700 mb-8">
               <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-l-4 border-blue-500 p-6 rounded-lg mb-8">
-                <h3 className="text-xl font-bold text-blue-900 mb-3">💡 Smart Investment in Visibility</h3>
+                <h3 className="text-xl font-bold text-blue-900 mb-3">💡 Smart Investment in Dual Visibility</h3>
                 <p className="text-blue-800 mb-4">
-                  <strong>List your management company for just €99.99/year</strong> - that's less than €0.28 per day, or roughly the cost of a coffee. Get discovered by serious property owners worldwide.
-                  <span className="text-blue-600 text-sm block mt-1">*Premium verification and website maintenance require this investment</span>
+                  <strong>List your management company on 2 websites for just €99.99/year</strong> - that's less than €0.28 per day, or roughly the cost of a coffee. Get listed on FindRentalManager.com AND{' '}
+                  <a href="https://bookdirectstays.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline font-semibold">
+                    BookDirectStays.com
+                  </a>
+                  {' '}to reach both property owners seeking managers and travelers seeking direct bookings.
+                  <span className="text-blue-600 text-sm block mt-1">*Vetting process and dual-website maintenance require this investment</span>
                 </p>
               </div>
 
@@ -426,7 +430,7 @@ export default function About() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl mx-auto text-center">
             <p className="text-gray-600">
-              All management companies are verified and vetted before listing. If you see an issue or outdated information, contact us at{' '}
+              All management companies go through our vetting process checking for legitimacy, reviews, professional systems, and direct booking websites before listing. We don't guarantee or endorse any specific outcomes. If you see an issue or outdated information, contact us at{' '}
               <a href="mailto:findrentalmanager@gmail.com" className="text-blue-600 hover:underline">
                 findrentalmanager@gmail.com
               </a>
