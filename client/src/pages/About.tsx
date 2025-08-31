@@ -227,7 +227,7 @@ export default function About() {
                   <a href="https://bookdirectstays.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline font-semibold">
                     BookDirectStays.com
                   </a>
-                  {' '}to reach both property owners seeking managers and travelers seeking direct bookings.
+                  {' '}<em>to reach both property owners seeking managers and travelers seeking direct bookings.</em>
                   <span className="text-blue-600 text-sm block mt-1">*Vetting process and dual-website maintenance require this investment</span>
                 </p>
               </div>
