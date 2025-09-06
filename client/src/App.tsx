@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { CurrencyProvider } from "@/contexts/currency-context";
 import CacheStatus from "@/components/cache-status";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/home";
@@ -65,9 +66,11 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <Router />
-        <PerformanceMonitor />
-        <CacheStatus />
+        <CurrencyProvider>
+          <Router />
+          <PerformanceMonitor />
+          <CacheStatus />
+        </CurrencyProvider>
       </TooltipProvider>
     </QueryClientProvider>
   );

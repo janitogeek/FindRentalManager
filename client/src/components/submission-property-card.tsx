@@ -1,14 +1,16 @@
 import { ExternalLink, MapPin, Building2 } from "lucide-react";
-import { SiInstagram, SiFacebook, SiLinkedin, SiTiktok, SiYoutube } from "react-icons/si";
+import { SiInstagram, SiFacebook, SiLinkedin, SiTiktok } from "react-icons/si";
 import { Link } from "wouter";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Submission } from "@/lib/airtable";
-import { generateSlug, extractCityName } from "@/lib/utils";
+import { generateSlug } from "@/lib/utils";
+import { formatPriceWithConversion } from "@/lib/currency-utils";
+import { useCurrency } from "@/contexts/currency-context";
 import { useClickTracking } from "@/lib/click-tracking";
-import { cardHoverVariants, buttonVariants, itemVariants } from "@/lib/animations";
+import { cardHoverVariants, itemVariants } from "@/lib/animations";
 import TopStats from "@/components/top-stats";
 
 interface SubmissionPropertyCardProps {
@@ -18,6 +20,8 @@ interface SubmissionPropertyCardProps {
 }
 
 export default function SubmissionPropertyCard({ submission, fromCity, fromCountry }: SubmissionPropertyCardProps) {
+  const { selectedCurrency } = useCurrency();
+  
   // Use unique slug if available, otherwise generate one
   const slug = submission.uniqueSlug || generateSlug(submission.brandName);
   
@@ -32,13 +36,7 @@ export default function SubmissionPropertyCard({ submission, fromCity, fromCount
     return url;
   };
   
-  // Extract just city names for display (keeping full data in backend)
-  const displayCities = submission.citiesRegions?.map((city: any) => {
-    if (typeof city === 'string') {
-      return extractCityName(city);
-    }
-    return city;
-  }) || [];
+  // Cities are handled in the component directly
 
   // Initialize click tracking for this submission
   const {
@@ -46,10 +44,8 @@ export default function SubmissionPropertyCard({ submission, fromCity, fromCount
     trackInstagram,
     trackFacebook,
     trackLinkedIn,
-    trackYouTube,
     trackTikTok,
-    trackCompany,
-    track
+    trackCompany
   } = useClickTracking(submission.id);
 
   const getFlagEmoji = (countryName: string) => {
@@ -408,18 +404,47 @@ export default function SubmissionPropertyCard({ submission, fromCity, fromCount
         </div>
 
         {/* Pricing Display */}
-        {(submission.minPrice || submission.maxPrice) && submission.currency && (
+        {(submission.minPrice || submission.maxPrice) && (
           <div className="flex items-center justify-end mb-3 text-sm">
             <div className="flex items-center gap-1 font-medium text-blue-600">
               <span className="text-gray-500">💰</span>
               <span>
-                {submission.minPrice && submission.maxPrice ? (
-                  `from ${submission.minPrice} ${submission.currency.split(' – ')[1]} to ${submission.maxPrice} ${submission.currency.split(' – ')[1]}`
-                ) : submission.minPrice ? (
-                  `from ${submission.minPrice} ${submission.currency.split(' – ')[1]}`
-                ) : (
-                  `up to ${submission.maxPrice} ${submission.currency.split(' – ')[1]}`
-                )}
+                {(() => {
+                  const primaryCountry = submission.countries?.[0] || '';
+                  
+                  if (submission.minPrice && submission.maxPrice) {
+                    const minPriceFormatted = formatPriceWithConversion(
+                      submission.minPrice, 
+                      submission.currency, 
+                      selectedCurrency, 
+                      primaryCountry
+                    );
+                    const maxPriceFormatted = formatPriceWithConversion(
+                      submission.maxPrice, 
+                      submission.currency, 
+                      selectedCurrency, 
+                      primaryCountry
+                    );
+                    return `from ${minPriceFormatted} to ${maxPriceFormatted}`;
+                  } else if (submission.minPrice) {
+                    const minPriceFormatted = formatPriceWithConversion(
+                      submission.minPrice, 
+                      submission.currency, 
+                      selectedCurrency, 
+                      primaryCountry
+                    );
+                    return `from ${minPriceFormatted}`;
+                  } else if (submission.maxPrice) {
+                    const maxPriceFormatted = formatPriceWithConversion(
+                      submission.maxPrice, 
+                      submission.currency, 
+                      selectedCurrency, 
+                      primaryCountry
+                    );
+                    return `up to ${maxPriceFormatted}`;
+                  }
+                  return '';
+                })()}
               </span>
             </div>
           </div>
@@ -565,18 +590,7 @@ export default function SubmissionPropertyCard({ submission, fromCity, fromCount
                 <SiTiktok className="w-5 h-5" />
               </a>
             )}
-            {submission.youtubeVideoTour && (
-              <a
-                href={submission.youtubeVideoTour}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-red-600 hover:scale-110 transition-transform"
-                title="YouTube"
-                onClick={trackYouTube}
-              >
-                <SiYoutube className="w-5 h-5" />
-              </a>
-            )}
+{/* YouTube video tour not available in current data structure */}
           </div>
 
           {/* Visit Direct Booking Website - Right */}

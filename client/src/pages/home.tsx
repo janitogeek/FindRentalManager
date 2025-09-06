@@ -152,9 +152,12 @@ export default function Home() {
               >
                 <Button 
                   onClick={() => setLocation("/find-manager")}
-                  className="w-full py-2 px-4 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-all shadow-xl text-sm font-semibold"
+                  className="w-full py-2 px-4 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-all shadow-xl text-sm font-semibold flex items-center justify-center gap-2"
                 >
                   Find a Manager Now!
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
                 </Button>
               </motion.div>
             </motion.div>
@@ -179,7 +182,7 @@ export default function Home() {
         </AnimatedSection>
 
       {/* Why Hire a Property Manager Section - 4 Pillars */}
-      <AnimatedSection className="py-20 bg-white" delay={0.2}>
+      <AnimatedSection className="py-20 bg-gray-50" delay={0.2}>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-6">
@@ -274,7 +277,9 @@ export default function Home() {
       </section>
 
       {/* What the Experts Say Section - Carousel */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-gray-25"
+        style={{ backgroundColor: '#fefefe' }}
+      >
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-6xl mx-auto text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-6">
@@ -355,9 +360,12 @@ export default function Home() {
              </p>
              <Button 
                onClick={() => setLocation("/find-manager")}
-               className="bg-white text-blue-600 hover:bg-blue-50 px-8 py-4 rounded-full text-lg font-semibold"
+               className="bg-white text-blue-600 hover:bg-blue-50 px-8 py-4 rounded-full text-lg font-semibold flex items-center justify-center gap-2"
              >
                Start Finding Managers
+               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+               </svg>
              </Button>
            </div>
          </div>

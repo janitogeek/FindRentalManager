@@ -1,4 +1,6 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
+import { useCurrency } from '@/contexts/currency-context';
+import { convertBudgetRange } from '@/lib/currency-utils';
 
 interface BudgetRangeSliderProps {
   minValue?: number | null;
@@ -13,14 +15,24 @@ export default function BudgetRangeSlider({
   onRangeChange,
   className = ""
 }: BudgetRangeSliderProps) {
-  const [minPrice, setMinPrice] = useState(minValue || 20);
-  const [maxPrice, setMaxPrice] = useState(maxValue || 300);
+  const { selectedCurrency, currencyOptions } = useCurrency();
+  
+  // Base range in EUR (original values)
+  const BASE_MIN_RANGE = 20;
+  const BASE_MAX_RANGE = 300;
+  
+  // Convert base range to selected currency
+  const convertedRange = convertBudgetRange(BASE_MIN_RANGE, BASE_MAX_RANGE, selectedCurrency);
+  
+  const [minPrice, setMinPrice] = useState(minValue || convertedRange.min);
+  const [maxPrice, setMaxPrice] = useState(maxValue || convertedRange.max);
   const [isDragging, setIsDragging] = useState<'min' | 'max' | null>(null);
   
   const sliderRef = useRef<HTMLDivElement>(null);
   
-  const MIN_RANGE = 20;
-  const MAX_RANGE = 300;
+  // Use converted range values
+  const MIN_RANGE = convertedRange.min;
+  const MAX_RANGE = convertedRange.max;
   const GAP = 10;
 
   // Histogram data
@@ -95,6 +107,13 @@ export default function BudgetRangeSlider({
     }
   }, [minPrice, maxPrice, isDragging, getValueFromPosition]);
 
+  // Update range when currency changes
+  useEffect(() => {
+    const newConvertedRange = convertBudgetRange(BASE_MIN_RANGE, BASE_MAX_RANGE, selectedCurrency);
+    setMinPrice(newConvertedRange.min);
+    setMaxPrice(newConvertedRange.max);
+  }, [selectedCurrency, BASE_MIN_RANGE, BASE_MAX_RANGE]);
+
   // Add global event listeners
   useEffect(() => {
     if (isDragging) {
@@ -130,7 +149,11 @@ export default function BudgetRangeSlider({
       
       {/* Selected Range Display */}
       <div className="text-sm text-gray-600 mb-4">
-        From € {minPrice} to € {maxPrice >= MAX_RANGE ? `${maxPrice}+` : maxPrice}
+        {(() => {
+          const selectedCurrencyInfo = currencyOptions.find(c => c.code === selectedCurrency);
+          const symbol = selectedCurrencyInfo?.symbol || '$';
+          return `From ${symbol}${minPrice} to ${symbol}${maxPrice >= MAX_RANGE ? `${maxPrice}+` : maxPrice}`;
+        })()}
       </div>
 
       {/* Slider Container */}

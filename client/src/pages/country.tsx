@@ -1,23 +1,22 @@
 import { useState, useMemo, useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRoute, Link } from "wouter";
-import { motion } from "framer-motion";
 import PropertyCard from "@/components/property-card";
 import SubmissionPropertyCard from "@/components/submission-property-card";
 import HostFilters, { FilterState } from "@/components/host-filters";
-import AnimatedPage, { AnimatedSection, AnimatedContainer } from "@/components/animated-page";
-import { containerVariants, itemVariants, fadeInUpVariants } from "@/lib/animations";
+import CurrencySelector from "@/components/currency-selector";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Search, X } from "lucide-react";
-import { apiRequest } from "@/lib/queryClient";
-import { airtableService } from "@/lib/airtable";
 import { dataPreloader } from "@/lib/data-preloader";
+import { useCurrency } from "@/contexts/currency-context";
+import { getCurrencyForCountry } from "@/lib/currency-utils";
 import { getFlagByCountryName, getManagerCountText } from "@/lib/utils";
 
 export default function Country() {
+  const { selectedCurrency, setSelectedCurrency } = useCurrency();
   const [, params] = useRoute('/country/:country');
   const countrySlug = params?.country;
   const [visibleCount, setVisibleCount] = useState(6);
@@ -59,158 +58,58 @@ export default function Country() {
     });
   };
   
-  // SYSTEMATIC country name resolver that works for ALL countries automatically
-  // No hardcoded mappings - handles any country format dynamically
-  const getCountryNameFromSlug = async (slug: string) => {
-    try {
-      console.log(`🔍 SYSTEMATIC: Resolving country name for slug: ${slug}`);
-      
-      // Step 1: Try to get from cached countries data first
-      const countries = await dataPreloader.getCountries();
-      const cachedCountry = countries.find(c => c.slug === slug);
-      
-      if (cachedCountry) {
-        console.log(`✅ CACHE HIT: ${slug} → ${cachedCountry.name}`);
-        return cachedCountry.name;
-      }
-      
-      // Step 2: Try to find in submissions data (most reliable source)
-      const submissions = await dataPreloader.getSubmissions();
-      const allCountriesFromSubmissions = new Set<string>();
-      
-      // Extract ALL unique countries from submissions
-      submissions.forEach(submission => {
-        if (submission.countries && submission.countries.length > 0) {
-          submission.countries.forEach(country => {
-            allCountriesFromSubmissions.add(country.trim());
-          });
-        }
-        
-        // Also check citiesRegions for country information
-        if (submission.citiesRegions && submission.citiesRegions.length > 0) {
-          submission.citiesRegions.forEach((cityRegion: any) => {
-            if (typeof cityRegion === 'string' && cityRegion.includes(', ')) {
-              const parts = cityRegion.split(', ');
-              if (parts.length >= 3) {
-                const countryFromCity = parts[parts.length - 1].trim(); // Last part is country
-                allCountriesFromSubmissions.add(countryFromCity);
-              }
-            }
-          });
-        }
-      });
-      
-      console.log(`📊 Found ${allCountriesFromSubmissions.size} unique countries in submissions`);
-      
-      // Step 3: Find the best match using systematic slug comparison
-      const countryArray = Array.from(allCountriesFromSubmissions);
-      let bestMatch = null;
-      let bestScore = 0;
-      
-      for (const country of countryArray) {
-        // Generate slug from country name
-        const countrySlug = country.toLowerCase()
-          .replace(/\s+/g, '-')           // Replace spaces with hyphens
-          .replace(/[^\w-]/g, '')         // Remove special characters
-          .replace(/-+/g, '-')            // Replace multiple hyphens with single
-          .replace(/^-|-$/g, '');         // Remove leading/trailing hyphens
-        
-        // Calculate similarity score
-        let score = 0;
-        
-        // Exact match gets highest score
-        if (countrySlug === slug) {
-          score = 100;
-        }
-        // Partial match gets medium score
-        else if (countrySlug.includes(slug) || slug.includes(countrySlug)) {
-          score = 50;
-        }
-        // Word-by-word comparison
-        else {
-          const slugWords = slug.split('-');
-          const countryWords = countrySlug.split('-');
-          
-          let wordMatches = 0;
-          slugWords.forEach(slugWord => {
-            if (countryWords.some(countryWord => 
-              countryWord.includes(slugWord) || slugWord.includes(countryWord)
-            )) {
-              wordMatches++;
-            }
-          });
-          
-          score = (wordMatches / slugWords.length) * 30;
-        }
-        
-        if (score > bestScore) {
-          bestScore = score;
-          bestMatch = country;
-        }
-      }
-      
-      if (bestMatch && bestScore > 20) {
-        console.log(`✅ SYSTEMATIC MATCH: ${slug} → ${bestMatch} (score: ${bestScore})`);
-        return bestMatch;
-      }
-      
-      // Step 4: Smart fallback - convert slug to readable format
-      const fallbackName = slug
-        .split('-')
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-        .join(' ');
-      
-      console.log(`⚠️ FALLBACK: ${slug} → ${fallbackName}`);
-      return fallbackName;
-      
-    } catch (error) {
-      console.error(`❌ SYSTEMATIC RESOLVER ERROR for slug ${slug}:`, error);
-      
-      // Ultimate fallback - convert slug to readable format
-      const ultimateFallback = slug
-        .split('-')
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-        .join(' ');
-      
-      console.log(`🔄 ULTIMATE FALLBACK: ${slug} → ${ultimateFallback}`);
-      return ultimateFallback;
-    }
+  // Map country slugs to full country names for Airtable matching
+  const getCountryNameFromSlug = (slug: string) => {
+    const countryMap: { [key: string]: string } = {
+      'united-states': 'United States',
+      usa: 'United States',
+      spain: 'Spain',
+      uk: 'United Kingdom',
+      germany: 'Germany',
+      france: 'France',
+      australia: 'Australia',
+      canada: 'Canada',
+      italy: 'Italy',
+      portugal: 'Portugal',
+      thailand: 'Thailand',
+      greece: 'Greece',
+      netherlands: 'Netherlands',
+      switzerland: 'Switzerland',
+      austria: 'Austria',
+      belgium: 'Belgium',
+      croatia: 'Croatia',
+      'czech-republic': 'Czech Republic',
+      denmark: 'Denmark',
+      finland: 'Finland',
+      hungary: 'Hungary',
+      ireland: 'Ireland',
+      norway: 'Norway',
+      poland: 'Poland',
+      sweden: 'Sweden',
+      turkey: 'Turkey',
+      albania: 'Albania',
+      andorra: 'Andorra',
+      indonesia: 'Indonesia'
+    };
+    return countryMap[slug] || slug.charAt(0).toUpperCase() + slug.slice(1);
   };
 
-  const [countryName, setCountryName] = useState<string>('');
-  const [isCountryNameLoading, setIsCountryNameLoading] = useState(true);
-
-  // Resolve country name asynchronously
+  const countryName = getCountryNameFromSlug(countrySlug || '');
+  
+  // Auto-set currency based on country
   useEffect(() => {
-    const resolveCountryName = async () => {
-      try {
-        setIsCountryNameLoading(true);
-        const resolvedName = await getCountryNameFromSlug(countrySlug || '');
-        setCountryName(resolvedName);
-      } catch (error) {
-        console.error('Error resolving country name:', error);
-        // Fallback to slug-based name
-        const fallbackName = (countrySlug || '')
-          .split('-')
-          .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-          .join(' ');
-        setCountryName(fallbackName);
-      } finally {
-        setIsCountryNameLoading(false);
-      }
-    };
-
-    if (countrySlug) {
-      resolveCountryName();
+    if (countryName) {
+      const countryCurrency = getCurrencyForCountry(countryName);
+      setSelectedCurrency(countryCurrency);
     }
-  }, [countrySlug]);
+  }, [countryName, setSelectedCurrency]);
   
   // Fetch validated cities for this country from submissions
   // Fetch cities for this country (instant if cached)  
   const { data: citiesWithCounts = [], isLoading: isCitiesLoading } = useQuery({
     queryKey: ["/api/preloaded-cities", countryName],
     queryFn: () => dataPreloader.getCitiesForCountry(countryName),
-    enabled: !!countryName && !isCountryNameLoading,
+    enabled: !!countryName,
     staleTime: 30 * 60 * 1000, // 30 minutes (longer since we have smart caching)
   });
 
@@ -242,7 +141,7 @@ export default function Country() {
   const { data: submissions = [], isLoading: isSubmissionsLoading } = useQuery({
     queryKey: ["/api/preloaded-submissions", countryName],
     queryFn: () => dataPreloader.getSubmissionsForCountry(countryName),
-    enabled: !!countryName && !isCountryNameLoading,
+    enabled: !!countryName,
     staleTime: 30 * 60 * 1000, // 30 minutes (longer since we have smart caching)
     refetchInterval: 60 * 1000, // Refetch every minute
   });
@@ -390,9 +289,6 @@ export default function Country() {
 
       // Check price range filters
       if (filters.minPrice !== null || filters.maxPrice !== null) {
-        console.log(`🔍 Price filter active: min=${filters.minPrice}, max=${filters.maxPrice}`);
-        console.log(`📊 Submission pricing: min=${submission.minPrice}, max=${submission.maxPrice}, currency=${submission.currency}`);
-        
         // Only apply price filters if submission has pricing data
         if (submission.minPrice && submission.maxPrice && submission.currency) {
           const companyMin = submission.minPrice;
@@ -400,80 +296,28 @@ export default function Country() {
           
           // If user sets only min price, show companies where max price >= user min
           if (filters.minPrice !== null && filters.maxPrice === null) {
-            if (companyMax < filters.minPrice) {
-              console.log(`❌ Filtered out ${submission.brandName}: companyMax (${companyMax}) < userMin (${filters.minPrice})`);
-              return false;
-            }
+            if (companyMax < filters.minPrice) return false;
           }
           
           // If user sets only max price, show companies where min price <= user max
           if (filters.maxPrice !== null && filters.minPrice === null) {
-            if (companyMin > filters.maxPrice) {
-              console.log(`❌ Filtered out ${submission.brandName}: companyMin (${companyMin}) > userMax (${filters.maxPrice})`);
-              return false;
-            }
+            if (companyMin > filters.maxPrice) return false;
           }
           
           // If user sets both min and max, check for range overlap
           if (filters.minPrice !== null && filters.maxPrice !== null) {
             // No overlap if company max < user min OR company min > user max
             if (companyMax < filters.minPrice || companyMin > filters.maxPrice) {
-              console.log(`❌ Filtered out ${submission.brandName}: no overlap - company range [${companyMin}-${companyMax}] vs user range [${filters.minPrice}-${filters.maxPrice}]`);
               return false;
             }
           }
-          
-          console.log(`✅ ${submission.brandName} passed price filter`);
         } else {
           // If submission doesn't have pricing data, exclude it when price filters are active
-          console.log(`❌ Filtered out ${submission.brandName}: missing pricing data`);
           return false;
         }
       }
 
-      // Check commission range filters
-      if (filters.minCommission !== null || filters.maxCommission !== null) {
-        console.log(`🔍 Commission filter active: min=${filters.minCommission}%, max=${filters.maxCommission}%`);
-        console.log(`📊 Submission commission: ${submission.commissionOnRevenue}%`);
-        
-        // Only apply commission filters if submission has commission data
-        if (submission.commissionOnRevenue !== undefined && submission.commissionOnRevenue !== null) {
-          const companyCommission = submission.commissionOnRevenue;
-          
-          // If user sets only min commission, show companies where commission >= user min
-          if (filters.minCommission !== null && filters.maxCommission === null) {
-            if (companyCommission < filters.minCommission) {
-              console.log(`❌ Filtered out ${submission.brandName}: companyCommission (${companyCommission}%) < userMin (${filters.minCommission}%)`);
-              return false;
-            }
-          }
-          
-          // If user sets only max commission, show companies where commission <= user max
-          if (filters.maxCommission !== null && filters.minCommission === null) {
-            if (companyCommission > filters.maxCommission) {
-              console.log(`❌ Filtered out ${submission.brandName}: companyCommission (${companyCommission}%) > userMax (${filters.maxCommission}%)`);
-              return false;
-            }
-          }
-          
-          // If user sets both min and max, check for range overlap
-          if (filters.minCommission !== null && filters.maxCommission !== null) {
-            // No overlap if company commission < user min OR company commission > user max
-            if (companyCommission < filters.minCommission || companyCommission > filters.maxCommission) {
-              console.log(`❌ Filtered out ${submission.brandName}: companyCommission (${companyCommission}%) outside user range [${filters.minCommission}%-${filters.maxCommission}%]`);
-              return false;
-            }
-          }
-          
-          console.log(`✅ ${submission.brandName} passed commission filter`);
-        } else {
-          // If submission doesn't have commission data, exclude it when commission filters are active
-          console.log(`❌ Filtered out ${submission.brandName}: missing commission data`);
-          return false;
-        }
-      }
-
-      return true;
+        return true;
       });
     }
     
@@ -534,26 +378,8 @@ export default function Country() {
     }
   } : null;
 
-  // Show loading state while resolving country name
-  if (isCountryNameLoading) {
-    return (
-      <AnimatedPage key={`country-loading-${countrySlug}`}>
-        <main>
-          <div className="min-h-screen flex items-center justify-center">
-            <div className="text-center">
-              <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto mb-4"></div>
-              <h1 className="text-2xl font-bold mb-2">Resolving Country Information</h1>
-              <p className="text-gray-600">Please wait while we load the country details...</p>
-            </div>
-          </div>
-        </main>
-      </AnimatedPage>
-    );
-  }
-
   return (
-    <AnimatedPage key={`country-${countrySlug}`}>
-      <main>
+    <main>
       {/* Structured Data for AI Understanding */}
       <script
         type="application/ld+json"
@@ -621,8 +447,19 @@ export default function Country() {
               </Button>
           </div>
           
-          {/* Host Filters */}
-          <HostFilters onFiltersChange={setFilters} />
+          {/* Currency Selector and Host Filters */}
+          <div className="mb-6 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+            <div className="flex items-center gap-4">
+              <span className="text-sm font-medium text-gray-700">Show prices in:</span>
+              <CurrencySelector 
+                selectedCurrency={selectedCurrency}
+                onCurrencyChange={setSelectedCurrency}
+              />
+            </div>
+            <div className="w-full sm:w-auto">
+              <HostFilters onFiltersChange={setFilters} />
+            </div>
+          </div>
 
           {/* Featured Only Toggle */}
           <div className="mb-6">
@@ -849,6 +686,5 @@ export default function Country() {
           </div>
         </section>
       </main>
-    </AnimatedPage>
   );
 }

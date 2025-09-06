@@ -1,17 +1,19 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useRoute, Link } from "wouter";
 import PropertyCard from "@/components/property-card";
 import SubmissionPropertyCard from "@/components/submission-property-card";
 import HostFilters, { FilterState } from "@/components/host-filters";
+import CurrencySelector from "@/components/currency-selector";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { apiRequest } from "@/lib/queryClient";
-import { airtableService } from "@/lib/airtable";
 import { dataPreloader } from "@/lib/data-preloader";
+import { useCurrency } from "@/contexts/currency-context";
+import { getCurrencyForCountry } from "@/lib/currency-utils";
 import { getFlagByCountryName, getManagerCountText } from "@/lib/utils";
 
 export default function City() {
+  const { selectedCurrency, setSelectedCurrency } = useCurrency();
   const [, params] = useRoute('/country/:country/:city');
   const countrySlug = params?.country;
   const citySlug = params?.city;
@@ -126,6 +128,14 @@ export default function City() {
   };
   
   const countryName = getCountryName(countrySlug || '');
+
+  // Auto-set currency based on country
+  useEffect(() => {
+    if (countryName) {
+      const countryCurrency = getCurrencyForCountry(countryName);
+      setSelectedCurrency(countryCurrency);
+    }
+  }, [countryName, setSelectedCurrency]);
 
   // Fetch submissions for this country (instant if cached)
   const { data: allSubmissions = [], isLoading: isSubmissionsLoading } = useQuery({
@@ -289,36 +299,7 @@ export default function City() {
         }
       }
 
-      // Check commission range filters
-      if (filters.minCommission !== null || filters.maxCommission !== null) {
-        // Only apply commission filters if submission has commission data
-        if (submission.commissionOnRevenue !== undefined && submission.commissionOnRevenue !== null) {
-          const companyCommission = submission.commissionOnRevenue;
-          
-          // If user sets only min commission, show companies where commission >= user min
-          if (filters.minCommission !== null && filters.maxCommission === null) {
-            if (companyCommission < filters.minCommission) return false;
-          }
-          
-          // If user sets only max commission, show companies where commission <= user max
-          if (filters.maxCommission !== null && filters.minCommission === null) {
-            if (companyCommission > filters.maxCommission) return false;
-          }
-          
-          // If user sets both min and max, check for range overlap
-          if (filters.minCommission !== null && filters.maxCommission !== null) {
-            // No overlap if company commission < user min OR company commission > user max
-            if (companyCommission < filters.minCommission || companyCommission > filters.maxCommission) {
-              return false;
-            }
-          }
-        } else {
-          // If submission doesn't have commission data, exclude it when commission filters are active
-          return false;
-        }
-      }
-
-      return true;
+        return true;
       });
     }
     
@@ -443,9 +424,20 @@ export default function City() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-6xl mx-auto">
             
-            {/* Host Filters */}
+            {/* Currency Selector and Host Filters */}
             {citySubmissions.length > 0 && (
-              <HostFilters onFiltersChange={setFilters} />
+              <div className="mb-6 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <span className="text-sm font-medium text-gray-700">Show prices in:</span>
+                  <CurrencySelector 
+                    selectedCurrency={selectedCurrency}
+                    onCurrencyChange={setSelectedCurrency}
+                  />
+                </div>
+                <div className="w-full sm:w-auto">
+                  <HostFilters onFiltersChange={setFilters} />
+                </div>
+              </div>
             )}
 
             {/* Featured Only Toggle */}

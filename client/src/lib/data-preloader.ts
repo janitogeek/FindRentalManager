@@ -144,51 +144,23 @@ class DataPreloader {
   }
 
   /**
-   * Generate slug from country name - SYSTEMATIC approach for ALL countries
+   * Generate slug from country name
    */
   private generateCountrySlug(countryName: string): string {
-    if (!countryName || typeof countryName !== 'string') {
-      console.warn('⚠️ Invalid country name for slug generation:', countryName);
-      return 'unknown';
-    }
-    
     return countryName
       .toLowerCase()
-      .trim()
-      .replace(/\s+/g, '-')           // Replace spaces with hyphens
-      .replace(/[^\w-]/g, '')         // Remove special characters
-      .replace(/-+/g, '-')            // Replace multiple hyphens with single
-      .replace(/^-|-$/g, '')          // Remove leading/trailing hyphens
-      .replace(/^the-/, '')           // Remove "the" prefix for consistency
-      .replace(/^united-/, 'united-') // Keep "united" prefix for clarity
-      .replace(/^new-/, 'new-')       // Keep "new" prefix for clarity
-      .replace(/^south-/, 'south-')   // Keep directional prefixes
-      .replace(/^north-/, 'north-')   // Keep directional prefixes
-      .replace(/^east-/, 'east-')     // Keep directional prefixes
-      .replace(/^west-/, 'west-');    // Keep directional prefixes
+      .replace(/\s+/g, '-')
+      .replace(/[^\w-]/g, '');
   }
 
   /**
-   * Generate slug from city name - SYSTEMATIC approach for ALL cities
+   * Generate slug from city name
    */
   private generateCitySlug(cityName: string): string {
-    if (!cityName || typeof cityName !== 'string') {
-      console.warn('⚠️ Invalid city name for slug generation:', cityName);
-      return 'unknown';
-    }
-    
     return cityName
       .toLowerCase()
-      .trim()
-      .replace(/\s+/g, '-')           // Replace spaces with hyphens
-      .replace(/[^\w-]/g, '')         // Remove special characters
-      .replace(/-+/g, '-')            // Replace multiple hyphens with single
-      .replace(/^-|-$/g, '')          // Remove leading/trailing hyphens
-      .replace(/^new-/, 'new-')       // Keep "new" prefix for clarity
-      .replace(/^south-/, 'south-')   // Keep directional prefixes
-      .replace(/^north-/, 'north-')   // Keep directional prefixes
-      .replace(/^east-/, 'east-')     // Keep directional prefixes
-      .replace(/^west-/, 'west-');    // Keep directional prefixes
+      .replace(/\s+/g, '-')
+      .replace(/[^\w-]/g, '');
   }
 
   /**
