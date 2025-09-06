@@ -163,17 +163,17 @@ export default function Home() {
               </motion.div>
             </motion.div>
 
-            {/* Key Benefits - Clean Cards - Updated */}
-            <div className="grid md:grid-cols-2 gap-3 max-w-2xl mx-auto">
+            {/* Key Benefits - Clean Cards - Compact */}
+            <div className="grid md:grid-cols-2 gap-2 max-w-xl mx-auto">
               <Card className="bg-white/10 backdrop-blur-sm border-white/20 text-white">
-                <CardContent className="p-3 text-center">
-                  <div className="text-xl font-bold text-blue-200 mb-1">1000+</div>
+                <CardContent className="p-2 text-center">
+                  <div className="text-lg font-bold text-blue-200 mb-0.5">1000+</div>
                   <div className="text-xs font-medium">Verified Professional Managers</div>
                 </CardContent>
               </Card>
               <Card className="bg-white/10 backdrop-blur-sm border-white/20 text-white">
-                <CardContent className="p-3 text-center">
-                  <div className="text-xl font-bold text-blue-200 mb-1">50+</div>
+                <CardContent className="p-2 text-center">
+                  <div className="text-lg font-bold text-blue-200 mb-0.5">50+</div>
                   <div className="text-xs font-medium">Countries</div>
                 </CardContent>
               </Card>
