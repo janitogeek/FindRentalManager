@@ -54,7 +54,7 @@ export default function About() {
               About FindRentalManager
             </h1>
             <p className="text-xl lg:text-2xl mb-8 opacity-90">
-              The Global Directory for Trusted Vacation Rental Management
+              The Global Directory for Trusted Vacation Rental Management Companies
             </p>
             <p className="text-lg mb-8 opacity-90">
               Finally sleep better at night. Discover vetted professional rental managers across 50+ countries. We help you find legitimate companies with good reviews, professional systems, and direct booking websites - but you make the final decisions about your investment.
