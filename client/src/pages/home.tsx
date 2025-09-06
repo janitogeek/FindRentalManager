@@ -138,7 +138,7 @@ export default function Home() {
             
             {/* Find a Manager Button - Compact */}
             <motion.div 
-              className="relative mx-auto mb-8 text-center"
+              className="relative mb-8 text-center"
               variants={fadeInUpVariants}
               initial="hidden"
               animate="visible"
@@ -149,10 +149,11 @@ export default function Home() {
                 initial="rest"
                 whileHover="hover"
                 whileTap="tap"
+                className="inline-block"
               >
                 <Button 
                   onClick={() => setLocation("/find-manager")}
-                  className="px-6 py-3 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-all shadow-xl text-sm font-semibold flex items-center justify-center gap-2"
+                  className="px-6 py-3 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-all shadow-xl text-sm font-semibold inline-flex items-center justify-center gap-2"
                 >
                   Find a Manager Now!
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -360,7 +361,7 @@ export default function Home() {
              </p>
              <Button 
                onClick={() => setLocation("/find-manager")}
-               className="bg-white text-blue-600 hover:bg-blue-50 px-8 py-4 rounded-full text-lg font-semibold flex items-center justify-center gap-2"
+               className="bg-white text-blue-600 hover:bg-blue-50 px-8 py-4 rounded-full text-lg font-semibold inline-flex items-center justify-center gap-2"
              >
                Start Finding Managers
                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
