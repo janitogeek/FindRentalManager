@@ -195,7 +195,7 @@ export default function About() {
                   <p className="text-blue-600 font-semibold text-lg">Founder</p>
                 </div>
                 <p className="text-gray-700 text-base leading-relaxed text-center mb-6">
-                  Property tech professional and rental management expert dedicated to connecting property owners with trustworthy managers. Worked with 100+ management companies across 6 continents.
+                  Ex-athlete, traveler, lifelong STR consumer, and now STR tech professional dedicated to empowering PMCs with smart automation tools and visibility. (Worked with 100+ PMCs)
                 </p>
                 <div className="text-center">
                   <Button 
