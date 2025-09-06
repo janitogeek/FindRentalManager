@@ -89,6 +89,10 @@ export default function HostFilters({ onFiltersChange, selectedCurrency, onCurre
   // Get default ranges in current currency
   const defaultPriceRange = convertBudgetRange(DEFAULT_MIN_PRICE_EUR, DEFAULT_MAX_PRICE_EUR, currentCurrency);
   
+  // Track if sliders have been modified by user
+  const [priceRangeTouched, setPriceRangeTouched] = useState(false);
+  const [commissionRangeTouched, setCommissionRangeTouched] = useState(false);
+  
   const [filters, setFilters] = useState<FilterState>({
     search: "",
     propertyTypes: [],
@@ -129,6 +133,11 @@ export default function HostFilters({ onFiltersChange, selectedCurrency, onCurre
     newFilters.minPrice = min;
     newFilters.maxPrice = max;
     
+    // Mark as touched when values are not null (user interacted)
+    if (min !== null || max !== null) {
+      setPriceRangeTouched(true);
+    }
+    
     setFilters(newFilters);
     onFiltersChange(newFilters);
   };
@@ -137,6 +146,11 @@ export default function HostFilters({ onFiltersChange, selectedCurrency, onCurre
     const newFilters = { ...filters };
     newFilters.minCommission = min;
     newFilters.maxCommission = max;
+    
+    // Mark as touched when values are not null (user interacted)
+    if (min !== null || max !== null) {
+      setCommissionRangeTouched(true);
+    }
     
     setFilters(newFilters);
     onFiltersChange(newFilters);
@@ -159,6 +173,8 @@ export default function HostFilters({ onFiltersChange, selectedCurrency, onCurre
       maxCommission: null
     };
     setFilters(emptyFilters);
+    setPriceRangeTouched(false);
+    setCommissionRangeTouched(false);
     onFiltersChange(emptyFilters);
   };
 
@@ -172,15 +188,11 @@ export default function HostFilters({ onFiltersChange, selectedCurrency, onCurre
 
   // Helper functions to check if sliders are modified from defaults
   const isPriceRangeModified = () => {
-    if (filters.minPrice === null && filters.maxPrice === null) return false;
-    const defaultMin = defaultPriceRange.min;
-    const defaultMax = defaultPriceRange.max;
-    return (filters.minPrice !== defaultMin) || (filters.maxPrice !== defaultMax);
+    return priceRangeTouched && (filters.minPrice !== null || filters.maxPrice !== null);
   };
 
   const isCommissionRangeModified = () => {
-    if (filters.minCommission === null && filters.maxCommission === null) return false;
-    return (filters.minCommission !== DEFAULT_MIN_COMMISSION) || (filters.maxCommission !== DEFAULT_MAX_COMMISSION);
+    return commissionRangeTouched && (filters.minCommission !== null || filters.maxCommission !== null);
   };
 
   const totalActiveFilters = 
@@ -335,7 +347,10 @@ export default function HostFilters({ onFiltersChange, selectedCurrency, onCurre
                   >
                     💰 {filters.minPrice || defaultPriceRange.min}€ - {filters.maxPrice ? `${filters.maxPrice}€` : `${defaultPriceRange.max}€+`}
                     <button
-                      onClick={() => updatePriceRange(null, null)}
+                      onClick={() => {
+                        updatePriceRange(null, null);
+                        setPriceRangeTouched(false);
+                      }}
                       className="ml-1 hover:bg-blue-200 rounded-full p-0.5"
                     >
                       <X className="h-3 w-3" />
@@ -351,7 +366,10 @@ export default function HostFilters({ onFiltersChange, selectedCurrency, onCurre
                   >
                     💼 {filters.minCommission || DEFAULT_MIN_COMMISSION}% - {filters.maxCommission ? `${filters.maxCommission}%` : `${DEFAULT_MAX_COMMISSION}%+`}
                     <button
-                      onClick={() => updateCommissionRange(null, null)}
+                      onClick={() => {
+                        updateCommissionRange(null, null);
+                        setCommissionRangeTouched(false);
+                      }}
                       className="ml-1 hover:bg-green-200 rounded-full p-0.5"
                     >
                       <X className="h-3 w-3" />

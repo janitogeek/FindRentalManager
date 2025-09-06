@@ -19,6 +19,7 @@ export default function CommissionRangeSlider({
   const [minCommission, setMinCommission] = useState(minValue || MIN_COMMISSION);
   const [maxCommission, setMaxCommission] = useState(maxValue || MAX_COMMISSION);
   const [isDragging, setIsDragging] = useState<'min' | 'max' | null>(null);
+  const [isInitialized, setIsInitialized] = useState(false);
   
   const sliderRef = useRef<HTMLDivElement>(null);
   const GAP = 2; // Minimum 2% gap
@@ -111,10 +112,17 @@ export default function CommissionRangeSlider({
     }
   }, [isDragging, handleMouseMove, handleMouseUp]);
 
-  // Update parent component
+  // Initialize flag on first render
   useEffect(() => {
-    onRangeChange(minCommission, maxCommission >= MAX_COMMISSION ? null : maxCommission);
-  }, [minCommission, maxCommission, onRangeChange]);
+    setIsInitialized(true);
+  }, []);
+
+  // Update parent component only after user interaction
+  useEffect(() => {
+    if (isInitialized) {
+      onRangeChange(minCommission, maxCommission >= MAX_COMMISSION ? null : maxCommission);
+    }
+  }, [minCommission, maxCommission, onRangeChange, isInitialized]);
 
   // Calculate positions
   const minPercent = ((minCommission - MIN_COMMISSION) / (MAX_COMMISSION - MIN_COMMISSION)) * 100;

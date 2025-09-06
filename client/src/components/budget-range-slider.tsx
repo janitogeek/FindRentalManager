@@ -27,6 +27,7 @@ export default function BudgetRangeSlider({
   const [minPrice, setMinPrice] = useState(minValue || convertedRange.min);
   const [maxPrice, setMaxPrice] = useState(maxValue || convertedRange.max);
   const [isDragging, setIsDragging] = useState<'min' | 'max' | null>(null);
+  const [isInitialized, setIsInitialized] = useState(false);
   
   const sliderRef = useRef<HTMLDivElement>(null);
   
@@ -107,21 +108,15 @@ export default function BudgetRangeSlider({
     }
   }, [minPrice, maxPrice, isDragging, getValueFromPosition]);
 
-  // Handle reset when parent passes null values
+  // Handle currency changes and resets
   useEffect(() => {
+    // Only reset to defaults if parent explicitly passed null values (reset) or on currency change
     if (minValue === null && maxValue === null) {
       const newConvertedRange = convertBudgetRange(BASE_MIN_RANGE, BASE_MAX_RANGE, selectedCurrency);
       setMinPrice(newConvertedRange.min);
       setMaxPrice(newConvertedRange.max);
     }
-  }, [minValue, maxValue, selectedCurrency, BASE_MIN_RANGE, BASE_MAX_RANGE]);
-
-  // Update range when currency changes
-  useEffect(() => {
-    const newConvertedRange = convertBudgetRange(BASE_MIN_RANGE, BASE_MAX_RANGE, selectedCurrency);
-    setMinPrice(newConvertedRange.min);
-    setMaxPrice(newConvertedRange.max);
-  }, [selectedCurrency, BASE_MIN_RANGE, BASE_MAX_RANGE]);
+  }, [minValue, maxValue, selectedCurrency]);
 
   // Add global event listeners
   useEffect(() => {
@@ -140,10 +135,17 @@ export default function BudgetRangeSlider({
     }
   }, [isDragging, handleMouseMove, handleMouseUp]);
 
-  // Update parent component
+  // Initialize flag on first render
   useEffect(() => {
-    onRangeChange(minPrice, maxPrice >= MAX_RANGE ? null : maxPrice);
-  }, [minPrice, maxPrice, onRangeChange]);
+    setIsInitialized(true);
+  }, []);
+
+  // Update parent component only after user interaction
+  useEffect(() => {
+    if (isInitialized) {
+      onRangeChange(minPrice, maxPrice >= MAX_RANGE ? null : maxPrice);
+    }
+  }, [minPrice, maxPrice, onRangeChange, isInitialized]);
 
   // Calculate positions
   const minPercent = ((minPrice - MIN_RANGE) / (MAX_RANGE - MIN_RANGE)) * 100;
