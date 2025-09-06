@@ -4,9 +4,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import BudgetRangeSlider from "@/components/budget-range-slider";
+import CommissionRangeSlider from "@/components/commission-range-slider";
+import CurrencySelector from "@/components/currency-selector";
 import { Separator } from "@/components/ui/separator";
 import { SearchableMultiSelect } from "@/components/searchable-multi-select";
 import { Filter, X, Info, Search } from "lucide-react";
+import { CurrencyCode } from "@/lib/currency-utils";
 
 // Filter options based on submission form data
 const PROPERTY_TYPES = [
@@ -52,6 +55,8 @@ const SETTINGS_LOCATIONS = [
 
 interface HostFiltersProps {
   onFiltersChange: (filters: FilterState) => void;
+  selectedCurrency?: CurrencyCode;
+  onCurrencyChange?: (currency: CurrencyCode) => void;
 }
 
 export interface FilterState {
@@ -66,9 +71,11 @@ export interface FilterState {
   settingsLocations: string[];
   minPrice: number | null;
   maxPrice: number | null;
+  minCommission: number | null;
+  maxCommission: number | null;
 }
 
-export default function HostFilters({ onFiltersChange }: HostFiltersProps) {
+export default function HostFilters({ onFiltersChange, selectedCurrency, onCurrencyChange }: HostFiltersProps) {
   const [filters, setFilters] = useState<FilterState>({
     search: "",
     propertyTypes: [],
@@ -80,7 +87,9 @@ export default function HostFilters({ onFiltersChange }: HostFiltersProps) {
     atmospheres: [],
     settingsLocations: [],
     minPrice: null,
-    maxPrice: null
+    maxPrice: null,
+    minCommission: null,
+    maxCommission: null
   });
 
 
@@ -111,6 +120,14 @@ export default function HostFilters({ onFiltersChange }: HostFiltersProps) {
     onFiltersChange(newFilters);
   };
 
+  const updateCommissionRange = (min: number | null, max: number | null) => {
+    const newFilters = { ...filters };
+    newFilters.minCommission = min;
+    newFilters.maxCommission = max;
+    
+    setFilters(newFilters);
+    onFiltersChange(newFilters);
+  };
 
   const clearAllFilters = () => {
     const emptyFilters = {
@@ -124,7 +141,9 @@ export default function HostFilters({ onFiltersChange }: HostFiltersProps) {
       atmospheres: [],
       settingsLocations: [],
       minPrice: null,
-      maxPrice: null
+      maxPrice: null,
+      minCommission: null,
+      maxCommission: null
     };
     setFilters(emptyFilters);
     onFiltersChange(emptyFilters);
@@ -148,7 +167,8 @@ export default function HostFilters({ onFiltersChange }: HostFiltersProps) {
     filters.atmospheres.length + 
     filters.settingsLocations.length + 
     (filters.search ? 1 : 0) +
-    (filters.minPrice !== null || filters.maxPrice !== null ? 1 : 0);
+    (filters.minPrice !== null || filters.maxPrice !== null ? 1 : 0) +
+    (filters.minCommission !== null || filters.maxCommission !== null ? 1 : 0);
 
   const renderFilterDropdown = (
     title: string,
@@ -183,16 +203,28 @@ export default function HostFilters({ onFiltersChange }: HostFiltersProps) {
               </Badge>
             )}
           </CardTitle>
-          {totalActiveFilters > 0 && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={clearAllFilters}
-              className="text-gray-600 hover:text-gray-800"
-            >
-              Clear All
-            </Button>
-          )}
+          <div className="flex items-center gap-4">
+            {/* Currency Selector */}
+            {selectedCurrency && onCurrencyChange && (
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-medium text-gray-700">Show prices in:</span>
+                <CurrencySelector 
+                  selectedCurrency={selectedCurrency}
+                  onCurrencyChange={onCurrencyChange}
+                />
+              </div>
+            )}
+            {totalActiveFilters > 0 && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={clearAllFilters}
+                className="text-gray-600 hover:text-gray-800"
+              >
+                Clear All
+              </Button>
+            )}
+          </div>
         </div>
       </CardHeader>
       
@@ -222,6 +254,14 @@ export default function HostFilters({ onFiltersChange }: HostFiltersProps) {
           minValue={filters.minPrice}
           maxValue={filters.maxPrice}
           onRangeChange={updatePriceRange}
+          className="px-2"
+        />
+
+        {/* Commission Range Slider */}
+        <CommissionRangeSlider
+          minValue={filters.minCommission}
+          maxValue={filters.maxCommission}
+          onRangeChange={updateCommissionRange}
           className="px-2"
         />
 
@@ -271,6 +311,22 @@ export default function HostFilters({ onFiltersChange }: HostFiltersProps) {
                     <button
                       onClick={() => updatePriceRange(null, null)}
                       className="ml-1 hover:bg-blue-200 rounded-full p-0.5"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </Badge>
+                )}
+
+                {/* Commission range filter */}
+                {(filters.minCommission !== null || filters.maxCommission !== null) && (
+                  <Badge 
+                    variant="secondary" 
+                    className="bg-green-100 text-green-800 flex items-center gap-1"
+                  >
+                    💼 {filters.minCommission || 0}% - {filters.maxCommission || '∞'}%
+                    <button
+                      onClick={() => updateCommissionRange(null, null)}
+                      className="ml-1 hover:bg-green-200 rounded-full p-0.5"
                     >
                       <X className="h-3 w-3" />
                     </button>

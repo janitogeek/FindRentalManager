@@ -4,7 +4,6 @@ import { useRoute, Link } from "wouter";
 import PropertyCard from "@/components/property-card";
 import SubmissionPropertyCard from "@/components/submission-property-card";
 import HostFilters, { FilterState } from "@/components/host-filters";
-import CurrencySelector from "@/components/currency-selector";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { dataPreloader } from "@/lib/data-preloader";
@@ -424,19 +423,14 @@ export default function City() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-6xl mx-auto">
             
-            {/* Currency Selector and Host Filters */}
+            {/* Host Filters */}
             {citySubmissions.length > 0 && (
-              <div className="mb-6 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <span className="text-sm font-medium text-gray-700">Show prices in:</span>
-                  <CurrencySelector 
-                    selectedCurrency={selectedCurrency}
-                    onCurrencyChange={setSelectedCurrency}
-                  />
-                </div>
-                <div className="w-full sm:w-auto">
-                  <HostFilters onFiltersChange={setFilters} />
-                </div>
+              <div className="mb-6">
+                <HostFilters 
+                  onFiltersChange={setFilters}
+                  selectedCurrency={selectedCurrency}
+                  onCurrencyChange={setSelectedCurrency}
+                />
               </div>
             )}
 

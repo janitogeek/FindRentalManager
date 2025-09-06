@@ -1,10 +1,9 @@
 import { useState, useMemo, useEffect } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useRoute, Link } from "wouter";
 import PropertyCard from "@/components/property-card";
 import SubmissionPropertyCard from "@/components/submission-property-card";
 import HostFilters, { FilterState } from "@/components/host-filters";
-import CurrencySelector from "@/components/currency-selector";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -19,7 +18,6 @@ export default function Country() {
   const { selectedCurrency, setSelectedCurrency } = useCurrency();
   const [, params] = useRoute('/country/:country');
   const countrySlug = params?.country;
-  const [visibleCount, setVisibleCount] = useState(6);
   const [citySearchQuery, setCitySearchQuery] = useState("");
   const [filters, setFilters] = useState<FilterState>({
     search: "",
@@ -39,8 +37,6 @@ export default function Country() {
   
   // Featured filter state
   const [featuredOnly, setFeaturedOnly] = useState(false);
-  
-  const queryClient = useQueryClient();
 
   // Sort function: Featured first, then alphabetical by brand name
   const sortSubmissions = (submissionsToSort: any[]) => {
@@ -325,11 +321,7 @@ export default function Country() {
     return sortSubmissions(filtered);
   }, [submissions, filters, featuredOnly]);
 
-  const handleShowMore = () => {
-    setVisibleCount(prevCount => prevCount + 6);
-  };
 
-  const hasMore = listingsData?.hasMore || false;
   const totalHosts = (listingsData?.listings?.length || 0) + filteredSubmissions.length;
 
   // Breadcrumb structured data for AI understanding
@@ -447,18 +439,13 @@ export default function Country() {
               </Button>
           </div>
           
-          {/* Currency Selector and Host Filters */}
-          <div className="mb-6 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-            <div className="flex items-center gap-4">
-              <span className="text-sm font-medium text-gray-700">Show prices in:</span>
-              <CurrencySelector 
-                selectedCurrency={selectedCurrency}
-                onCurrencyChange={setSelectedCurrency}
-              />
-            </div>
-            <div className="w-full sm:w-auto">
-              <HostFilters onFiltersChange={setFilters} />
-            </div>
+          {/* Host Filters */}
+          <div className="mb-6">
+            <HostFilters 
+              onFiltersChange={setFilters}
+              selectedCurrency={selectedCurrency}
+              onCurrencyChange={setSelectedCurrency}
+            />
           </div>
 
           {/* Featured Only Toggle */}
@@ -543,18 +530,6 @@ export default function Country() {
             )}
           </div>
           
-          {/* Show More Button */}
-          {hasMore && (
-            <div className="mt-10 text-center">
-              <Button 
-                variant="outline"
-                className="border border-primary text-primary px-6 py-3 rounded-lg hover:bg-primary hover:text-white transition"
-                onClick={handleShowMore}
-              >
-                Show More
-              </Button>
-            </div>
-          )}
         </div>
       </section>
 
