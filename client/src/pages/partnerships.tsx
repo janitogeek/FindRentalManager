@@ -298,14 +298,14 @@ export default function Partnerships() {
               <div className="text-center">
                 <div 
                   className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4 cursor-pointer hover:bg-blue-400 transition-colors"
-                  onClick={() => window.open('mailto:bookdirectstays@gmail.com?subject=Partnership Inquiry&body=Hi, I am interested in exploring partnership opportunities with BookDirectStays.', '_blank')}
+                  onClick={() => window.open('mailto:findmyrentalmanager@gmail.com?subject=Partnership Inquiry&body=Hi, I am interested in exploring partnership opportunities with BookDirectStays.', '_blank')}
                 >
                   <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                   </svg>
                 </div>
                 <h3 className="text-lg font-semibold text-white mb-2">Email Us</h3>
-                <p className="text-blue-100">bookdirectstays@gmail.com</p>
+                <p className="text-blue-100">findmyrentalmanager@gmail.com</p>
               </div>
               
               <div className="text-center">
@@ -324,7 +324,7 @@ export default function Partnerships() {
 
             <Button 
               className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-4 text-lg font-semibold"
-              onClick={() => window.open('mailto:bookdirectstays@gmail.com?subject=Partnership Inquiry&body=Hi, I am interested in exploring partnership opportunities with BookDirectStays.', '_blank')}
+              onClick={() => window.open('mailto:findmyrentalmanager@gmail.com?subject=Partnership Inquiry&body=Hi, I am interested in exploring partnership opportunities with BookDirectStays.', '_blank')}
             >
               Start Partnership Discussion
             </Button>

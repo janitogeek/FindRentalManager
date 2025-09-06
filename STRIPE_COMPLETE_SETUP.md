@@ -302,7 +302,7 @@ console.log('Event data:', JSON.stringify(event.data, null, 2));
 
 - **Stripe Documentation**: [stripe.com/docs](https://stripe.com/docs)
 - **Stripe Support**: Available in Dashboard chat
-- **BookDirectStays Support**: bookdirectstays@gmail.com
+- **BookDirectStays Support**: findmyrentalmanager@gmail.com
 
 ---
 

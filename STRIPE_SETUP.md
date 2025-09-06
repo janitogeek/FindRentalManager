@@ -178,7 +178,7 @@ console.log('Session data:', session);
 
 - **Stripe Documentation**: [stripe.com/docs](https://stripe.com/docs)
 - **Stripe Support**: Available in Dashboard
-- **BookDirectStays Support**: bookdirectstays@gmail.com
+- **BookDirectStays Support**: findmyrentalmanager@gmail.com
 
 ---
 

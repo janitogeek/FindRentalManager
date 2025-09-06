@@ -151,9 +151,9 @@ export default function Footer() {
             <h3 className="text-lg font-semibold mb-4">Contact Us</h3>
             <ul className="space-y-2">
               <li className="flex items-start">
-                <a href="mailto:bookdirectstays@gmail.com" className="flex items-start text-gray-300 hover:text-white transition-colors">
+                <a href="mailto:findmyrentalmanager@gmail.com" className="flex items-start text-gray-300 hover:text-white transition-colors">
                   <i className="fas fa-envelope mt-1 mr-2"></i>
-                  <span>bookdirectstays@gmail.com</span>
+                  <span>findmyrentalmanager@gmail.com</span>
                 </a>
               </li>
               <li className="flex items-start">

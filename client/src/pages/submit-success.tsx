@@ -377,10 +377,10 @@ export default function SubmitSuccess() {
                 <p className="text-sm text-gray-500">
                   Need help? Contact us at{" "}
                   <a 
-                    href="mailto:bookdirectstays@gmail.com" 
+                    href="mailto:findmyrentalmanager@gmail.com" 
                     className="text-blue-600 hover:underline"
                   >
-                    bookdirectstays@gmail.com
+                    findmyrentalmanager@gmail.com
                   </a>
                 </p>
               </div>
@@ -423,7 +423,7 @@ export default function SubmitSuccess() {
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button 
-                  onClick={() => window.location.href = "mailto:bookdirectstays@gmail.com?subject=Submission Error&body=Session ID: " + sessionId}
+                  onClick={() => window.location.href = "mailto:findmyrentalmanager@gmail.com?subject=Submission Error&body=Session ID: " + sessionId}
                   className="bg-red-600 hover:bg-red-700 text-white"
                 >
                   Contact Support
