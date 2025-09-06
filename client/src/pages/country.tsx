@@ -313,6 +313,36 @@ export default function Country() {
         }
       }
 
+      // Check commission range filters
+      if (filters.minCommission !== null || filters.maxCommission !== null) {
+        // Only apply commission filters if submission has commission data
+        if (submission.commissionOnRevenue) {
+          const companyCommission = typeof submission.commissionOnRevenue === 'number' 
+            ? submission.commissionOnRevenue 
+            : parseFloat(submission.commissionOnRevenue);
+          
+          // If user sets only min commission, show companies where commission >= user min
+          if (filters.minCommission !== null && filters.maxCommission === null) {
+            if (companyCommission < filters.minCommission) return false;
+          }
+          
+          // If user sets only max commission, show companies where commission <= user max
+          if (filters.maxCommission !== null && filters.minCommission === null) {
+            if (companyCommission > filters.maxCommission) return false;
+          }
+          
+          // If user sets both min and max, check if commission is within range
+          if (filters.minCommission !== null && filters.maxCommission !== null) {
+            if (companyCommission < filters.minCommission || companyCommission > filters.maxCommission) {
+              return false;
+            }
+          }
+        } else {
+          // If submission doesn't have commission data, exclude it when commission filters are active
+          return false;
+        }
+      }
+
         return true;
       });
     }
