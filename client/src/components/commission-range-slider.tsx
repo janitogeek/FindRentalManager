@@ -24,8 +24,14 @@ export default function CommissionRangeSlider({
   const GAP = 2; // Minimum 2% gap
 
   useEffect(() => {
-    setMinCommission(minValue || MIN_COMMISSION);
-    setMaxCommission(maxValue || MAX_COMMISSION);
+    if (minValue === null && maxValue === null) {
+      // Reset to defaults when parent passes null
+      setMinCommission(MIN_COMMISSION);
+      setMaxCommission(MAX_COMMISSION);
+    } else {
+      setMinCommission(minValue || MIN_COMMISSION);
+      setMaxCommission(maxValue || MAX_COMMISSION);
+    }
   }, [minValue, maxValue]);
 
   // Convert mouse position to value

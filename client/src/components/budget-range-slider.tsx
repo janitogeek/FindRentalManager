@@ -107,6 +107,15 @@ export default function BudgetRangeSlider({
     }
   }, [minPrice, maxPrice, isDragging, getValueFromPosition]);
 
+  // Handle reset when parent passes null values
+  useEffect(() => {
+    if (minValue === null && maxValue === null) {
+      const newConvertedRange = convertBudgetRange(BASE_MIN_RANGE, BASE_MAX_RANGE, selectedCurrency);
+      setMinPrice(newConvertedRange.min);
+      setMaxPrice(newConvertedRange.max);
+    }
+  }, [minValue, maxValue, selectedCurrency, BASE_MIN_RANGE, BASE_MAX_RANGE]);
+
   // Update range when currency changes
   useEffect(() => {
     const newConvertedRange = convertBudgetRange(BASE_MIN_RANGE, BASE_MAX_RANGE, selectedCurrency);

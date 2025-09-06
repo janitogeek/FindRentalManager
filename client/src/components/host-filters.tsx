@@ -9,7 +9,8 @@ import CurrencySelector from "@/components/currency-selector";
 import { Separator } from "@/components/ui/separator";
 import { SearchableMultiSelect } from "@/components/searchable-multi-select";
 import { Filter, X, Info, Search } from "lucide-react";
-import { CurrencyCode } from "@/lib/currency-utils";
+import { CurrencyCode, convertBudgetRange } from "@/lib/currency-utils";
+import { useCurrency } from "@/contexts/currency-context";
 
 // Filter options based on submission form data
 const PROPERTY_TYPES = [
@@ -75,7 +76,19 @@ export interface FilterState {
   maxCommission: number | null;
 }
 
+// Default ranges for sliders
+const DEFAULT_MIN_PRICE_EUR = 20;
+const DEFAULT_MAX_PRICE_EUR = 300;
+const DEFAULT_MIN_COMMISSION = 10;
+const DEFAULT_MAX_COMMISSION = 50;
+
 export default function HostFilters({ onFiltersChange, selectedCurrency, onCurrencyChange }: HostFiltersProps) {
+  const { selectedCurrency: contextCurrency } = useCurrency();
+  const currentCurrency = selectedCurrency || contextCurrency;
+  
+  // Get default ranges in current currency
+  const defaultPriceRange = convertBudgetRange(DEFAULT_MIN_PRICE_EUR, DEFAULT_MAX_PRICE_EUR, currentCurrency);
+  
   const [filters, setFilters] = useState<FilterState>({
     search: "",
     propertyTypes: [],
@@ -157,6 +170,19 @@ export default function HostFilters({ onFiltersChange, selectedCurrency, onCurre
     updateFilter('search', '', false);
   };
 
+  // Helper functions to check if sliders are modified from defaults
+  const isPriceRangeModified = () => {
+    if (filters.minPrice === null && filters.maxPrice === null) return false;
+    const defaultMin = defaultPriceRange.min;
+    const defaultMax = defaultPriceRange.max;
+    return (filters.minPrice !== defaultMin) || (filters.maxPrice !== defaultMax);
+  };
+
+  const isCommissionRangeModified = () => {
+    if (filters.minCommission === null && filters.maxCommission === null) return false;
+    return (filters.minCommission !== DEFAULT_MIN_COMMISSION) || (filters.maxCommission !== DEFAULT_MAX_COMMISSION);
+  };
+
   const totalActiveFilters = 
     filters.propertyTypes.length + 
     filters.idealFor.length + 
@@ -167,8 +193,8 @@ export default function HostFilters({ onFiltersChange, selectedCurrency, onCurre
     filters.atmospheres.length + 
     filters.settingsLocations.length + 
     (filters.search ? 1 : 0) +
-    (filters.minPrice !== null || filters.maxPrice !== null ? 1 : 0) +
-    (filters.minCommission !== null || filters.maxCommission !== null ? 1 : 0);
+    (isPriceRangeModified() ? 1 : 0) +
+    (isCommissionRangeModified() ? 1 : 0);
 
   const renderFilterDropdown = (
     title: string,
@@ -302,12 +328,12 @@ export default function HostFilters({ onFiltersChange, selectedCurrency, onCurre
                 )}
 
                 {/* Price range filter */}
-                {(filters.minPrice !== null || filters.maxPrice !== null) && (
+                {isPriceRangeModified() && (
                   <Badge 
                     variant="secondary" 
                     className="bg-blue-100 text-blue-800 flex items-center gap-1"
                   >
-                    💰 {filters.minPrice || 0}€ - {filters.maxPrice ? `${filters.maxPrice}€` : '300€+'}
+                    💰 {filters.minPrice || defaultPriceRange.min}€ - {filters.maxPrice ? `${filters.maxPrice}€` : `${defaultPriceRange.max}€+`}
                     <button
                       onClick={() => updatePriceRange(null, null)}
                       className="ml-1 hover:bg-blue-200 rounded-full p-0.5"
@@ -318,12 +344,12 @@ export default function HostFilters({ onFiltersChange, selectedCurrency, onCurre
                 )}
 
                 {/* Commission range filter */}
-                {(filters.minCommission !== null || filters.maxCommission !== null) && (
+                {isCommissionRangeModified() && (
                   <Badge 
                     variant="secondary" 
                     className="bg-green-100 text-green-800 flex items-center gap-1"
                   >
-                    💼 {filters.minCommission || 0}% - {filters.maxCommission ? `${filters.maxCommission}%` : '50%+'}
+                    💼 {filters.minCommission || DEFAULT_MIN_COMMISSION}% - {filters.maxCommission ? `${filters.maxCommission}%` : `${DEFAULT_MAX_COMMISSION}%+`}
                     <button
                       onClick={() => updateCommissionRange(null, null)}
                       className="ml-1 hover:bg-green-200 rounded-full p-0.5"
