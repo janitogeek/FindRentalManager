@@ -136,9 +136,9 @@ export default function Home() {
               Connect directly with professional rental managers worldwide for better occupancy rates, more flexibility, and personalized property management
             </p>
             
-            {/* Find a Manager Button - Smaller */}
+            {/* Find a Manager Button - Compact */}
             <motion.div 
-              className="relative max-w-xs mx-auto mb-8"
+              className="relative mx-auto mb-8 text-center"
               variants={fadeInUpVariants}
               initial="hidden"
               animate="visible"
@@ -152,7 +152,7 @@ export default function Home() {
               >
                 <Button 
                   onClick={() => setLocation("/find-manager")}
-                  className="w-full py-2 px-4 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-all shadow-xl text-sm font-semibold flex items-center justify-center gap-2"
+                  className="px-6 py-3 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-all shadow-xl text-sm font-semibold flex items-center justify-center gap-2"
                 >
                   Find a Manager Now!
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
