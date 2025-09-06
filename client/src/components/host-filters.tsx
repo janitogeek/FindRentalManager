@@ -307,7 +307,7 @@ export default function HostFilters({ onFiltersChange, selectedCurrency, onCurre
                     variant="secondary" 
                     className="bg-blue-100 text-blue-800 flex items-center gap-1"
                   >
-                    💰 {filters.minPrice || 0}€ - {filters.maxPrice || '∞'}€
+                    💰 {filters.minPrice || 0}€ - {filters.maxPrice ? `${filters.maxPrice}€` : '300€+'}
                     <button
                       onClick={() => updatePriceRange(null, null)}
                       className="ml-1 hover:bg-blue-200 rounded-full p-0.5"
@@ -323,7 +323,7 @@ export default function HostFilters({ onFiltersChange, selectedCurrency, onCurre
                     variant="secondary" 
                     className="bg-green-100 text-green-800 flex items-center gap-1"
                   >
-                    💼 {filters.minCommission || 0}% - {filters.maxCommission || '∞'}%
+                    💼 {filters.minCommission || 0}% - {filters.maxCommission ? `${filters.maxCommission}%` : '50%+'}
                     <button
                       onClick={() => updateCommissionRange(null, null)}
                       className="ml-1 hover:bg-green-200 rounded-full p-0.5"

@@ -51,7 +51,7 @@ export default function CommissionRangeSlider({
               max={MAX_COMMISSION}
               min={MIN_COMMISSION}
               step={1}
-              className="w-full"
+              className="w-full [&_[role=slider]]:bg-green-500 [&_[role=slider]]:border-green-600 [&>.relative>.absolute:nth-child(3)]:bg-green-500"
             />
           </div>
           
