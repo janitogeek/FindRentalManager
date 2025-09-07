@@ -77,24 +77,24 @@ export default function FindHost() {
         style={{
           backgroundColor: '#2563eb',
           backgroundImage: "url('/find-manager-background.png')",
-          minHeight: '400px'
+          minHeight: '500px'
         }}
       >
         {/* Overlay for better text readability */}
-        <div className="absolute inset-0 bg-black/40"></div>
+        <div className="absolute inset-0 bg-black/50"></div>
         
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl sm:text-5xl font-bold mb-6">
-              Choose Your Location(s)
+            <h1 className="text-4xl sm:text-6xl font-bold mb-6">
+              Find a Manager by Country
             </h1>
-            <p className="text-xl text-blue-100 mb-8">
-              Search for a country or countries to discover verified vacation rental property management companies
+            <p className="text-xl text-white mb-8">
+              Select a country to discover verified vacation rental property management companies
             </p>
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 inline-block">
-              <p className="text-lg">
-                <span className="font-semibold text-blue-200">Over 1000+</span> verified managers across{" "}
-                <span className="font-semibold text-blue-200">50+ countries</span> worldwide
+            <div className="bg-black/30 backdrop-blur-sm rounded-lg p-6 inline-block">
+              <p className="text-lg text-white">
+                <span className="font-semibold">Over 1000+</span> verified managers across{" "}
+                <span className="font-semibold">50+ countries</span> worldwide
               </p>
             </div>
           </div>
@@ -107,6 +107,13 @@ export default function FindHost() {
       {/* Countries Grid */}
       <section className="py-16">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Choose Your Location Heading */}
+          <div className="text-center mb-12">
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-8">
+              Choose Your Location
+            </h2>
+          </div>
+          
           {/* Search and Filter Controls */}
           <div className="max-w-4xl mx-auto mb-12">
             <div className="flex flex-col sm:flex-row gap-4 mb-6">
