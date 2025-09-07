@@ -102,6 +102,7 @@ export interface Submission {
   // Additional properties for display
   logo?: string;
   highlightImage?: string;
+  ratingScreenshot?: string;
   minPrice?: number;
   maxPrice?: number;
   currency?: string;
@@ -614,6 +615,7 @@ export const airtableService = {
       // Additional properties for display
       logo: getAttachmentUrl(fields['Logo']),
       highlightImage: getAttachmentUrl(fields['Highlight Image']),
+      ratingScreenshot: findRatingScreenshotUrl(),
       minPrice: fields['Min Price'] ? Number(fields['Min Price']) : undefined,
       maxPrice: fields['Max Price'] ? Number(fields['Max Price']) : undefined,
       currency: fields['Currency'] || undefined,
