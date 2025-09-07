@@ -39,11 +39,10 @@ export interface Testimonial {
 }
 
 export interface FAQ {
-  id: number;
+  id: string;
   question: string;
   answer: string;
-  category: "traveler" | "host";
-  order: number;
+  category: "owner" | "manager";
 }
 
 export const countries: Country[] = [
@@ -234,183 +233,159 @@ export const listings: Listing[] = [
   }
 ];
 
+// FAQ dataset for FindRentalManager.com
+// Optimized for SEO + LLM/geo discovery
+// Categories: owner (property owners) / manager (property managers)
+
 export const faqs: FAQ[] = [
+  // ======================
+  // PROPERTY OWNERS
+  // ======================
   {
-    id: 1,
-    question: "What is FindRentalManager.com?",
-    answer: "FindRentalManager.com is the world's most comprehensive directory connecting property owners with professional rental management companies worldwide. Our platform features over 1,000+ meticulously verified property management companies spanning 50+ countries. According to industry research by the Vacation Rental Performance Analytics Report (2024), property owners using professional management services see an average of 35% higher revenue compared to self-management. We eliminate the guesswork, connecting you directly with verified property managers for superior service and guaranteed income growth.",
+    id: "o-what-is-frm",
     category: "owner",
-    order: 1
+    question: "What is FindRentalManager.com and how does it work?",
+    answer:
+      "FindRentalManager.com is a free directory that helps property owners connect directly with verified short-term rental property management companies. Simply choose your location, browse trusted managers, and contact them directly to compare services and pricing.",
   },
   {
-    id: 2,
-    question: "How much can I increase my rental income with professional management?",
-    answer: "Independent research validates substantial income increases through professional management. Our analysis of 10,000+ properties across major vacation rental markets (2023-2024) shows property owners earn an average of 35% more when using professional managers versus self-management. This translates to real income: on a $1,000 monthly rental, you earn approximately $350 more, and on a $2,000 monthly property, you earn $700 more. The increases come from professional expertise: dynamic pricing optimization, marketing reach, guest experience management, and operational efficiency. According to the Tourism Research Institute (2024), professionally managed properties also achieve 90% occupancy rates vs 50-70% for DIY management.",
+    id: "o-why-use",
     category: "owner",
-    order: 2
+    question: "Why should I use a property manager instead of managing my rental myself?",
+    answer:
+      "Professional property managers save you time, increase bookings, and optimize your revenue. They handle marketing, guest communication, cleaning, maintenance, and compliance with local regulations. Many owners find the net income is higher and the experience stress-free compared to self-managing.",
   },
   {
-    id: 3,
-    question: "How do I connect with rental managers through FindRentalManager.com?",
-    answer: "FindRentalManager.com operates as a sophisticated directory platform, not a management intermediary. Our proven 3-step process has facilitated over 15,000+ successful connections: 1) Search our verified directory using advanced filters for location, property type, and management services, 2) Click 'Contact Manager' on companies that match your criteria, 3) Connect directly with the property management company, 4) Enjoy superior management services and guaranteed income growth. Our system bypasses traditional property management searches entirely, ensuring you find the most qualified managers available. Industry data shows our process results in 98% connection success rates and 24-hour average response times from property managers.",
+    id: "o-geo-coverage",
     category: "owner",
-    order: 3
+    question: "In which cities and countries can I find property managers?",
+    answer:
+      "Our directory covers major short-term rental markets worldwide, including the USA, Canada, France, Spain, Italy, Portugal, Greece, the UK, Mexico, and more. Within each country, you can browse popular destinations such as New York, Miami, Los Angeles, Barcelona, Paris, Rome, and Lisbon.",
   },
   {
-    id: 4,
-    question: "Why should I hire a professional rental manager instead of managing myself?",
-    answer: "Research from the Vacation Rental Industry Research Institute (2024) demonstrates clear advantages of professional management: 1) **Income Growth**: 35% average revenue increase - earn $700+ more monthly on typical properties, 2) **Superior Occupancy**: 90% occupancy rates vs 50-70% for DIY management, 3) **Time Savings**: Save 20+ hours monthly on guest communication and operations, 4) **Professional Expertise**: Access to dynamic pricing, marketing strategies, and guest experience optimization, 5) **Better Guest Satisfaction**: 40% higher guest ratings and repeat bookings, 6) **Scale Opportunities**: Easily manage 2-10+ properties with professional support. As noted by Dr. Sarah Mitchell, Vacation Rental Industry Research Institute: 'Properties using professional management see 35% higher profit margins and 40% better guest satisfaction scores compared to self-managed properties.'",
+    id: "o-compare",
     category: "owner",
-    order: 4
+    question: "How do I compare different property managers in my area?",
+    answer:
+      "Each manager profile shows their portfolio size, services offered, coverage areas, and website. You can compare commission rates, experience, guest ratings, and service perks like 24/7 support or revenue optimization. Always contact at least 2–3 companies before making a decision.",
   },
   {
-    id: 5,
-    question: "Are the property management companies on FindRentalManager.com verified and reliable?",
-    answer: "Yes, we employ a rigorous 12-point verification process for all property management companies before listing approval. Our comprehensive vetting includes: 1) Business legitimacy and licensing verification, 2) Website security and functionality testing, 3) Client review analysis across multiple platforms, 4) Response time and service quality assessment, 5) Insurance and liability coverage confirmation, 6) Photo authenticity verification. According to our internal data, 100% of listed companies undergo manual review, resulting in a 98.2% satisfaction rate. The STR Global Report (2024) confirms that verified property management directories like ours demonstrate 31% higher reliability scores compared to unverified listings. We maintain ongoing monitoring to ensure continued quality standards.",
+    id: "o-fees",
     category: "owner",
-    order: 5
+    question: "How much do property management companies usually charge?",
+    answer:
+      "Fees vary by location and service level. Most managers charge 15–30% commission on bookings. Some offer fixed-fee packages or tiered services. It's best to ask each company about their pricing model and what's included (marketing, guest communication, cleaning, etc.).",
   },
   {
-    id: 6,
-    question: "What countries and destinations have property management companies available?",
-    answer: "Our directory provides comprehensive global coverage across 50+ countries with the highest concentration of verified property management companies worldwide. Top destinations include: United States (450+ companies), Spain (280+ companies), United Kingdom (195+ companies), Germany, France, Australia, Canada, Italy, Portugal, Thailand, Greece, and many more. According to our market analysis, we feature management companies in major cities, beach destinations, mountain locations, and rural areas. The US market shows the highest professional management adoption rate at 78%, while European markets demonstrate 23% higher owner satisfaction rates for professional management. Our platform covers destinations across all continents, from Mediterranean villas to Australian beach houses to North American mountain retreats.",
+    id: "o-services",
     category: "owner",
-    order: 6
+    question: "What services do property managers typically provide?",
+    answer:
+      "Common services include listing creation, dynamic pricing, channel management (Airbnb, Booking.com, Vrbo), direct booking website support, guest communication, cleaning and maintenance coordination, check-ins/outs, and handling of local regulations and taxes.",
   },
   {
-    id: 7,
-    question: "How is FindRentalManager.com different from other property management directories?",
-    answer: "FindRentalManager.com represents a paradigm shift in property management discovery. Key differentiators backed by industry research: 1) **Verified Directory Model**: We connect you directly with verified property management companies, ensuring quality and reliability, 2) **Zero Fees**: No listing fees, service charges, or commissions for property owners, 3) **Professional Focus**: 100% verified property management companies, not individual hosts, 4) **Direct Relationships**: You deal directly with property managers for superior service, 5) **Owner-Centric**: Optimized for property owners seeking professional management services. Research shows our model results in 67% faster response times and 40% more flexible service options compared to traditional property management searches. The Vacation Rental Performance Analytics Report (2024) confirms professional management channels generate 35% higher revenue per available room for property owners.",
+    id: "o-direct-bookings",
     category: "owner",
-    order: 7
+    question: "Can property managers help me get more direct bookings?",
+    answer:
+      "Yes. Many managers create and promote direct booking websites in addition to OTA distribution. This helps reduce reliance on Airbnb or Booking.com, saves on commissions, and builds repeat guest relationships.",
   },
   {
-    id: 8,
+    id: "o-legal",
+    category: "owner",
+    question: "Do I need special permits or licenses to rent my property?",
+    answer:
+      "Rules vary by city and country. In many places you need a rental license, business registration, and compliance with safety or tax regulations. Property managers can guide you through local requirements and ensure compliance.",
+  },
+  {
+    id: "o-trust",
+    category: "owner",
+    question: "How do I know if a property manager is trustworthy?",
+    answer:
+      "Check their profile on FindRentalManager.com, review their website, ask for references, and look at guest reviews on platforms like Airbnb, Booking.com, or Google. You can also request performance data or case studies before signing a contract.",
+  },
+  {
+    id: "o-contact",
+    category: "owner",
+    question: "What if I have more questions about choosing a property manager?",
+    answer:
+      "You can reach us at findmyrentalmanager@gmail.com and we'll guide you on how to evaluate managers in your area. We recommend shortlisting a few, asking for proposals, and comparing side by side.",
+  },
+
+  // ======================
+  // PROPERTY MANAGERS
+  // ======================
+  {
+    id: "m-how-to-list",
+    category: "manager",
     question: "How do I list my property management company on FindRentalManager.com?",
-    answer: "If you're a professional property management company with a dedicated website, our streamlined listing process ensures maximum visibility: 1) Submit your company details through our 'List Your Management Company' form, 2) Choose between Basic listing (€99.99/year for standard placement) or Premium listing (€499.99/year for priority positioning), 3) Our verification team conducts a comprehensive 12-point review within 2-3 business days, 4) Upon approval, your listing goes live and begins attracting property owners immediately. Industry data shows Premium listings receive 300% more visibility and generate 3x more inquiries than standard listings. Our platform has facilitated over 15,000+ successful connections, with property management companies reporting 40% increases in client inquiries after joining our directory.",
+    answer:
+      "Click 'Submit' on the website and fill in your company details, coverage areas, website, and brand assets. After review, your company profile will go live so property owners can discover and contact you.",
+  },
+  {
+    id: "m-requirements",
     category: "manager",
-    order: 8
+    question: "What are the requirements to be listed?",
+    answer:
+      "You must operate a professional rental management company with a public website, clear contact details, and verifiable presence. We prioritize companies with proven experience, transparent policies, and good reputations.",
   },
   {
-    id: 9,
-    question: "What are the requirements to list on FindRentalManager.com?",
-    answer: "To ensure quality and reliability, our listing requirements are comprehensive and professionally focused: 1) **Business Status**: Must be a legitimate property management business with proper licensing (not individual hosts), 2) **Professional Website**: Must have a dedicated, secure company website (not just social media presence), 3) **Service Type**: Vacation rental or short-term rental management services only, 4) **Complete Information**: High-quality photos, detailed descriptions, and accurate service details, 5) **Insurance Coverage**: Proper business licensing and liability insurance, 6) **Service Standards**: Demonstrated commitment to excellent client service with verified reviews. We maintain strict standards because research shows professional property managers deliver 40% higher owner satisfaction scores and 35% higher profit margins compared to individual hosts. Our verification process ensures 98.2% satisfaction rates for listed companies.",
+    id: "m-pricing",
     category: "manager",
-    order: 9
+    question: "How much does it cost to be listed?",
+    answer:
+      "Basic listings are free. Premium plans (from €100/year) provide enhanced visibility, featured placement, and marketing opportunities. Pricing is per company, not per property.",
   },
   {
-    id: 10,
-    question: "How much does it cost to list on FindRentalManager.com?",
-    answer: "We offer two strategically designed listing tiers to maximize your client acquisition potential: 1) **Basic Listing**: €99.99/year for standard directory placement with essential features and search visibility, 2) **Premium Listing**: €499.99/year for priority positioning with enhanced visibility, priority search placement, highlighted presentation, social media advertising support, website banner ads, and priority customer support. Performance data shows Premium listings generate 300% more clicks and inquiries compared to basic listings. According to our analytics, Premium property management companies report an average ROI of 847% within the first month, with increased client inquiries typically covering the listing fee within the first quarter. Both options include our comprehensive verification process and permanent listing status until you choose to remove it.",
+    id: "m-benefits",
     category: "manager",
-    order: 10
+    question: "What are the benefits of being listed on FindRentalManager.com?",
+    answer:
+      "You gain qualified leads from property owners actively seeking management, improved visibility in your GEO markets, and SEO benefits from a trusted directory citation. Premium plans also include editorial features and lead generation boosts.",
   },
   {
-    id: 11,
-    question: "What services do property management companies typically provide?",
-    answer: "Professional property management companies offer comprehensive services that maximize your rental income: 1) **Guest Management**: 24/7 guest support, booking management, and guest experience optimization, 2) **Revenue Optimization**: Dynamic pricing strategies, market analysis, and occupancy maximization, 3) **Marketing & Advertising**: Professional photography, listing optimization, and multi-platform marketing, 4) **Operations**: Cleaning services, maintenance coordination, and property care, 5) **Financial Management**: Revenue tracking, expense management, and detailed reporting, 6) **Technology**: Professional booking systems, channel management, and automation tools. Research shows professionally managed properties achieve 90% occupancy rates vs 50-70% for DIY management, with owners saving 20+ hours monthly on operations. Property management companies typically charge 15-25% commission on revenue, but this investment typically results in 35% higher net income due to increased occupancy and optimized pricing.",
-    category: "owner",
-    order: 11
-  },
-  {
-    id: 12,
-    question: "Do I need to pay FindRentalManager.com for connecting with property managers?",
-    answer: "FindRentalManager.com is completely free for property owners - we charge zero connection fees, service charges, or commissions. You pay only the property management company directly for their services, ensuring you receive the most competitive rates available. Our revenue model is transparent: we earn income exclusively from property management companies who choose our listing options (Basic €99.99/year or Premium €499.99/year), not from property owners. This model aligns our interests with yours - we succeed when you find the best property managers. Industry research confirms that fee-free directory models like ours enable property owners to find qualified managers more efficiently compared to commission-based platforms. Unlike traditional property management brokers who charge 5-10% fees, we never add costs to your management services.",
-    category: "owner",
-    order: 12
-  },
-  {
-    id: 13,
-    question: "What is the difference between a basic and premium listing for property managers?",
-    answer: "Our listing tiers are designed based on performance analytics and property management company feedback: **Basic Listings** (€99.99/year) include standard directory placement with search visibility and essential contact information. **Premium Listings** (€499.99/year) provide: 1) **Priority Placement**: Top positioning in search results with enhanced visibility, 2) **Visual Enhancement**: Highlighted presentation with 'Premium' trust badge, 3) **Marketing Support**: Social media advertising and website banner ads, 4) **Performance Boost**: 300% more clicks and client inquiries, 5) **Priority Support**: Dedicated customer service and faster response times, 6) **Analytics Access**: Detailed performance metrics and inquiry insights. Industry data shows Premium listings generate an average ROI of 847% within the first month. Property management companies with Premium listings report 40% increases in client inquiries and 35% higher conversion rates compared to basic listings.",
+    id: "m-geo",
     category: "manager",
-    order: 13
+    question: "How should I present my GEO coverage?",
+    answer:
+      "List countries → regions → cities clearly (e.g., Spain: Barcelona, Madrid; USA: Miami, Los Angeles). Include niche markets (e.g., Algarve, Amalfi Coast, Lake Tahoe) to match how owners search. Accurate coverage helps owners find you faster.",
   },
   {
-    id: 14,
-    question: "How long does it take to get my listing approved on FindRentalManager.com?",
-    answer: "Our comprehensive verification process typically requires 2-3 business days for standard approval. Our 12-point verification system includes: 1) **Business Legitimacy**: Licensing and registration verification, 2) **Website Security**: SSL certificates and functionality testing, 3) **Content Quality**: Photo authenticity and description accuracy review, 4) **Contact Verification**: Phone and email confirmation, 5) **Insurance Confirmation**: Liability coverage verification, 6) **Review Analysis**: Client feedback and reputation assessment. Featured listings may require additional quality assurance steps to ensure premium standards. According to our internal metrics, 94% of submissions are approved on first review, with 98.2% of approved listings maintaining active status. Our thorough vetting process ensures the high satisfaction rates and client acquisition that distinguish our directory.",
+    id: "m-featured",
     category: "manager",
-    order: 14
+    question: "What extra visibility comes with a Featured listing?",
+    answer:
+      "Featured listings appear at the top of search results, receive a 'Verified Manager' badge, and are eligible for editorial showcases like 'Top Property Managers in Spain'. They also benefit from social media mentions and inclusion in newsletters.",
   },
   {
-    id: 15,
-    question: "Can I update my listing information after it's live?",
-    answer: "Yes, we provide comprehensive listing management capabilities to ensure your information remains current and competitive. Update options include: 1) **Company Details**: Descriptions, services, and contact information, 2) **Visual Content**: Photos, virtual tours, and highlight images, 3) **Contact Information**: Phone numbers, email addresses, and website URLs, 4) **Service Offerings**: Management packages, pricing, and commission structures, 5) **Promotional Content**: Special offers and exclusive packages. Featured listings receive access to our self-service dashboard for instant updates, while standard listings are updated within 24-48 hours via our support team. Research shows companies with regularly updated information receive 35% more client inquiries. Our system sends automated reminders to keep your listing optimized for maximum visibility and client acquisition.",
+    id: "m-updates",
     category: "manager",
-    order: 15
+    question: "How do I update my listing once it's live?",
+    answer:
+      "Contact findmyrentalmanager@gmail.com with your company name and the changes (logo, images, services, coverage areas, or website link). Updates are typically made within a few days.",
   },
   {
-    id: 16,
-    question: "How do I choose the right property management company for my properties?",
-    answer: "Selecting the right property management company requires careful evaluation of several key factors: 1) **Service Match**: Ensure they offer the specific services you need (guest management, cleaning, maintenance, etc.), 2) **Commission Structure**: Compare rates (typically 15-25%) and understand what's included, 3) **Geographic Coverage**: Verify they operate in your property's location, 4) **Property Type Experience**: Check if they have experience with your property type and target market, 5) **Technology & Systems**: Evaluate their booking systems, reporting, and communication tools, 6) **Client Reviews**: Read testimonials from other property owners, 7) **Response Time**: Test their communication speed and availability. Our directory makes this process easier by providing verified companies with detailed profiles, service descriptions, and commission information. Research shows property owners who carefully select management companies report 40% higher satisfaction rates and 25% better financial outcomes.",
-    category: "owner",
-    order: 16
+    id: "m-seo",
+    category: "manager",
+    question: "Do I get SEO benefits from a listing?",
+    answer:
+      "Yes. Directory citations improve search engine visibility and help large language models recognize your company as a trusted rental manager entity. This supports both organic SEO and AI search discovery.",
   },
   {
-    id: 17,
-    question: "What questions should I ask potential property management companies?",
-    answer: "Essential questions for evaluating property management companies ensure successful partnerships and optimal results: 1) **Service Scope**: 'What specific services are included in your management package?' 2) **Commission Structure**: 'What is your commission rate and what services does it cover?' 3) **Occupancy Expectations**: 'What occupancy rates can I expect with your management?' 4) **Guest Support**: 'How do you handle guest inquiries and support 24/7?' 5) **Maintenance & Cleaning**: 'How do you coordinate property maintenance and cleaning services?' 6) **Reporting & Communication**: 'How often will I receive reports and updates?' 7) **Technology & Systems**: 'What booking systems and management tools do you use?' 8) **Contract Terms**: 'What are the terms, duration, and cancellation policies?' Our verified property management companies average 98% response rates within 24 hours and are trained to provide comprehensive information. Industry research shows property owners who ask these questions report 35% higher satisfaction rates and avoid 90% of common management issues.",
-    category: "owner",
-    order: 17
+    id: "m-support",
+    category: "manager",
+    question: "Who do I contact for partnership or support questions?",
+    answer:
+      "Email findmyrentalmanager@gmail.com with your company name and query. For collaborations or media features, add 'Partnership' in the subject line.",
   },
   {
-    id: 18,
-    question: "How do property management companies handle marketing and bookings?",
-    answer: "Professional property management companies employ comprehensive marketing and booking strategies that maximize your property's visibility and revenue: 1) **Multi-Platform Marketing**: Listings on Airbnb, VRBO, Booking.com, and direct booking websites, 2) **Professional Photography**: High-quality images and virtual tours that increase booking rates by 65%, 3) **Dynamic Pricing**: AI-powered pricing optimization based on demand, seasonality, and local events, 4) **Content Marketing**: Local guides, property descriptions, and SEO optimization, 5) **Social Media**: Instagram, Facebook, and TikTok marketing to reach target audiences, 6) **Channel Management**: Synchronized availability across all platforms to maximize exposure, 7) **Guest Experience**: Personalized service that generates repeat bookings and referrals. Research shows professionally managed properties achieve 90% occupancy rates vs 50-70% for DIY management. Property management companies typically invest 5-10% of revenue in marketing, but this investment results in 35% higher overall income due to increased bookings and optimized pricing strategies.",
-    category: "owner",
-    order: 18
+    id: "m-trust",
+    category: "manager",
+    question: "How can I build trust with property owners?",
+    answer:
+      "Provide clear contracts, transparent fees, verified business info, and references. Showcase reviews, case studies, and success metrics. Owners prefer managers who are responsive, reliable, and transparent.",
   },
-  {
-    id: 19,
-    question: "What technology and systems do property management companies use?",
-    answer: "Leading property management companies utilize advanced technology systems that optimize operations and maximize revenue: 1) **Property Management Systems (PMS)**: Centralized platforms for managing bookings, guest communication, and operations, 2) **Channel Managers**: Synchronize availability and pricing across multiple booking platforms, 3) **Dynamic Pricing Tools**: AI-powered algorithms that optimize rates based on market demand, 4) **Guest Communication Platforms**: Automated messaging systems with personalization capabilities, 5) **Revenue Management**: Analytics and reporting tools for performance optimization, 6) **Maintenance Tracking**: Digital systems for coordinating property care and repairs, 7) **Financial Management**: Integrated accounting and revenue tracking systems. Industry research shows properties using professional management technology increase efficiency by 45% and guest satisfaction by 30%. Our directory features companies that use enterprise-level systems, ensuring your properties benefit from the latest technology and optimization strategies.",
-    category: "owner",
-    order: 19
-  },
-  {
-    id: 20,
-    question: "How do property management companies handle maintenance and property care?",
-    answer: "Professional property management companies provide comprehensive maintenance and property care services that protect your investment and enhance guest satisfaction: 1) **Preventive Maintenance**: Regular inspections and scheduled maintenance to prevent costly repairs, 2) **Emergency Response**: 24/7 emergency repair services with trusted contractors, 3) **Cleaning Services**: Professional cleaning between guests with quality control standards, 4) **Property Inspections**: Regular assessments of property condition and guest experience, 5) **Vendor Management**: Vetted contractors for repairs, landscaping, and specialized services, 6) **Quality Control**: Regular audits to ensure maintenance standards are met, 7) **Guest Communication**: Proactive communication about maintenance schedules and any issues. Research shows professionally managed properties have 40% fewer maintenance emergencies and 30% longer property lifespans. Property management companies typically include basic maintenance in their service packages, with major repairs billed separately or covered by property insurance.",
-    category: "owner",
-    order: 20
-  },
-  {
-    id: 21,
-    question: "What are the contract terms and cancellation policies for property management services?",
-    answer: "Property management contracts typically include the following terms and conditions: 1) **Service Duration**: Most contracts are 12-24 months with automatic renewal options, 2) **Commission Structure**: Clear percentage rates (typically 15-25%) and what services are included, 3) **Service Scope**: Detailed description of management services, marketing, and operational support, 4) **Performance Guarantees**: Minimum occupancy rates or revenue targets in some cases, 5) **Cancellation Policies**: Usually 30-60 days notice required for contract termination, 6) **Fee Structure**: Clear breakdown of commission, additional fees, and payment schedules, 7) **Dispute Resolution**: Procedures for handling disagreements or service issues. Industry research shows that property owners who carefully review contracts report 40% higher satisfaction rates. Most property management companies offer flexible terms and are willing to negotiate based on property type, location, and management needs. Always read contracts carefully and ask questions about any unclear terms before signing.",
-    category: "owner",
-    order: 21
-  },
-  {
-    id: 22,
-    question: "How do property management companies handle pricing and revenue optimization?",
-    answer: "Professional property management companies employ sophisticated pricing and revenue optimization strategies that maximize your rental income: 1) **Dynamic Pricing**: AI-powered algorithms that adjust rates based on demand, seasonality, local events, and competitor pricing, 2) **Market Analysis**: Continuous monitoring of local market conditions and pricing trends, 3) **Demand Forecasting**: Predictive analytics to optimize pricing for future dates, 4) **Competitive Analysis**: Regular review of similar properties to ensure competitive positioning, 5) **Seasonal Optimization**: Strategic pricing adjustments for peak and off-peak periods, 6) **Length-of-Stay Discounts**: Optimized pricing for different booking durations, 7) **Revenue Management**: Strategic inventory management to maximize overall property revenue. Research by STR Global (2024) shows optimized pricing can increase revenue by 25-35% annually. Property management companies typically achieve 90% occupancy rates vs 50-70% for DIY management, with the average property seeing $15,000-50,000 additional annual revenue through professional pricing strategies.",
-    category: "owner",
-    order: 22
-  },
-  {
-    id: 23,
-    question: "What insurance and liability coverage do property management companies provide?",
-    answer: "Professional property management companies provide comprehensive insurance and liability coverage that protects both property owners and guests: 1) **General Liability Insurance**: Coverage for accidents, injuries, and property damage during guest stays, 2) **Professional Liability**: Protection against claims related to management services and advice, 3) **Workers' Compensation**: Coverage for employees and contractors working on your property, 4) **Property Damage**: Protection against damage caused by guests or management operations, 5) **Guest Injury Coverage**: Medical and liability protection for guest accidents, 6) **Contractor Insurance**: Verification that all vendors carry appropriate insurance, 7) **Umbrella Policies**: Additional coverage beyond standard policy limits. Industry research shows professionally managed properties have 40% fewer insurance claims and 30% lower liability risks. Property management companies typically carry $1-5 million in liability coverage, with additional umbrella policies available. Always verify insurance coverage and ask for certificates of insurance before signing management contracts.",
-    category: "owner",
-    order: 23
-  },
-  {
-    id: 24,
-    question: "How do property management companies handle local regulations and compliance?",
-    answer: "Professional property management companies ensure your properties comply with all local regulations and legal requirements: 1) **Licensing & Permits**: Verification that your property meets all local vacation rental licensing requirements, 2) **Tax Compliance**: Proper collection and remittance of local taxes, including occupancy taxes and tourism fees, 3) **Safety Regulations**: Compliance with fire codes, building safety standards, and accessibility requirements, 4) **Zoning Laws**: Verification that vacation rentals are permitted in your property's location, 5) **Insurance Requirements**: Ensuring your property meets local insurance and liability coverage requirements, 6) **Guest Registration**: Compliance with local guest registration and reporting requirements, 7) **Environmental Regulations**: Adherence to local environmental and sustainability requirements. Research shows professionally managed properties have 90% fewer regulatory violations and 40% lower compliance costs. Property management companies typically include compliance monitoring in their service packages, with additional fees for handling violations or legal issues. This expertise is particularly valuable in areas with complex or frequently changing vacation rental regulations.",
-    category: "owner",
-    order: 24
-  },
-  {
-    id: 25,
-    question: "What reporting and analytics do property management companies provide?",
-    answer: "Professional property management companies provide comprehensive reporting and analytics that give you complete visibility into your property's performance: 1) **Financial Reports**: Monthly revenue statements, expense tracking, and profit analysis, 2) **Occupancy Analytics**: Detailed occupancy rates, booking patterns, and revenue per available night, 3) **Guest Insights**: Guest demographics, satisfaction scores, and feedback analysis, 4) **Market Performance**: Comparison with local market trends and competitor performance, 5) **Operational Metrics**: Maintenance costs, cleaning expenses, and operational efficiency data, 6) **Revenue Optimization**: Pricing performance, demand forecasting, and revenue maximization insights, 7) **Custom Reports**: Tailored analytics based on your specific property and investment goals. Industry research shows property owners with detailed analytics make 25% better investment decisions and achieve 30% higher returns. Most property management companies provide monthly reports with real-time dashboard access, allowing you to monitor performance and make informed decisions about your property investments.",
-    category: "owner",
-    order: 25
-  }
-];
+] as const;
 
 export const testimonials: Testimonial[] = [
   {

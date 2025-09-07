@@ -6,7 +6,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { useState, useMemo } from "react";
@@ -89,7 +88,7 @@ export default function FAQ() {
                 </Link>
               </Button>
               <Button asChild variant="outline" className="border-blue-600 text-blue-600 hover:bg-blue-50">
-                <a href="mailto:info@findrentalmanager.com">
+                <a href="mailto:findmyrentalmanager@gmail.com">
                   Contact Support
                 </a>
               </Button>
