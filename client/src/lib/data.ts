@@ -319,7 +319,7 @@ export const faqs: FAQ[] = [
     category: "manager",
     question: "How do I list my property management company on FindRentalManager.com?",
     answer:
-      "Click <a href='/submit' class='text-blue-600 hover:underline'>List Your Management Company</a> on the website and fill in your company details, coverage areas, website, and brand assets. After review, your company profile will go live so property owners can discover and contact you.",
+      "Click on <a href='/submit' class='text-blue-600 hover:underline'>List Your Management Company</a> on the website and fill in your company details, coverage areas, website, and brand assets. After review, your company profile will go live so property owners can discover and contact you.",
   },
   {
     id: "m-requirements",
@@ -347,7 +347,7 @@ export const faqs: FAQ[] = [
     category: "manager",
     question: "How can I make sure my company listing shows up higher and gets more visibility?",
     answer:
-      "The best way is simple: fill out the 'List Your Company' form with as much detail as possible. The more complete your profile is (coverage areas, property types, perks, services, images, social links), the easier it is for both travelers and search engines—including AI search tools—to understand who you are and what you offer. Generative AI and large language models rely on detailed, structured information to recommend companies. A rich, accurate listing increases your chances of showing up when an owner searches for a manager in your area.",
+      "The best way is simple: fill out the <a href='/submit' class='text-blue-600 hover:underline'>List Your Management Company</a> form with as much detail as possible. The more complete your profile is (coverage areas, property types, perks, services, images, social links), the easier it is for both travelers and search engines—including AI search tools—to understand who you are and what you offer. Generative AI and large language models rely on detailed, structured information to recommend companies. A rich, accurate listing increases your chances of showing up when an owner searches for a manager in your area.",
   },
   {
     id: "m-featured",
