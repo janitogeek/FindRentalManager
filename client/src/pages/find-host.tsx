@@ -75,7 +75,7 @@ export default function FindHost() {
       <section 
         className="text-white py-16 bg-cover bg-center bg-no-repeat relative"
         style={{
-          backgroundImage: 'url(/find-manager-background.jpg)'
+          backgroundImage: "url('/find-manager-background.jpg')"
         }}
       >
         {/* Overlay for better text readability */}
