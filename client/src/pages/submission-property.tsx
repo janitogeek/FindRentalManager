@@ -440,31 +440,29 @@ export default function SubmissionProperty() {
             {/* Left Column - Company Content (Desktop) */}
             <div className="flex flex-col gap-8 lg:flex-1">
               
-              {/* Why Rent With - Mobile: 1st, Desktop: Left column 1st */}
-              <div className="order-1 lg:order-1">
-                <Card className="h-full">
-                  <CardHeader className="bg-gradient-to-r from-blue-600 to-blue-500 text-white">
-                    <CardTitle>Why Rent With {submission.brandName}?</CardTitle>
-                  </CardHeader>
-                  <CardContent className="p-6">
-                    <div className="prose prose-gray max-w-none">
-                      {submission.whyRentWithYou && submission.whyRentWithYou.trim() ? (
-                        <p className="text-gray-700 whitespace-pre-line">
-                          {submission.whyRentWithYou}
-                        </p>
-                      ) : (
-                        <p className="text-gray-500 italic">
-                          No content available from "Why Rent With You" column in Airtable.
-                        </p>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
+              {/* Why Rent With - Always first on left column */}
+              <Card className="h-full">
+                <CardHeader className="bg-gradient-to-r from-blue-600 to-blue-500 text-white">
+                  <CardTitle>Why Rent With {submission.brandName}?</CardTitle>
+                </CardHeader>
+                <CardContent className="p-6">
+                  <div className="prose prose-gray max-w-none">
+                    {submission.whyRentWithYou && submission.whyRentWithYou.trim() ? (
+                      <p className="text-gray-700 whitespace-pre-line">
+                        {submission.whyRentWithYou}
+                      </p>
+                    ) : (
+                      <p className="text-gray-500 italic">
+                        No content available from "Why Rent With You" column in Airtable.
+                      </p>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
 
-              {/* Ideal For - Mobile: 2nd, Desktop: Left column 2nd */}
+              {/* Ideal For - Second on left column */}
               {submission.idealFor && submission.idealFor.length > 0 && (
-                <Card className="order-2 lg:order-none">
+                <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Users className="w-5 h-5 text-blue-600" />
@@ -483,9 +481,9 @@ export default function SubmissionProperty() {
                 </Card>
               )}
 
-              {/* Properties Features - Mobile: 3rd, Desktop: Left column 3rd */}
+              {/* Properties Features */}
               {submission.propertiesFeatures && submission.propertiesFeatures.length > 0 && (
-                <Card className="order-3 lg:order-none">
+                <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Home className="w-5 h-5 text-blue-600" />
@@ -505,9 +503,9 @@ export default function SubmissionProperty() {
                 </Card>
               )}
 
-              {/* Services & Convenience - Mobile: 4th, Desktop: Left column 4th */}
+              {/* Services & Convenience */}
               {submission.servicesConvenience && submission.servicesConvenience.length > 0 && (
-                <Card className="order-4 lg:order-none">
+                <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Wrench className="w-5 h-5 text-green-600" />
@@ -529,7 +527,7 @@ export default function SubmissionProperty() {
 
               {/* Lifestyle & Values - Mobile: 5th, Desktop: Left column 5th */}
               {submission.lifestyleValues && submission.lifestyleValues.length > 0 && (
-                <Card className="order-5 lg:order-none">
+                <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Shield className="w-5 h-5 text-purple-600" />
@@ -550,7 +548,7 @@ export default function SubmissionProperty() {
 
               {/* Design Style - Mobile: 6th, Desktop: Left column 6th */}
               {submission.designStyle && submission.designStyle.length > 0 && (
-                <Card className="order-6 lg:order-none">
+                <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Palette className="w-5 h-5 text-indigo-600" />
@@ -571,7 +569,7 @@ export default function SubmissionProperty() {
 
               {/* Atmospheres - Mobile: 7th, Desktop: Left column 7th */}
               {submission.atmospheres && submission.atmospheres.length > 0 && (
-                <Card className="order-7 lg:order-none">
+                <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Coffee className="w-5 h-5 text-amber-600" />
@@ -592,7 +590,7 @@ export default function SubmissionProperty() {
 
               {/* Settings/Locations - Mobile: 8th, Desktop: Left column 8th */}
               {submission.settingsLocations && submission.settingsLocations.length > 0 && (
-                <Card className="order-8 lg:order-none">
+                <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <TreePine className="w-5 h-5 text-emerald-600" />
@@ -618,7 +616,7 @@ export default function SubmissionProperty() {
 
               {/* Host's Stats - Mobile: 2nd, Desktop: Right column 1st */}
               {submission.topStats && (
-                <Card className="order-2 lg:order-none">
+                <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       📊 {submission.brandName} Stats
@@ -649,7 +647,7 @@ export default function SubmissionProperty() {
 
               {/* Guest Reviews & Ratings - Mobile: 3rd, Desktop: Right column 2nd */}
               {submission.ratingScreenshot && (
-                <Card className="order-3 lg:order-none">
+                <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Star className="w-5 h-5 text-yellow-500" />
@@ -672,7 +670,7 @@ export default function SubmissionProperty() {
               )}
 
               {/* Get in Touch - Mobile: 9th (last), Desktop: Right column 3rd */}
-              <Card className="order-9 lg:order-none">
+              <Card>
                 <CardHeader>
                   <CardTitle>Get in Touch</CardTitle>
                 </CardHeader>
