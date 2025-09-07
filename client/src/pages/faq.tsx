@@ -32,7 +32,7 @@ export default function FAQ() {
               Frequently Asked Questions
             </h1>
             <p className="text-xl text-gray-600 mb-8">
-              Everything you need to know about finding professional property management services
+              Find answers to common questions about FindRentalManager.com
             </p>
           </div>
 
