@@ -69,16 +69,15 @@ export default function FindHost() {
     <main className="min-h-screen bg-white">
       {/* Hero Section with Background Image */}
       <section 
-        className="py-16 bg-cover bg-center bg-no-repeat relative"
+        className="text-white py-16 bg-cover bg-center bg-no-repeat relative"
         style={{
-          backgroundImage: "url('/find-manager-background.png')",
-          minHeight: '400px'
+          backgroundImage: "url('/find-manager-background.png')"
         }}
       >
-        {/* Overlay */}
+        {/* Overlay for better text readability */}
         <div className="absolute inset-0 bg-black/60"></div>
         
-        <div className="max-w-7xl mx-auto px-4 relative z-10">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight">
               Find a Manager by Country
@@ -86,16 +85,10 @@ export default function FindHost() {
             <p className="text-xl font-normal text-blue-100 mb-8 leading-relaxed">
               Select a country to discover verified vacation rental property management companies
             </p>
-            <div 
-              className="inline-block rounded-lg backdrop-blur-sm text-center"
-              style={{
-                background: 'rgba(31, 41, 55, 0.5)',
-                padding: '24px 32px'
-              }}
-            >
-              <p className="text-lg font-normal text-white leading-normal">
-                Over <span className="font-bold text-blue-500">1000+</span> verified managers across{" "}
-                <span className="font-bold text-blue-500">50+ countries</span> worldwide
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 inline-block">
+              <p className="text-lg">
+                <span className="font-semibold text-blue-200">Over 1000+</span> verified managers across{" "}
+                <span className="font-semibold text-blue-200">50+ countries</span> worldwide
               </p>
             </div>
           </div>
@@ -107,12 +100,11 @@ export default function FindHost() {
 
       {/* Countries Grid */}
       <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4">
+        <div className="max-w-6xl mx-auto">
           {/* Choose Your Location Heading */}
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-gray-800 mb-8">
-              <span className="bg-blue-200 px-1 py-0.5 font-bold">Choose</span>{" "}
-              <span className="font-normal">Your Location</span>
+            <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">
+              <span className="bg-blue-200 px-2 py-1 rounded-sm">Choose</span> <span className="font-normal">Your Location</span>
             </h2>
           </div>
           
@@ -139,7 +131,7 @@ export default function FindHost() {
           </div>
           
           {/* Filters placeholder div for spacing */}
-          <div className="max-w-4xl mx-auto mb-12">
+          <div className="max-w-4xl mx-auto mb-12 px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col sm:flex-row gap-4 mb-6">
               <div className="hidden">
                 {/* This maintains the original layout structure */}
