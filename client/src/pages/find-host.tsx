@@ -6,8 +6,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Search, X } from "lucide-react";
-import { apiRequest } from "@/lib/queryClient";
-import { airtableService } from "@/lib/airtable";
 import { dataPreloader } from "@/lib/data-preloader";
 import { getFlagByCountryName, getManagerCountText } from "@/lib/utils";
 
@@ -23,8 +21,6 @@ export default function FindHost() {
 
   // Transform active country names into country objects with metadata
   const countries = useMemo(() => {
-    const existingSlugs: string[] = [];
-    
     return countriesData.map((country, index) => ({
       id: index + 1,
       name: country.name,
@@ -70,31 +66,36 @@ export default function FindHost() {
   };
 
   return (
-    <main className="min-h-screen bg-gray-50">
-      {/* Header Section with Background Image */}
+    <main className="min-h-screen bg-white">
+      {/* Hero Section with Background Image */}
       <section 
-        className="text-white py-16 bg-cover bg-center bg-no-repeat relative"
+        className="py-16 bg-cover bg-center bg-no-repeat relative"
         style={{
-          backgroundColor: '#2563eb',
           backgroundImage: "url('/find-manager-background.png')",
-          minHeight: '500px'
+          minHeight: '400px'
         }}
       >
-        {/* Overlay for better text readability */}
-        <div className="absolute inset-0 bg-black/50"></div>
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-black/60"></div>
         
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="max-w-7xl mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl sm:text-6xl font-bold mb-6">
+            <h1 className="text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight">
               Find a Manager by Country
             </h1>
-            <p className="text-xl text-white mb-8">
+            <p className="text-xl font-normal text-blue-100 mb-8 leading-relaxed">
               Select a country to discover verified vacation rental property management companies
             </p>
-            <div className="bg-black/30 backdrop-blur-sm rounded-lg p-6 inline-block">
-              <p className="text-lg text-white">
-                <span className="font-semibold">Over 1000+</span> verified managers across{" "}
-                <span className="font-semibold">50+ countries</span> worldwide
+            <div 
+              className="inline-block rounded-lg backdrop-blur-sm text-center"
+              style={{
+                background: 'rgba(31, 41, 55, 0.5)',
+                padding: '24px 32px'
+              }}
+            >
+              <p className="text-lg font-normal text-white leading-normal">
+                Over <span className="font-bold text-blue-500">1000+</span> verified managers across{" "}
+                <span className="font-bold text-blue-500">50+ countries</span> worldwide
               </p>
             </div>
           </div>
@@ -105,35 +106,43 @@ export default function FindHost() {
       {/* Removed multi-country selection section */}
 
       {/* Countries Grid */}
-      <section className="py-16">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4">
           {/* Choose Your Location Heading */}
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-8">
-              Choose Your Location
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold text-gray-800 mb-8">
+              <span className="bg-blue-200 px-1 py-0.5 font-bold">Choose</span>{" "}
+              <span className="font-normal">Your Location</span>
             </h2>
           </div>
           
-          {/* Search and Filter Controls */}
+          {/* Search Bar */}
+          <div className="max-w-md mx-auto mb-8">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-5 h-5" />
+              <Input
+                type="text"
+                placeholder="Search for a country..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="h-12 pl-12 pr-12 text-base font-normal text-gray-800 bg-white border border-gray-300 rounded-md placeholder-gray-500"
+              />
+              {searchQuery && (
+                <button
+                  onClick={clearSearch}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 w-5 h-5"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              )}
+            </div>
+          </div>
+          
+          {/* Filters placeholder div for spacing */}
           <div className="max-w-4xl mx-auto mb-12">
             <div className="flex flex-col sm:flex-row gap-4 mb-6">
-              <div className="flex-1 relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                <Input
-                  type="text"
-                  placeholder="Search for a country..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 pr-4 py-3 text-lg"
-                />
-                {searchQuery && (
-                  <button
-                    onClick={clearSearch}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                  >
-                    <X className="w-5 h-5" />
-                  </button>
-                )}
+              <div className="hidden">
+                {/* This maintains the original layout structure */}
               </div>
             </div>
 
