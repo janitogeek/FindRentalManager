@@ -12,7 +12,7 @@ import { getCurrencyForCountry } from "@/lib/currency-utils";
 import { getFlagByCountryName, getManagerCountText } from "@/lib/utils";
 
 export default function City() {
-  const { selectedCurrency, setSelectedCurrency } = useCurrency();
+  const { selectedCurrency, setSelectedCurrency, currencyOptions, isLoading: isLoadingCurrencies } = useCurrency();
   const [, params] = useRoute('/country/:country/:city');
   const countrySlug = params?.country;
   const citySlug = params?.city;
@@ -460,6 +460,8 @@ export default function City() {
                   onFiltersChange={setFilters}
                   selectedCurrency={selectedCurrency}
                   onCurrencyChange={setSelectedCurrency}
+                  currencyOptions={currencyOptions}
+                  isLoadingCurrencies={isLoadingCurrencies}
                 />
               </div>
             )}

@@ -5,11 +5,10 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import BudgetRangeSlider from "@/components/budget-range-slider";
 import CommissionRangeSlider from "@/components/commission-range-slider";
-import CurrencySelector from "@/components/currency-selector";
+import { CurrencyPopupSelector } from "@/components/currency-popup-selector";
 import { Separator } from "@/components/ui/separator";
 import { SearchableMultiSelect } from "@/components/searchable-multi-select";
 import { Filter, X, Info, Search } from "lucide-react";
-import { CurrencyCode } from "@/lib/currency-utils";
 
 // Filter options based on submission form data
 const PROPERTY_TYPES = [
@@ -55,8 +54,10 @@ const SETTINGS_LOCATIONS = [
 
 interface HostFiltersProps {
   onFiltersChange: (filters: FilterState) => void;
-  selectedCurrency?: CurrencyCode;
-  onCurrencyChange?: (currency: CurrencyCode) => void;
+  selectedCurrency?: string;
+  onCurrencyChange?: (currency: string) => void;
+  currencyOptions?: Array<{ code: string; symbol: string; name: string }>;
+  isLoadingCurrencies?: boolean;
 }
 
 export interface FilterState {
@@ -75,7 +76,13 @@ export interface FilterState {
   maxCommission: number | null;
 }
 
-export default function HostFilters({ onFiltersChange, selectedCurrency, onCurrencyChange }: HostFiltersProps) {
+export default function HostFilters({ 
+  onFiltersChange, 
+  selectedCurrency, 
+  onCurrencyChange, 
+  currencyOptions = [], 
+  isLoadingCurrencies = false 
+}: HostFiltersProps) {
   
   
   const [filters, setFilters] = useState<FilterState>({
@@ -207,11 +214,13 @@ export default function HostFilters({ onFiltersChange, selectedCurrency, onCurre
           <div className="flex items-center gap-4">
             {/* Currency Selector */}
             {selectedCurrency && onCurrencyChange && (
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col gap-2 min-w-[200px]">
                 <span className="text-sm font-medium text-gray-700">Show prices in:</span>
-                <CurrencySelector 
+                <CurrencyPopupSelector
                   selectedCurrency={selectedCurrency}
                   onCurrencyChange={onCurrencyChange}
+                  currencies={currencyOptions}
+                  isLoading={isLoadingCurrencies}
                 />
               </div>
             )}
