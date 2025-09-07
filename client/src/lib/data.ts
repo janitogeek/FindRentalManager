@@ -1,4 +1,3 @@
-import { slugify, getFlagEmoji } from "@/lib/utils";
 
 /**
  * This file contains fallback static data that is used when API calls fail or for development purposes.
@@ -309,7 +308,7 @@ export const faqs: FAQ[] = [
     category: "owner",
     question: "What if I have more questions about choosing a property manager?",
     answer:
-      "You can reach us at findmyrentalmanager@gmail.com and we'll guide you on how to evaluate managers in your area. We recommend shortlisting a few, asking for proposals, and comparing side by side.",
+      "You can reach us at <a href='mailto:findmyrentalmanager@gmail.com' class='text-blue-600 underline'>findmyrentalmanager@gmail.com</a> and we'll guide you on how to evaluate managers in your area. We recommend shortlisting a few, asking for proposals, and comparing side by side.",
   },
 
   // ======================
@@ -320,7 +319,7 @@ export const faqs: FAQ[] = [
     category: "manager",
     question: "How do I list my property management company on FindRentalManager.com?",
     answer:
-      "Click 'Submit' on the website and fill in your company details, coverage areas, website, and brand assets. After review, your company profile will go live so property owners can discover and contact you.",
+      "Click <a href='/submit' class='text-blue-600 underline'>List Your Management Company</a> on the website and fill in your company details, coverage areas, website, and brand assets. After review, your company profile will go live so property owners can discover and contact you.",
   },
   {
     id: "m-requirements",
@@ -334,7 +333,7 @@ export const faqs: FAQ[] = [
     category: "manager",
     question: "How much does it cost to be listed?",
     answer:
-      "Basic listings are free. Premium plans (from €100/year) provide enhanced visibility, featured placement, and marketing opportunities. Pricing is per company, not per property.",
+      "Basic: €99.99/year to cover maintenance costs of the website. Featured: €499.99/year for instant listing, premium placement & badges for increased visibility + social media posts (TikTok & Instagram) to promote your business. We're offering these 50% discounted prices for the first 2000 listings, then we'll have standard prices as we grow and have more work and costs. Pricing is per company (not per property). If you want you can also be listed in <a href='https://bookdirectstays.com' target='_blank' class='text-blue-600 underline'>BookDirectStays.com</a> (without any extra fee) to help you attract more guests for increased direct bookings.",
   },
   {
     id: "m-benefits",
@@ -355,14 +354,14 @@ export const faqs: FAQ[] = [
     category: "manager",
     question: "What extra visibility comes with a Featured listing?",
     answer:
-      "Featured listings appear at the top of search results, receive a 'Verified Manager' badge, and are eligible for editorial showcases like 'Top Property Managers in Spain'. They also benefit from social media mentions and inclusion in newsletters.",
+      "Featured includes top-of-category placement, a 'Featured Manager' badge, a 'Our Featured Managers' showcase slot, social mentions, optional case studies, and eligibility for editorial guides (e.g., 'Top Property Managers Sites in Spain').",
   },
   {
     id: "m-updates",
     category: "manager",
     question: "How do I update my listing once it's live?",
     answer:
-      "Contact findmyrentalmanager@gmail.com with your company name and the changes (logo, images, services, coverage areas, or website link). Updates are typically made within a few days.",
+      "Contact <a href='mailto:findmyrentalmanager@gmail.com' class='text-blue-600 underline'>findmyrentalmanager@gmail.com</a> with your company name and the changes (logo, images, services, coverage areas, or website link). Updates are typically made within a few days.",
   },
   {
     id: "m-seo",
@@ -376,7 +375,7 @@ export const faqs: FAQ[] = [
     category: "manager",
     question: "Who do I contact for partnership or support questions?",
     answer:
-      "Email findmyrentalmanager@gmail.com with your company name and query. For collaborations or media features, add 'Partnership' in the subject line.",
+      "Email <a href='mailto:findmyrentalmanager@gmail.com' class='text-blue-600 underline'>findmyrentalmanager@gmail.com</a> with your company name and query. For collaborations or media features, add 'Partnership' in the subject line.",
   },
   {
     id: "m-trust",
@@ -435,10 +434,7 @@ export const testimonials: Testimonial[] = [
     name: "Leslie Voué",
     role: "guest",
     content: "I have been using Zenica Conciergerie services for several months to manage my seasonal rentals, and I am delighted. Professionalism, responsiveness and attention to detail are always there. The accommodations are impeccable, travelers are well welcomed, and I can delegate with complete confidence. Thank you to the whole team for your seriousness and your kindness.",
-    avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&q=80",
-    company: "Zenica Conciergerie",
-    date: "2025-05-27",
-    rating: 5
+    avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&q=80"
   }
 ];
 
@@ -483,11 +479,9 @@ export function getTotalListingsCount(): number {
   return listings.length;
 }
 
-export function getFAQsByCategory(category?: "traveler" | "host"): FAQ[] {
-  if (!category) return faqs.sort((a, b) => a.order - b.order);
-  return faqs
-    .filter(faq => faq.category === category)
-    .sort((a, b) => a.order - b.order);
+export function getFAQsByCategory(category?: "owner" | "manager"): FAQ[] {
+  if (!category) return faqs;
+  return faqs.filter(faq => faq.category === category);
 }
 
 export function getTestimonialsByRole(role?: "host" | "guest"): Testimonial[] {

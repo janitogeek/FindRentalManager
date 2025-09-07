@@ -51,7 +51,7 @@ export default function FAQ() {
                       {faq.question}
                     </AccordionTrigger>
                     <AccordionContent>
-                      <p className="text-gray-700">{faq.answer}</p>
+                      <div className="text-gray-700" dangerouslySetInnerHTML={{ __html: faq.answer }} />
                     </AccordionContent>
                   </AccordionItem>
                 ))}
@@ -67,7 +67,7 @@ export default function FAQ() {
                       {faq.question}
                     </AccordionTrigger>
                     <AccordionContent>
-                      <p className="text-gray-700">{faq.answer}</p>
+                      <div className="text-gray-700" dangerouslySetInnerHTML={{ __html: faq.answer }} />
                     </AccordionContent>
                   </AccordionItem>
                 ))}
