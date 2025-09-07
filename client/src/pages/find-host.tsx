@@ -104,7 +104,7 @@ export default function FindHost() {
           {/* Choose Your Location Heading */}
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
-              <span className="bg-blue-200 px-2 py-1 rounded-sm">Choose</span> Your Location
+              Choose Your Location
             </h2>
           </div>
           
