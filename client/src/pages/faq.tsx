@@ -23,15 +23,14 @@ export default function FAQ() {
   }, [activeTab]);
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="container mx-auto px-4 py-12">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
           <div className="text-center mb-12">
-            <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">
+            <h1 className="text-3xl font-bold mb-2 text-center">
               Frequently Asked Questions
             </h1>
-            <p className="text-xl text-gray-600 mb-8">
+            <p className="text-gray-600 mb-8 text-center">
               Find answers to common questions about FindRentalManager.com
             </p>
           </div>
@@ -95,7 +94,6 @@ export default function FAQ() {
             </div>
           </div>
         </div>
-      </div>
     </div>
   );
 }

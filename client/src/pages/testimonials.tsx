@@ -40,7 +40,7 @@ export default function Testimonials() {
       <div className="max-w-4xl mx-auto">
         <h1 className="text-3xl font-bold mb-2 text-center">Testimonials</h1>
         <p className="text-gray-600 mb-8 text-center">
-          See what our community of property owners and rental managers are saying about FindRentalManager.com
+          See what our community is saying about FindRentalManager.com
         </p>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-12">
