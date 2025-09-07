@@ -434,33 +434,34 @@ export default function SubmissionProperty() {
       {/* Main Content */}
       <div className="container mx-auto px-4 py-12">
         <div className="max-w-6xl mx-auto">
+          
+          {/* Why Rent With - Full width at top */}
+          <div className="mb-8">
+            <Card className="h-full">
+              <CardHeader className="bg-gradient-to-r from-blue-600 to-blue-500 text-white">
+                <CardTitle>Why Rent With {submission.brandName}?</CardTitle>
+              </CardHeader>
+              <CardContent className="p-6">
+                <div className="prose prose-gray max-w-none">
+                  {submission.whyRentWithYou && submission.whyRentWithYou.trim() ? (
+                    <p className="text-gray-700 whitespace-pre-line">
+                      {submission.whyRentWithYou}
+                    </p>
+                  ) : (
+                    <p className="text-gray-500 italic">
+                      No content available from "Why Rent With You" column in Airtable.
+                    </p>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
           {/* Mobile: Single column with proper order, Desktop: Two independent columns */}
           <div className="flex flex-col gap-8 lg:flex-row lg:gap-8 lg:items-start">
             
             {/* Left Column - Company Content (Desktop) */}
             <div className="flex flex-col gap-8 lg:flex-1">
-              
-              {/* Why Rent With - Mobile: 1st, Desktop: Left column 1st */}
-              <div className="lg:col-span-1 order-1 lg:order-1">
-                <Card className="h-full">
-                  <CardHeader className="bg-gradient-to-r from-blue-600 to-blue-500 text-white">
-                    <CardTitle>Why Rent With {submission.brandName}?</CardTitle>
-                  </CardHeader>
-                  <CardContent className="p-6">
-                    <div className="prose prose-gray max-w-none">
-                      {submission.whyRentWithYou && submission.whyRentWithYou.trim() ? (
-                        <p className="text-gray-700 whitespace-pre-line">
-                          {submission.whyRentWithYou}
-                        </p>
-                      ) : (
-                        <p className="text-gray-500 italic">
-                          No content available from "Why Rent With You" column in Airtable.
-                        </p>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
 
               {/* Ideal For - Mobile: 2nd, Desktop: Left column 2nd */}
               {submission.idealFor && submission.idealFor.length > 0 && (
