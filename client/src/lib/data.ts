@@ -308,7 +308,7 @@ export const faqs: FAQ[] = [
     category: "owner",
     question: "What if I have more questions about choosing a property manager?",
     answer:
-      "You can reach us at <a href='mailto:findmyrentalmanager@gmail.com' class='text-blue-600 underline'>findmyrentalmanager@gmail.com</a> and we'll guide you on how to evaluate managers in your area. We recommend shortlisting a few, asking for proposals, and comparing side by side.",
+      "You can reach us at <a href='mailto:findmyrentalmanager@gmail.com' class='text-blue-600 hover:underline'>findmyrentalmanager@gmail.com</a> and we'll guide you on how to evaluate managers in your area. We recommend shortlisting a few, asking for proposals, and comparing side by side.",
   },
 
   // ======================
@@ -319,7 +319,7 @@ export const faqs: FAQ[] = [
     category: "manager",
     question: "How do I list my property management company on FindRentalManager.com?",
     answer:
-      "Click <a href='/submit' class='text-blue-600 underline'>List Your Management Company</a> on the website and fill in your company details, coverage areas, website, and brand assets. After review, your company profile will go live so property owners can discover and contact you.",
+      "Click <a href='/submit' class='text-blue-600 hover:underline'>List Your Management Company</a> on the website and fill in your company details, coverage areas, website, and brand assets. After review, your company profile will go live so property owners can discover and contact you.",
   },
   {
     id: "m-requirements",
@@ -333,7 +333,7 @@ export const faqs: FAQ[] = [
     category: "manager",
     question: "How much does it cost to be listed?",
     answer:
-      "Basic: €99.99/year to cover maintenance costs of the website. Featured: €499.99/year for instant listing, premium placement & badges for increased visibility + social media posts (TikTok & Instagram) to promote your business. We're offering these 50% discounted prices for the first 2000 listings, then we'll have standard prices as we grow and have more work and costs. Pricing is per company (not per property). If you want you can also be listed in <a href='https://bookdirectstays.com' target='_blank' class='text-blue-600 underline'>BookDirectStays.com</a> (without any extra fee) to help you attract more guests for increased direct bookings.",
+      "Basic: €99.99/year to cover maintenance costs of the website. Featured: €499.99/year for instant listing, premium placement & badges for increased visibility + social media posts (TikTok & Instagram) to promote your business. We're offering these 50% discounted prices for the first 2000 listings, then we'll have standard prices as we grow and have more work and costs. Pricing is per company (not per property). If you want you can also be listed in <a href='https://bookdirectstays.com' target='_blank' class='text-blue-600 hover:underline'>BookDirectStays.com</a> (without any extra fee) to help you attract more guests for increased direct bookings.",
   },
   {
     id: "m-benefits",
@@ -345,9 +345,9 @@ export const faqs: FAQ[] = [
   {
     id: "m-geo",
     category: "manager",
-    question: "How should I present my GEO coverage?",
+    question: "How can I make sure my company listing shows up higher and gets more visibility?",
     answer:
-      "List countries → regions → cities clearly (e.g., Spain: Barcelona, Madrid; USA: Miami, Los Angeles). Include niche markets (e.g., Algarve, Amalfi Coast, Lake Tahoe) to match how owners search. Accurate coverage helps owners find you faster.",
+      "The best way is simple: fill out the 'List Your Company' form with as much detail as possible. The more complete your profile is (coverage areas, property types, perks, services, images, social links), the easier it is for both travelers and search engines—including AI search tools—to understand who you are and what you offer. Generative AI and large language models rely on detailed, structured information to recommend companies. A rich, accurate listing increases your chances of showing up when an owner searches for a manager in your area.",
   },
   {
     id: "m-featured",
@@ -361,7 +361,7 @@ export const faqs: FAQ[] = [
     category: "manager",
     question: "How do I update my listing once it's live?",
     answer:
-      "Contact <a href='mailto:findmyrentalmanager@gmail.com' class='text-blue-600 underline'>findmyrentalmanager@gmail.com</a> with your company name and the changes (logo, images, services, coverage areas, or website link). Updates are typically made within a few days.",
+      "Contact <a href='mailto:findmyrentalmanager@gmail.com' class='text-blue-600 hover:underline'>findmyrentalmanager@gmail.com</a> with your company name and the changes (logo, images, services, coverage areas, or website link). Updates are typically made within a few days.",
   },
   {
     id: "m-seo",
@@ -375,7 +375,7 @@ export const faqs: FAQ[] = [
     category: "manager",
     question: "Who do I contact for partnership or support questions?",
     answer:
-      "Email <a href='mailto:findmyrentalmanager@gmail.com' class='text-blue-600 underline'>findmyrentalmanager@gmail.com</a> with your company name and query. For collaborations or media features, add 'Partnership' in the subject line.",
+      "Email <a href='mailto:findmyrentalmanager@gmail.com' class='text-blue-600 hover:underline'>findmyrentalmanager@gmail.com</a> with your company name and query. For collaborations or media features, add 'Partnership' in the subject line.",
   },
   {
     id: "m-trust",
