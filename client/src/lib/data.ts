@@ -354,7 +354,7 @@ export const faqs: FAQ[] = [
     category: "manager",
     question: "What extra visibility comes with a Featured listing?",
     answer:
-      "Featured includes top-of-category placement, a 'Featured Manager' badge, a 'Our Featured Managers' showcase slot, social mentions, optional case studies, and eligibility for editorial guides (e.g., 'Top Property Managers Sites in Spain').",
+      "Featured includes top-of-category placement, a 'Featured Manager' badge, a <a href='/#our-featured-hosts' class='text-blue-600 hover:underline'>Our Featured Property Management Companies</a> showcase slot, social mentions, optional case studies, and eligibility for editorial guides (e.g., 'Top Property Managers Sites in Spain').",
   },
   {
     id: "m-updates",
