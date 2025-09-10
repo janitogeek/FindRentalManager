@@ -513,7 +513,7 @@ export default function Submit() {
         "Direct Booking Engine URL": values["Direct Booking Engine URL"],
         "PMS": values["PMS/Channel Manager"],
         "Number of Listings": values["Number of Listings"],
-        "Cities / Regions": values["Cities / Regions"].map(city => {
+        "Cities": values["Cities / Regions"].map(city => {
           const cityDisplayName = city.displayName;
           // Extract only the city name from "City, Region, Country" format
           if (typeof cityDisplayName === 'string' && cityDisplayName.includes(', ')) {
