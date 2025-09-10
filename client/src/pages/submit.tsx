@@ -508,7 +508,7 @@ export default function Submit() {
         "Number of Listings": values["Number of Listings"],
         // Split GeoNames data into 4 separate columns
         "Geonames Record": values["Geonames Record"], // Full format: ["Paris, Île-de-France, France"]
-        "Cities / Regions": values["Geonames Record"].map(fullName => {
+        "Cities": values["Geonames Record"].map(fullName => {
           // Extract city name (first part)
           return fullName.split(',')[0].trim();
         }),
