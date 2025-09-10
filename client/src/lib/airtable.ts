@@ -70,6 +70,7 @@ export interface Submission {
   directBookingEngineUrl: string;
   numberOfListings: number;
   citiesRegions: string[];
+  cities: string[]; // NEW: From GeoNames implementation  
   countries: string[];
   oneLineDescription: string;
   whyBookWithYou: string;
@@ -583,6 +584,7 @@ export const airtableService = {
       directBookingEngineUrl: fields['Direct Booking Engine URL'] || '',
       numberOfListings: fields['Number of Listings'] || 0,
       citiesRegions: parseArray(fields['Cities / Regions']),
+      cities: parseArray(fields['Cities']), // NEW: From GeoNames implementation
       countries: parseArray(fields['Countries']),
       oneLineDescription: fields['One-line Description'] || '',
       whyBookWithYou: fields['Why Book With You'] || '',

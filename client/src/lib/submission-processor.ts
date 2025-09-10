@@ -259,44 +259,49 @@ export async function getCitySubmissionCounts(countryName: string): Promise<Reco
     const cityCounts: Record<string, number> = {};
     
     for (const submission of allSubmissions) {
-      if (submission.citiesRegions && submission.citiesRegions.length > 0 && 
-          submission.countries && submission.countries.length > 0) {
+      // Check if this submission operates in the requested country
+      const operatesInCountry = submission.countries && submission.countries.includes(countryName);
+      
+      if (operatesInCountry) {
+        console.log(`🎯 Processing submission "${submission.brandName}" for ${countryName}`);
         
-        // Extract just city names from the cities/regions data
-        const cityNames = submission.citiesRegions.map((cityRegion: any) => {
-          if (typeof cityRegion === 'string') {
-            // If it's already "City, Region, Country" format, extract just the city
-            if (cityRegion.includes(', ')) {
-              const cityName = extractCityName(cityRegion);
-              // Filter out obvious non-city names
-              if (cityName && 
-                  !cityName.toLowerCase().includes('komplex') && 
-                  !cityName.toLowerCase().includes('pemilihan') &&
-                  !cityName.toLowerCase().includes('panitia') &&
-                  cityName.length > 2 && 
-                  cityName.length < 50) {
+        let cityNames: string[] = [];
+        
+        // NEW FORMAT: Check for new "Cities" field (from GeoNames implementation)
+        if ((submission as any).cities && Array.isArray((submission as any).cities)) {
+          cityNames = (submission as any).cities.filter((city: any) => 
+            typeof city === 'string' && city.trim().length > 0
+          );
+          console.log(`📋 Found cities from NEW format:`, cityNames);
+        }
+        
+        // OLD FORMAT: Fallback to old "citiesRegions" field for existing submissions
+        else if (submission.citiesRegions && submission.citiesRegions.length > 0) {
+          cityNames = submission.citiesRegions.map((cityRegion: any) => {
+            if (typeof cityRegion === 'string') {
+              // If it's "City, Region, Country" format, extract just the city
+              if (cityRegion.includes(', ')) {
+                const cityName = extractCityName(cityRegion);
+                console.log(`🏙️ Extracted city from old format: "${cityName}" from "${cityRegion}"`);
                 return cityName;
               }
-              return null;
+              // Otherwise it's just a city name
+              return cityRegion.trim();
             }
-            // Otherwise it's just a city name - apply same filters
-            const cityName = cityRegion.trim();
-            if (cityName && 
-                !cityName.toLowerCase().includes('komplex') && 
-                !cityName.toLowerCase().includes('pemilihan') &&
-                !cityName.toLowerCase().includes('panitia') &&
-                cityName.length > 2 && 
-                cityName.length < 50) {
-              return cityName;
-            }
-            return null;
-          }
-          return cityRegion;
-        }).filter(Boolean);
+            return cityRegion;
+          }).filter(Boolean);
+          console.log(`📋 Found cities from OLD format:`, cityNames);
+        }
         
-        // Simplified: Just count all cities for now (GeoNames matching removed for simplicity)
+        // Count cities for this submission
         cityNames.forEach(cityName => {
-          if (cityName && cityName.trim()) {
+          if (cityName && cityName.trim() &&
+              // Filter out obvious non-city names
+              !cityName.toLowerCase().includes('komplex') && 
+              !cityName.toLowerCase().includes('pemilihan') &&
+              !cityName.toLowerCase().includes('panitia') &&
+              cityName.length > 2 && 
+              cityName.length < 50) {
             cityCounts[cityName] = (cityCounts[cityName] || 0) + 1;
             console.log(`✅ COUNTED: ${cityName} in ${countryName} (count: ${cityCounts[cityName]})`);
           }
