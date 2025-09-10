@@ -1,7 +1,7 @@
 // Submission processing service
 // Handles validation and creation of cities when submissions are approved
 
-import { matchCitiesToCountriesOptimized } from './geonames';
+// Removed complex GeoNames processing - keeping simple for submission flow
 import { airtableService, type Submission } from './airtable';
 import { extractCityName } from './utils';
 
@@ -294,14 +294,11 @@ export async function getCitySubmissionCounts(countryName: string): Promise<Reco
           return cityRegion;
         }).filter(Boolean);
         
-        // Use cached/optimized GeoNames matching (with batching and delays)
-        const cityMatches = await matchCitiesToCountriesOptimized(cityNames, submission.countries);
-        
-        // Count cities that belong to the requested country
-        cityMatches.forEach(match => {
-          if (match.countryName.toLowerCase() === countryName.toLowerCase()) {
-            cityCounts[match.cityName] = (cityCounts[match.cityName] || 0) + 1;
-            console.log(`✅ MATCHED: ${match.cityName} belongs to ${countryName} (count: ${cityCounts[match.cityName]})`);
+        // Simplified: Just count all cities for now (GeoNames matching removed for simplicity)
+        cityNames.forEach(cityName => {
+          if (cityName && cityName.trim()) {
+            cityCounts[cityName] = (cityCounts[cityName] || 0) + 1;
+            console.log(`✅ COUNTED: ${cityName} in ${countryName} (count: ${cityCounts[cityName]})`);
           }
         });
       }

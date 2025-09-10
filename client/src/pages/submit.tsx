@@ -17,7 +17,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { CountryMultiSelect } from "../components/country-multi-select";
 import { FileDrop } from "../components/file-drop";
-import { CityRegionAsyncMultiSelect } from "../components/city-region-async-multi-select";
+import { GeonamesCitySelector } from "../components/geonames-city-selector";
 import { SimpleMultiSelect } from "../components/simple-multi-select";
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "../components/ui/select";
 import { Tooltip } from "@/components/ui/tooltip";
@@ -34,14 +34,7 @@ const formSchema = z.object({
   "Direct Booking Engine URL": z.string().url("Please enter a valid URL"),
   "PMS/Channel Manager": z.string().min(1, "Please select your PMS/Channel Manager"),
   "Number of Listings": z.coerce.number().min(1),
-  "Cities / Regions": z.array(z.object({ 
-    name: z.string(), 
-    displayName: z.string(), 
-    geonameId: z.number(),
-    countryName: z.string(),
-    countryCode: z.string(),
-    adminName1: z.string().optional()
-  })).min(1),
+  "Geonames Record": z.array(z.string()).min(1, "Please select at least one city"),
   "Logo Upload": z.object({
     url: z.string().url(),
     name: z.string()
@@ -194,7 +187,7 @@ export default function Submit() {
       "PMS/Channel Manager": "",
       "Number of Listings": 1,
 
-      "Cities / Regions": [],
+      "Geonames Record": [],
       "Logo Upload": { url: "", name: "" },
       "Highlight Image": { url: "", name: "" },
       "Rating (X/5) & Reviews (#) Screenshot": { url: "", name: "" },
@@ -513,15 +506,22 @@ export default function Submit() {
         "Direct Booking Engine URL": values["Direct Booking Engine URL"],
         "PMS": values["PMS/Channel Manager"],
         "Number of Listings": values["Number of Listings"],
-        "Cities / Regions": values["Cities / Regions"].map(city => {
-          const cityDisplayName = city.displayName;
-          // Extract only the city name from "City, Region, Country" format
-          if (typeof cityDisplayName === 'string' && cityDisplayName.includes(', ')) {
-            return cityDisplayName.split(', ')[0].trim();
-          }
-          return cityDisplayName;
-        }).join(", "),
-        "Countries": extractedCountries.join(", "),
+        // Split GeoNames data into 4 separate columns
+        "Geonames Record": values["Geonames Record"], // Full format: ["Paris, Île-de-France, France"]
+        "Cities / Regions": values["Geonames Record"].map(fullName => {
+          // Extract city name (first part)
+          return fullName.split(',')[0].trim();
+        }),
+        "States / Regions": values["Geonames Record"].map(fullName => {
+          // Extract state/region name (second part)
+          const parts = fullName.split(',');
+          return parts.length >= 2 ? parts[1].trim() : '';
+        }).filter(Boolean), // Remove empty strings
+        "Countries": values["Geonames Record"].map(fullName => {
+          // Extract country name (third part)
+          const parts = fullName.split(',');
+          return parts.length >= 3 ? parts[2].trim() : '';
+        }).filter(Boolean), // Remove empty strings
         "One-line Description": values["One-line Description"],
               "Why Book With You": values["Why Book With You?"],
       "Why Rent With You": values["Why Rent With You?"],
@@ -703,17 +703,15 @@ export default function Submit() {
   };
 
   // Extract countries from selected cities and populate countries field
-  const extractCountriesFromCities = (cities: any[]) => {
+  const extractCountriesFromCities = (geonamesRecords: string[]) => {
     const countries = new Set<string>();
     
-    cities.forEach(city => {
-      if (city.displayName) {
-        // Parse "City, Region, Country" format
-        const parts = city.displayName.split(', ');
-        if (parts.length >= 3) {
-          const country = parts[2]; // Last part is the country
-          countries.add(country);
-        }
+    geonamesRecords.forEach(record => {
+      // Parse "City, Region, Country" format
+      const parts = record.split(', ');
+      if (parts.length >= 3) {
+        const country = parts[2].trim(); // Last part is the country
+        countries.add(country);
       }
     });
     
@@ -721,7 +719,7 @@ export default function Submit() {
   };
 
   // Watch cities changes to auto-populate countries
-  const selectedCities = form.watch("Cities / Regions");
+  const selectedCities = form.watch("Geonames Record");
   const extractedCountries = useMemo(() => {
     if (selectedCities && selectedCities.length > 0) {
       return extractCountriesFromCities(selectedCities);
@@ -815,18 +813,18 @@ export default function Submit() {
                   <FormMessage />
                 </FormItem>
               )} />
-              <FormField control={form.control} name="Cities / Regions" render={({ field }) => (
+              <FormField control={form.control} name="Geonames Record" render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Cities<RequiredAsterisk /></FormLabel>
+                  <FormLabel>Cities / Regions<RequiredAsterisk /></FormLabel>
                   <FormDescription>
-                    Select the cities where you operate. Countries will be automatically determined.
+                    Search and select cities where you operate. We'll automatically extract city, region, and country data.
                   </FormDescription>
                   <FormControl>
-                    <CityRegionAsyncMultiSelect
-                      selected={field.value || []}
-                      onSelect={values => field.onChange(values)}
-                      placeholder="e.g. New York, Paris"
-                      className={field.value && field.value.length > 0 ? 'border-blue-500 bg-blue-50' : ''}
+                    <GeonamesCitySelector
+                      value={field.value || []}
+                      onChange={field.onChange}
+                      placeholder="Search cities (e.g. Paris, New York)..."
+                      maxSelections={15}
                     />
                   </FormControl>
                   <FormMessage />

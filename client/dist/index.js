@@ -1,10 +1,3 @@
-var __require = /* @__PURE__ */ ((x) => typeof require !== "undefined" ? require : typeof Proxy !== "undefined" ? new Proxy(x, {
-  get: (a, b) => (typeof require !== "undefined" ? require : a)[b]
-}) : x)(function(x) {
-  if (typeof require !== "undefined") return require.apply(this, arguments);
-  throw Error('Dynamic require of "' + x + '" is not supported');
-});
-
 // ../server/index.ts
 import express2 from "express";
 
@@ -1042,32 +1035,40 @@ var getInvoice = async (req, res) => {
 // ../server/routes.ts
 var router = Router();
 async function registerRoutes(app2) {
-  app2.get("/api/listings", async (req, res) => {
+  app2.get("/api/main", async (req, res) => {
+    const { endpoint } = req.query;
     try {
-      let listings2;
-      if (isAirtableInitialized()) {
-        listings2 = await fetchListingsFromAirtable();
-      } else {
-        listings2 = await storage.getListings();
+      switch (endpoint) {
+        case "listings":
+          let listings2;
+          if (isAirtableInitialized()) {
+            listings2 = await fetchListingsFromAirtable();
+          } else {
+            listings2 = await storage.getListings();
+          }
+          return res.json({
+            listings: listings2,
+            total: listings2.length,
+            hasMore: false
+          });
+        case "countries":
+          const countries2 = await storage.getCountries();
+          return res.json(countries2);
+        case "faqs":
+          const faqs2 = await storage.getFAQs();
+          return res.json(faqs2);
+        case "testimonials":
+          const testimonials2 = await storage.getTestimonials();
+          return res.json(testimonials2);
+        default:
+          res.status(404).json({ error: "Endpoint not found" });
       }
-      res.json({
-        listings: listings2,
-        total: listings2.length,
-        hasMore: false
-      });
     } catch (error) {
-      res.status(500).json({ message: "Failed to fetch listings" });
+      console.error("API error:", error);
+      res.status(500).json({ error: "Internal server error" });
     }
   });
-  app2.get("/api/countries", async (req, res) => {
-    try {
-      const countries2 = await storage.getCountries();
-      res.json(countries2);
-    } catch (error) {
-      res.status(500).json({ message: "Failed to fetch countries" });
-    }
-  });
-  app2.get("/api/countries/:slug", async (req, res) => {
+  app2.get("/api/main/countries/:slug", async (req, res) => {
     try {
       const country = await storage.getCountryBySlug(req.params.slug);
       if (!country) {
@@ -1078,83 +1079,80 @@ async function registerRoutes(app2) {
       res.status(500).json({ message: "Failed to fetch country" });
     }
   });
-  app2.post("/api/subscribe", async (req, res) => {
+  app2.post("/api/main", async (req, res) => {
+    const { endpoint } = req.query;
     try {
-      const parsedData = insertSubscriptionSchema.parse(req.body);
-      const createdAt = (/* @__PURE__ */ new Date()).toISOString();
-      const subscriptionData = {
-        ...parsedData,
-        createdAt
-      };
-      const result = await storage.createSubscription(subscriptionData);
-      if (isAirtableInitialized()) {
-        try {
-          await submitSubscriptionToAirtable(subscriptionData);
-          log("Subscription also stored in Airtable");
-        } catch (airtableError) {
-          log(`Airtable storage failed but local storage succeeded: ${airtableError}`);
-        }
+      switch (endpoint) {
+        case "subscribe":
+          const parsedData = insertSubscriptionSchema.parse(req.body);
+          const createdAt = (/* @__PURE__ */ new Date()).toISOString();
+          const subscriptionData = {
+            ...parsedData,
+            createdAt
+          };
+          const result = await storage.createSubscription(subscriptionData);
+          if (isAirtableInitialized()) {
+            try {
+              await submitSubscriptionToAirtable(subscriptionData);
+              log("Subscription also stored in Airtable");
+            } catch (airtableError) {
+              log(`Airtable storage failed but local storage succeeded: ${airtableError}`);
+            }
+          }
+          return res.status(201).json(result);
+        case "submissions":
+          const parsedSubmissionData = insertSubmissionSchema.parse(req.body);
+          const submissionCreatedAt = (/* @__PURE__ */ new Date()).toISOString();
+          const submissionData = {
+            ...parsedSubmissionData,
+            status: "pending",
+            createdAt: submissionCreatedAt
+          };
+          const submissionResult = await storage.createSubmission(submissionData);
+          if (isAirtableInitialized()) {
+            try {
+              await submitPropertyToAirtable(submissionData);
+              log("Property submission also stored in Airtable");
+            } catch (airtableError) {
+              log(`Airtable storage failed but local storage succeeded: ${airtableError}`);
+            }
+          }
+          return res.status(201).json(submissionResult);
+        default:
+          res.status(404).json({ error: "Endpoint not found" });
       }
-      res.status(201).json(result);
     } catch (error) {
       if (error instanceof z.ZodError) {
-        return res.status(400).json({ message: "Invalid subscription data", errors: error.errors });
+        return res.status(400).json({ message: "Invalid data", errors: error.errors });
       }
-      res.status(500).json({ message: "Failed to create subscription" });
+      res.status(500).json({ message: "Failed to process request" });
     }
   });
-  app2.post("/api/submissions", async (req, res) => {
+  app2.post("/api/stripe", async (req, res) => {
+    const { action, subscriptionId, invoiceId, customerId } = req.query;
     try {
-      const parsedData = insertSubmissionSchema.parse(req.body);
-      const createdAt = (/* @__PURE__ */ new Date()).toISOString();
-      const submissionData = {
-        ...parsedData,
-        status: "pending",
-        createdAt
-      };
-      const result = await storage.createSubmission(submissionData);
-      if (isAirtableInitialized()) {
-        try {
-          await submitPropertyToAirtable(submissionData);
-          log("Property submission also stored in Airtable");
-        } catch (airtableError) {
-          log(`Airtable storage failed but local storage succeeded: ${airtableError}`);
-        }
+      switch (action) {
+        case "create-checkout-session":
+          return await createCheckoutSession(req, res);
+        case "create-portal-session":
+          return await createPortalSession(req, res);
+        case "webhook":
+          return await handleWebhook(req, res);
+        default:
+          if (subscriptionId) {
+            return await getSubscription(req, res);
+          } else if (invoiceId) {
+            return await getInvoice(req, res);
+          } else if (customerId && req.query.action === "subscriptions") {
+            return await getCustomerSubscriptions(req, res);
+          }
+          res.status(404).json({ error: "Stripe endpoint not found" });
       }
-      res.status(201).json(result);
     } catch (error) {
-      if (error instanceof z.ZodError) {
-        return res.status(400).json({ message: "Invalid submission data", errors: error.errors });
-      }
-      res.status(500).json({ message: "Failed to create submission" });
+      console.error("Stripe API error:", error);
+      res.status(500).json({ error: "Internal server error" });
     }
   });
-  app2.get("/api/faqs", async (req, res) => {
-    try {
-      const faqs2 = await storage.getFAQs();
-      res.json(faqs2);
-    } catch (error) {
-      res.status(500).json({ message: "Failed to fetch FAQs" });
-    }
-  });
-  app2.get("/api/testimonials", async (req, res) => {
-    try {
-      const testimonials2 = await storage.getTestimonials();
-      res.json(testimonials2);
-    } catch (error) {
-      res.status(500).json({ message: "Failed to fetch testimonials" });
-    }
-  });
-  app2.post("/api/stripe/create-checkout-session", createCheckoutSession);
-  app2.post("/api/stripe/create-portal-session", createPortalSession);
-  app2.get("/api/stripe/subscription/:subscriptionId", getSubscription);
-  app2.get("/api/stripe/customer/:customerId/subscriptions", getCustomerSubscriptions);
-  app2.get("/api/stripe/invoice/:invoiceId", getInvoice);
-  app2.post(
-    "/api/stripe/webhook",
-    __require("express").raw({ type: "application/json" }),
-    handleWebhook
-  );
   const httpServer = createServer(app2);
   return httpServer;
 }
