@@ -101,6 +101,10 @@ export default function SubmitSuccess() {
         "PMS": formData["PMS/Channel Manager"],
         "Number of Listings": formData["Number of Listings"],
 
+        // GeoNames Record - Full format for each city
+        "Geonames Record": formData["Cities / Regions"].map((city: any) => city.displayName),
+        
+        // Cities - Extract city names only
         "Cities": formData["Cities / Regions"].map((city: any) => {
           const cityDisplayName = city.displayName;
           // Extract only the city name from "City, Region, Country" format
@@ -108,8 +112,32 @@ export default function SubmitSuccess() {
             return cityDisplayName.split(', ')[0].trim();
           }
           return cityDisplayName;
-        }).join(", "),
-        "Countries": [...new Set(formData["Cities / Regions"].map((city: any) => city.countryName))].join(", "),
+        }),
+        
+        // Regions / States - Extract regions/states from GeoNames data
+        "Regions / States": formData["Cities / Regions"].map((city: any) => {
+          const cityDisplayName = city.displayName;
+          // Extract region from "City, Region, Country" format
+          if (typeof cityDisplayName === 'string' && cityDisplayName.includes(', ')) {
+            const parts = cityDisplayName.split(', ');
+            if (parts.length >= 2) {
+              return parts[1].trim(); // Second part is the region/state
+            }
+          }
+          return city.adminName1 || ''; // Fallback to adminName1 if available
+        }).filter(Boolean), // Remove empty values
+        
+        // Countries - Extract unique countries
+        "Countries": [...new Set(formData["Cities / Regions"].map((city: any) => {
+          const cityDisplayName = city.displayName;
+          if (typeof cityDisplayName === 'string' && cityDisplayName.includes(', ')) {
+            const parts = cityDisplayName.split(', ');
+            if (parts.length >= 3) {
+              return parts[2].trim(); // Last part is the country
+            }
+          }
+          return city.countryName; // Fallback to countryName
+        }).filter(Boolean))], // Remove empty values and duplicates
         "One-line Description": formData["One-line Description"],
               "Why Book With You": formData["Why Book With You?"],
       "Why Rent With You": formData["Why Rent With You?"],

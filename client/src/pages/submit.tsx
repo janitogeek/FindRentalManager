@@ -15,15 +15,9 @@ import {
   FormDescription,
 } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
-import { CountryMultiSelect } from "../components/country-multi-select";
 import { FileDrop } from "../components/file-drop";
 import { CityRegionAsyncMultiSelect } from "../components/city-region-async-multi-select";
-import { SimpleMultiSelect } from "../components/simple-multi-select";
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "../components/ui/select";
-import { Tooltip } from "@/components/ui/tooltip";
-import { CheckboxGroup } from "../components/checkbox-group";
 import { SearchableMultiSelect } from "../components/searchable-multi-select";
-import { airtableService } from "@/lib/airtable";
 import { createCheckoutSession } from "@/lib/stripe";
 import { useMemo, useEffect } from "react";
 
@@ -93,9 +87,6 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 
-const CITIES = [
-  "New York", "Paris", "Bali", "Lisbon", "Dolomites", "Rome", "Bangkok", "Athens"
-];
 const TYPES_OF_STAYS = [
   "Apartments", "Bungalows", "Cabins", "Campervans", "Chalets", "Condos", "Domes", "Guesthouses", "Hostels", "Hotels", "Houses", "Rooms", "Tents", "Villas"
 ];
@@ -180,9 +171,6 @@ const RequiredAsterisk = () => (
 
 export default function Submit() {
   const { toast } = useToast();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showStripeCheckout, setShowStripeCheckout] = useState(false);
-  const [formData, setFormData] = useState<FormValues | null>(null);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -292,8 +280,8 @@ export default function Submit() {
     }
   };
 
-  // Keep the original submission logic for webhook processing
-  const processFormSubmission = async (values: FormValues) => {
+  // Keep the original submission logic for webhook processing (currently unused but kept for reference)
+  /* const processFormSubmission = async (values: FormValues) => {
     try {
       // Helper function to get file from blob URL
       const getFileFromBlobUrl = async (blobUrl: string, fileName: string): Promise<File> => {
@@ -513,6 +501,10 @@ export default function Submit() {
         "Direct Booking Engine URL": values["Direct Booking Engine URL"],
         "PMS": values["PMS/Channel Manager"],
         "Number of Listings": values["Number of Listings"],
+        // GeoNames Record - Full format for each city
+        "Geonames Record": values["Cities / Regions"].map(city => city.displayName),
+        
+        // Cities - Extract city names only
         "Cities": values["Cities / Regions"].map(city => {
           const cityDisplayName = city.displayName;
           // Extract only the city name from "City, Region, Country" format
@@ -520,8 +512,32 @@ export default function Submit() {
             return cityDisplayName.split(', ')[0].trim();
           }
           return cityDisplayName;
-        }).join(", "),
-        "Countries": extractedCountries.join(", "),
+        }),
+        
+        // Regions / States - Extract regions/states from GeoNames data
+        "Regions / States": values["Cities / Regions"].map(city => {
+          const cityDisplayName = city.displayName;
+          // Extract region from "City, Region, Country" format
+          if (typeof cityDisplayName === 'string' && cityDisplayName.includes(', ')) {
+            const parts = cityDisplayName.split(', ');
+            if (parts.length >= 2) {
+              return parts[1].trim(); // Second part is the region/state
+            }
+          }
+          return city.adminName1 || ''; // Fallback to adminName1 if available
+        }).filter(Boolean), // Remove empty values
+        
+        // Countries - Extract unique countries
+        "Countries": [...new Set(values["Cities / Regions"].map(city => {
+          const cityDisplayName = city.displayName;
+          if (typeof cityDisplayName === 'string' && cityDisplayName.includes(', ')) {
+            const parts = cityDisplayName.split(', ');
+            if (parts.length >= 3) {
+              return parts[2].trim(); // Last part is the country
+            }
+          }
+          return city.countryName; // Fallback to countryName
+        }).filter(Boolean))], // Remove empty values and duplicates
         "One-line Description": values["One-line Description"],
               "Why Book With You": values["Why Book With You?"],
       "Why Rent With You": values["Why Rent With You?"],
@@ -700,7 +716,7 @@ export default function Submit() {
         variant: "destructive",
       });
     }
-  };
+  }; */
 
   // Extract countries from selected cities and populate countries field
   const extractCountriesFromCities = (cities: any[]) => {

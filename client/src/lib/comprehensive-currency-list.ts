@@ -199,3 +199,4 @@ export const COMPREHENSIVE_CURRENCY_LIST: CurrencyOption[] = [
   { code: 'ZAR', symbol: 'R', name: 'South African Rand' },
   { code: 'ZMW', symbol: 'ZK', name: 'Zambian Kwacha' },
 ];
+

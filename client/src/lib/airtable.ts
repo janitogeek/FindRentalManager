@@ -31,6 +31,9 @@ export interface AirtableSubmission {
     'Top Stats': string;
     'Countries': string | string[];
     'Cities / Regions': string | string[];
+    'Cities': string | string[];
+    'Geonames Record': string | string[];
+    'Regions / States': string | string[];
     'Types of Stays': string | string[];
     'Ideal For': string | string[];
     'Properties Features': string | string[];
@@ -71,6 +74,8 @@ export interface Submission {
   numberOfListings: number;
   citiesRegions: string[];
   cities: string[]; // NEW: From GeoNames implementation  
+  geonamesRecord: string[]; // NEW: Full GeoNames format ["Paris, Île-de-France, France"]
+  regionsStates: string[]; // NEW: Extracted regions/states
   countries: string[];
   oneLineDescription: string;
   whyBookWithYou: string;
@@ -585,6 +590,8 @@ export const airtableService = {
       numberOfListings: fields['Number of Listings'] || 0,
       citiesRegions: parseArray(fields['Cities / Regions']),
       cities: parseArray(fields['Cities']), // NEW: From GeoNames implementation
+      geonamesRecord: parseArray(fields['Geonames Record']), // NEW: Full GeoNames format
+      regionsStates: parseArray(fields['Regions / States']), // NEW: Extracted regions/states
       countries: parseArray(fields['Countries']),
       oneLineDescription: fields['One-line Description'] || '',
       whyBookWithYou: fields['Why Book With You'] || '',

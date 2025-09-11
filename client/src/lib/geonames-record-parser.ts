@@ -162,3 +162,4 @@ export function findSubmissionsForCity(submissions: any[], targetCountry: string
     return false;
   });
 }
+
