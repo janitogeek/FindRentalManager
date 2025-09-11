@@ -444,7 +444,11 @@ export default function City() {
                   <Button
                     variant={featuredOnly ? "default" : "outline"}
                     onClick={() => setFeaturedOnly(!featuredOnly)}
-                    className="bg-yellow-500 hover:bg-yellow-600 text-white"
+                    className={`${
+                      featuredOnly 
+                        ? "bg-yellow-500 hover:bg-yellow-600 text-yellow-900 border-yellow-500" 
+                        : "border-yellow-500 text-yellow-600 hover:bg-yellow-50"
+                    }`}
                   >
                     {featuredOnly ? "✓ Featured Only" : "Featured Only"}
                   </Button>

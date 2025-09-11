@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useRoute, Link } from "wouter";
 import SubmissionPropertyCard from "@/components/submission-property-card";
 import HostFilters, { FilterState } from "@/components/host-filters";
+import AlphabeticalDirectory from "@/components/alphabetical-directory";
 import AnimatedPage from "@/components/animated-page";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -15,6 +16,7 @@ import { useCurrency } from "@/contexts/currency-context";
 import { getCurrencyForCountry } from "@/lib/currency-utils";
 import { getFlagByCountryName, getManagerCountText } from "@/lib/utils";
 import { getSubmissionsForRegion } from "@/lib/submission-processor";
+import { dataPreloader } from "@/lib/data-preloader";
 
 export default function Region() {
   const { selectedCurrency, setSelectedCurrency, currencyOptions, isLoading: isLoadingCurrencies } = useCurrency();
@@ -150,6 +152,52 @@ export default function Region() {
   const { data: regionSubmissions = [], isLoading: isSubmissionsLoading } = useQuery({
     queryKey: ["/api/region-submissions", regionName, countryName],
     queryFn: () => getSubmissionsForRegion(regionName, countryName),
+    enabled: !!regionName && !!countryName,
+    staleTime: 30 * 60 * 1000, // 30 minutes
+  });
+
+  // Fetch cities in this region for the "Find by City" section
+  const { data: citiesInRegion = [], isLoading: isCitiesLoading } = useQuery({
+    queryKey: ["/api/cities-in-region", regionName, countryName],
+    queryFn: async () => {
+      // Get all submissions for the country and filter by region
+      const allSubmissions = await dataPreloader.getSubmissionsForCountry(countryName);
+      const cityMap = new Map<string, number>();
+      
+      allSubmissions.forEach(submission => {
+        // Check if submission operates in this region
+        const operatesInRegion = 
+          submission.regionsStates?.some(r => 
+            r.toLowerCase() === regionName.toLowerCase()
+          ) ||
+          submission.geonamesRecord?.some(record => 
+            record.includes(regionName)
+          );
+        
+        if (operatesInRegion) {
+          // Extract cities from this submission
+          submission.cities?.forEach(city => {
+            cityMap.set(city, (cityMap.get(city) || 0) + 1);
+          });
+          
+          // Also check geonamesRecord for cities
+          submission.geonamesRecord?.forEach(record => {
+            if (record.includes(regionName)) {
+              const parts = record.split(',').map(s => s.trim());
+              if (parts.length >= 1) {
+                const cityName = parts[0];
+                cityMap.set(cityName, (cityMap.get(cityName) || 0) + 1);
+              }
+            }
+          });
+        }
+      });
+      
+      return Array.from(cityMap.entries()).map(([name, count]) => ({
+        name,
+        count
+      })).filter(city => city.count > 0);
+    },
     enabled: !!regionName && !!countryName,
     staleTime: 30 * 60 * 1000, // 30 minutes
   });
@@ -444,7 +492,11 @@ export default function Region() {
                   <Button
                     variant={featuredOnly ? "default" : "outline"}
                     onClick={() => setFeaturedOnly(!featuredOnly)}
-                    className="bg-yellow-500 hover:bg-yellow-600 text-white"
+                    className={`${
+                      featuredOnly 
+                        ? "bg-yellow-500 hover:bg-yellow-600 text-yellow-900 border-yellow-500" 
+                        : "border-yellow-500 text-yellow-600 hover:bg-yellow-50"
+                    }`}
                   >
                     {featuredOnly ? "✓ Featured Only" : "Featured Only"}
                   </Button>
@@ -506,6 +558,40 @@ export default function Region() {
             </div>
           </div>
         </section>
+
+        {/* City Navigation Section */}
+        {citiesInRegion.length > 0 && (
+          <section id="city-navigation" className="py-16 bg-white">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="max-w-6xl mx-auto">
+                {isCitiesLoading ? (
+                  <div className="text-center py-12">
+                    <div className="h-8 bg-gray-300 w-96 mx-auto rounded animate-pulse mb-4"></div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                      {Array.from({ length: 8 }, (_, i) => (
+                        <div key={i} className="h-20 bg-gray-300 rounded animate-pulse"></div>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <AlphabeticalDirectory
+                    title={`Find Managers by City in 🏛️ ${regionName}`}
+                    description={`Browse management companies in specific cities within ${regionName}`}
+                    items={citiesInRegion.map(city => ({
+                      name: city.name,
+                      slug: city.name.toLowerCase().replace(/\s+/g, '-'),
+                      count: city.count,
+                      href: `/country/${countrySlug}/${city.name.toLowerCase().replace(/\s+/g, '-')}`
+                    }))}
+                    searchPlaceholder="Search cities..."
+                    emptyStateTitle="No cities found"
+                    emptyStateDescription="This region doesn't have city data yet."
+                  />
+                )}
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* Call to Action */}
         <section className="bg-gray-100 py-16">

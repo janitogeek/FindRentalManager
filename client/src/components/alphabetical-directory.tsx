@@ -3,7 +3,7 @@
  * Displays items in alphabetical sections with search functionality
  * Used for regions and cities directory listings
  */
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Search, X } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -38,6 +38,7 @@ export default function AlphabeticalDirectory({
   className = ""
 }: AlphabeticalDirectoryProps) {
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedLetter, setSelectedLetter] = useState<string | null>(null);
 
   // Filter items based on search query
   const filteredItems = useMemo(() => {
@@ -49,31 +50,39 @@ export default function AlphabeticalDirectory({
     );
   }, [items, searchQuery]);
 
-  // Group items alphabetically
-  const groupedItems = useMemo(() => {
-    const groups: Record<string, DirectoryItem[]> = {};
+  // Get available letters
+  const availableLetters = useMemo(() => {
+    const letters = new Set<string>();
     filteredItems.forEach(item => {
       const firstLetter = item.name.charAt(0).toUpperCase();
-      const key = /[A-Z]/.test(firstLetter) ? firstLetter : '#';
-      if (!groups[key]) {
-        groups[key] = [];
+      if (/[A-Z]/.test(firstLetter)) {
+        letters.add(firstLetter);
       }
-      groups[key].push(item);
     });
-
-    // Sort items within each group
-    Object.keys(groups).forEach(key => {
-      groups[key].sort((a, b) => a.name.localeCompare(b.name));
-    });
-
-    return groups;
+    return Array.from(letters).sort();
   }, [filteredItems]);
 
-  const alphabetKeys = Object.keys(groupedItems).sort((a, b) => {
-    if (a === '#') return 1;
-    if (b === '#') return -1;
-    return a.localeCompare(b);
-  });
+  // Auto-select first available letter if none selected
+  useEffect(() => {
+    if (!selectedLetter && availableLetters.length > 0) {
+      setSelectedLetter(availableLetters[0]);
+    } else if (selectedLetter && !availableLetters.includes(selectedLetter)) {
+      // If selected letter is no longer available, select first available
+      setSelectedLetter(availableLetters[0] || null);
+    }
+  }, [availableLetters, selectedLetter]);
+
+  // Get items for selected letter
+  const itemsByLetter = useMemo(() => {
+    if (!selectedLetter) return [];
+    
+    return filteredItems
+      .filter(item => {
+        const firstLetter = item.name.charAt(0).toUpperCase();
+        return firstLetter === selectedLetter;
+      })
+      .sort((a, b) => a.name.localeCompare(b.name));
+  }, [filteredItems, selectedLetter]);
 
   const clearSearch = () => {
     setSearchQuery("");
@@ -128,8 +137,27 @@ export default function AlphabeticalDirectory({
         </div>
       )}
 
+      {/* 🔤 ALPHABETICAL FRIEZE */}
+      {availableLetters.length > 0 && (
+        <div className="border-2 border-blue-300 rounded-lg p-4 bg-blue-50">
+          <div className="flex flex-wrap justify-center gap-2">
+            {availableLetters.map((letter) => (
+              <Button
+                key={letter}
+                onClick={() => setSelectedLetter(letter)}
+                variant={selectedLetter === letter ? "default" : "outline"}
+                size="sm"
+                className="min-w-[40px] h-10 font-semibold"
+              >
+                {letter}
+              </Button>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Directory Content */}
-      {alphabetKeys.length === 0 ? (
+      {itemsByLetter.length === 0 ? (
         <div className="text-center py-12">
           <div className="text-gray-500">
             <Search className="h-12 w-12 mx-auto mb-4 text-gray-300" />
@@ -143,36 +171,19 @@ export default function AlphabeticalDirectory({
           </div>
         </div>
       ) : (
-        <div className="space-y-8">
-          {alphabetKeys.map(letter => (
-            <div key={letter} className="space-y-4">
-              {/* Letter Header */}
-              <div className="flex items-center">
-                <div className="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-xl mr-4">
-                  {letter}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {itemsByLetter.map((item) => (
+            <div key={item.slug} className="bg-white rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-200">
+              <Link href={item.href} className="block p-4 text-center hover:bg-gray-50 transition-colors">
+                <div className="space-y-2">
+                  <h3 className="font-semibold text-gray-900 hover:text-blue-600 transition-colors">
+                    {item.name}
+                  </h3>
+                  <Badge variant="secondary" className="bg-blue-100 text-blue-800">
+                    {item.count} {item.count === 1 ? 'manager' : 'managers'}
+                  </Badge>
                 </div>
-                <div className="flex-1 h-px bg-gray-200"></div>
-              </div>
-
-              {/* Items Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {groupedItems[letter].map((item) => (
-                  <Card key={item.slug} className="hover:shadow-md transition-shadow duration-200 cursor-pointer">
-                    <CardContent className="p-4">
-                      <Link href={item.href} className="block">
-                        <div className="text-center">
-                          <h3 className="font-semibold text-gray-900 hover:text-blue-600 transition-colors mb-2">
-                            {item.name}
-                          </h3>
-                          <Badge variant="secondary" className="bg-blue-100 text-blue-800">
-                            {item.count} {item.count === 1 ? 'manager' : 'managers'}
-                          </Badge>
-                        </div>
-                      </Link>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
+              </Link>
             </div>
           ))}
         </div>
