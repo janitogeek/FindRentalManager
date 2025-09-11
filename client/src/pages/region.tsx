@@ -1,3 +1,7 @@
+/**
+ * Region/State page for displaying property management companies in a specific region
+ * URL: /country/{countrySlug}/region/{regionSlug}
+ */
 import { useState, useMemo, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useRoute, Link } from "wouter";
@@ -9,14 +13,14 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useCurrency } from "@/contexts/currency-context";
 import { getCurrencyForCountry } from "@/lib/currency-utils";
-import { getFlagByCountryName } from "@/lib/utils";
-import { getSubmissionsForCity } from "@/lib/submission-processor";
+import { getFlagByCountryName, getManagerCountText } from "@/lib/utils";
+import { getSubmissionsForRegion } from "@/lib/submission-processor";
 
-export default function City() {
+export default function Region() {
   const { selectedCurrency, setSelectedCurrency, currencyOptions, isLoading: isLoadingCurrencies } = useCurrency();
-  const [, params] = useRoute('/country/:country/:city');
+  const [, params] = useRoute('/country/:country/region/:region');
   const countrySlug = params?.country;
-  const citySlug = params?.city;
+  const regionSlug = params?.region;
   const [filters, setFilters] = useState<FilterState>({
     search: "",
     propertyTypes: [],
@@ -64,47 +68,41 @@ export default function City() {
     });
   };
   
-  // Convert slug back to readable city name with proper accents
-  const getCityNameFromSlug = (slug: string) => {
-    // Map of common city slugs to their proper names with accents
-    const cityNameMap: { [key: string]: string } = {
+  // Convert slug back to readable region name
+  const getRegionNameFromSlug = (slug: string) => {
+    // Map of common region slugs to their proper names
+    const regionNameMap: { [key: string]: string } = {
       'new-york': 'New York',
       'los-angeles': 'Los Angeles',
       'san-francisco': 'San Francisco',
-      'las-vegas': 'Las Vegas',
-      'new-orleans': 'New Orleans',
-      'san-diego': 'San Diego',
-      'san-antonio': 'San Antonio',
-      'salt-lake-city': 'Salt Lake City',
-      'durres': 'Durrës',
-      'nice': 'Nice',
-      'malaga': 'Málaga',
-      'cordoba': 'Córdoba',
-      'leon': 'León',
-      'caceres': 'Cáceres',
-      'alicante': 'Alicante',
-      'santander': 'Santander',
-      'san-sebastian': 'San Sebastián',
-      'a-coruna': 'A Coruña',
-      'monte-carlo': 'Monte-Carlo',
-      'zurich': 'Zürich',
-      'dusseldorf': 'Düsseldorf',
-      'cologne': 'Köln',
-      'munich': 'München',
-      'montreal': 'Montréal',
-      'quebec': 'Québec',
-      'sao-paulo': 'São Paulo',
-      'brasilia': 'Brasília',
-      'rio-de-janeiro': 'Rio de Janeiro'
+      'ile-de-france': 'Île-de-France',
+      'provence-alpes-cote-dazur': 'Provence-Alpes-Côte d\'Azur',
+      'nueva-york': 'Nueva York',
+      'castilla-y-leon': 'Castilla y León',
+      'castilla-la-mancha': 'Castilla-La Mancha',
+      'pais-vasco': 'País Vasco',
+      'comunitat-valenciana': 'Comunitat Valenciana',
+      'baden-wurttemberg': 'Baden-Württemberg',
+      'rheinland-pfalz': 'Rheinland-Pfalz',
+      'schleswig-holstein': 'Schleswig-Holstein',
+      'mecklenburg-vorpommern': 'Mecklenburg-Vorpommern',
+      'sachsen-anhalt': 'Sachsen-Anhalt',
+      'nordrhein-westfalen': 'Nordrhein-Westfalen',
+      'south-australia': 'South Australia',
+      'new-south-wales': 'New South Wales',
+      'western-australia': 'Western Australia',
+      'british-columbia': 'British Columbia',
+      'newfoundland-and-labrador': 'Newfoundland and Labrador',
+      'prince-edward-island': 'Prince Edward Island'
     };
     
     // Return mapped name if exists, otherwise capitalize normally
-    return cityNameMap[slug] || slug.split('-').map(word => 
+    return regionNameMap[slug] || slug.split('-').map(word => 
       word.charAt(0).toUpperCase() + word.slice(1)
     ).join(' ');
   };
   
-  const cityName = getCityNameFromSlug(citySlug || '');
+  const regionName = getRegionNameFromSlug(regionSlug || '');
   
   // Get country name from slug
   const getCountryName = (slug: string) => {
@@ -148,19 +146,19 @@ export default function City() {
     }
   }, [countryName, setSelectedCurrency]);
 
-  // Fetch submissions for this specific city using our enhanced GeoNames system
-  const { data: citySubmissions = [], isLoading: isSubmissionsLoading } = useQuery({
-    queryKey: ["/api/city-submissions", cityName, countryName],
-    queryFn: () => getSubmissionsForCity(cityName, countryName),
-    enabled: !!cityName && !!countryName,
+  // Fetch submissions for this specific region using our enhanced GeoNames system
+  const { data: regionSubmissions = [], isLoading: isSubmissionsLoading } = useQuery({
+    queryKey: ["/api/region-submissions", regionName, countryName],
+    queryFn: () => getSubmissionsForRegion(regionName, countryName),
+    enabled: !!regionName && !!countryName,
     staleTime: 30 * 60 * 1000, // 30 minutes
   });
 
   // Filter and sort submissions by all active filters
   const filteredSubmissions = useMemo(() => {
-    if (!citySubmissions.length) return [];
+    if (!regionSubmissions.length) return [];
     
-    let filtered = citySubmissions;
+    let filtered = regionSubmissions;
     
     // Apply featured filter first
     if (featuredOnly) {
@@ -173,7 +171,7 @@ export default function City() {
     const hasActiveFilters = Object.values(filters).some(filterArray => Array.isArray(filterArray) ? filterArray.length > 0 : Boolean(filterArray));
     if (!hasActiveFilters && !featuredOnly) {
       // No filters, just sort
-      return sortSubmissions(citySubmissions);
+      return sortSubmissions(regionSubmissions);
     }
     
     if (hasActiveFilters) {
@@ -329,8 +327,9 @@ export default function City() {
     
     // Sort submissions: Featured first, then price, then alphabetical
     return sortSubmissions(filtered);
-  }, [citySubmissions, filters, featuredOnly, priceSorting, selectedCurrency]);
+  }, [regionSubmissions, filters, featuredOnly, priceSorting, selectedCurrency]);
 
+  const totalHosts = filteredSubmissions.length;
 
   // Breadcrumb structured data
   const breadcrumbStructuredData = {
@@ -340,34 +339,32 @@ export default function City() {
       {
         "@type": "ListItem",
         "position": 1,
-        "name": "BookDirectStays.com",
-        "item": "https://bookdirectstays.com"
+        "name": "FindRentalManager.com",
+        "item": "https://findrentalmanager.com"
       },
       {
         "@type": "ListItem",
         "position": 2,
         "name": "Find a Manager",
-        "item": "https://bookdirectstays.com/find-manager"
+        "item": "https://findrentalmanager.com/find-manager"
       },
       {
         "@type": "ListItem",
         "position": 3,
         "name": `${countryName}`,
-        "item": `https://bookdirectstays.com/country/${countrySlug}`
+        "item": `https://findrentalmanager.com/country/${countrySlug}`
       },
       {
         "@type": "ListItem",
         "position": 4,
-        "name": `${cityName} Rental Managers`,
-        "item": `https://bookdirectstays.com/country/${countrySlug}/${citySlug}`
+        "name": `${regionName} Property Management Companies`,
+        "item": `https://findrentalmanager.com/country/${countrySlug}/region/${regionSlug}`
       }
     ]
   };
 
-  const totalHosts = filteredSubmissions.length;
-
   return (
-    <AnimatedPage key={`city-${countrySlug}-${citySlug}`}>
+    <AnimatedPage key={`region-${countrySlug}-${regionSlug}`}>
       <main>
         {/* Structured Data */}
         <script
@@ -397,15 +394,18 @@ export default function City() {
                     </Link>
                   </li>
                   <li className="text-blue-300">›</li>
-                  <li className="text-white font-semibold">{cityName}</li>
+                  <li className="text-white font-semibold flex items-center gap-2">
+                    <span>🏛️</span>
+                    {regionName}
+                  </li>
                 </ol>
               </nav>
 
               <h1 className="text-4xl sm:text-5xl font-bold mb-6">
-                {getFlagByCountryName(countryName)} {cityName} Property Management Companies
+                {getFlagByCountryName(countryName)} {regionName} Property Management Companies
               </h1>
               <p className="text-xl text-blue-100 mb-8">
-                Professional rental management companies in {cityName}, {getFlagByCountryName(countryName)} {countryName}
+                Professional rental management companies in {regionName}, {getFlagByCountryName(countryName)} {countryName}
               </p>
 
               <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 inline-block">
@@ -428,7 +428,7 @@ export default function City() {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-6xl mx-auto">
               {/* Host Filters */}
-              {citySubmissions.length > 0 && (
+              {regionSubmissions.length > 0 && (
                 <HostFilters 
                   onFiltersChange={setFilters}
                   selectedCurrency={selectedCurrency}
@@ -439,7 +439,7 @@ export default function City() {
               )}
 
               {/* Controls */}
-              {citySubmissions.length > 0 && (
+              {regionSubmissions.length > 0 && (
                 <div className="mb-6 flex flex-wrap items-center gap-4">
                   <Button
                     variant={featuredOnly ? "default" : "outline"}
@@ -474,10 +474,10 @@ export default function City() {
                 ) : filteredSubmissions.length === 0 ? (
                   <div className="col-span-full text-center py-12">
                     <h3 className="text-xl font-semibold text-gray-700 mb-4">
-                      No management companies found in {cityName}
+                      No management companies found in {regionName}
                     </h3>
                     <p className="text-gray-500 mb-6">
-                      We currently don't have any companies listed for this city.
+                      We currently don't have any companies listed for this region.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-3 justify-center">
                       <Button asChild variant="outline" className="border-blue-600 text-blue-600">
@@ -497,7 +497,7 @@ export default function City() {
                     <SubmissionPropertyCard 
                       key={submission.id} 
                       submission={submission} 
-                      fromCity={cityName}
+                      fromRegion={regionName}
                       fromCountry={countryName}
                     />
                   ))
@@ -512,7 +512,7 @@ export default function City() {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto text-center">
               <h2 className="text-3xl font-bold text-gray-900 mb-6">
-                Have a property management company in {getFlagByCountryName(countryName)} {cityName}?
+                Have a property management company in 🏛️ {regionName}, {getFlagByCountryName(countryName)} {countryName}?
               </h2>
               <p className="text-xl text-gray-600 mb-8">
                 Join our directory and connect with property owners looking for professional management services.
@@ -528,4 +528,4 @@ export default function City() {
       </main>
     </AnimatedPage>
   );
-} 
+}

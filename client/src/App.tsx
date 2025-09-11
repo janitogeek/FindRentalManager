@@ -9,6 +9,7 @@ import NotFound from "@/pages/not-found";
 import Home from "@/pages/home";
 import FindHost from "@/pages/find-host";
 import Country from "@/pages/country";
+import Region from "@/pages/region";
 import City from "@/pages/city";
 import Submit from "@/pages/submit";
 import SubmitSuccess from "@/pages/submit-success";
@@ -42,6 +43,7 @@ function Router() {
         <Switch>
           <Route path="/" component={Home} />
           <Route path="/find-manager" component={FindHost} />
+          <Route path="/country/:country/region/:region" component={Region} />
           <Route path="/country/:country/:city" component={City} />
           <Route path="/country/:country" component={Country} />
           <Route path="/submit" component={Submit} />

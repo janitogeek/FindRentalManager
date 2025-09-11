@@ -16,24 +16,44 @@ import TopStats from "@/components/top-stats";
 interface SubmissionPropertyCardProps {
   submission: Submission;
   fromCity?: string;
+  fromRegion?: string;
   fromCountry?: string;
+  fromFeatured?: boolean;
 }
 
-export default function SubmissionPropertyCard({ submission, fromCity, fromCountry }: SubmissionPropertyCardProps) {
+export default function SubmissionPropertyCard({ 
+  submission, 
+  fromCity, 
+  fromRegion, 
+  fromCountry, 
+  fromFeatured 
+}: SubmissionPropertyCardProps) {
   const { selectedCurrency } = useCurrency();
   
   // Use unique slug if available, otherwise generate one
   const slug = submission.uniqueSlug || generateSlug(submission.brandName);
   
-  // Build URL with unique slug to ensure each company has its own page
+  // Build URL with unique slug and breadcrumb context
   const buildPropertyUrl = () => {
-    // Always use the unique slug to ensure unique routing
     let url = `/property/${slug}`;
-    if (fromCity && fromCountry) {
-      // Use the actual city and country names (not slugs) in URL parameters
-      url += `?city=${encodeURIComponent(fromCity)}&country=${encodeURIComponent(fromCountry)}`;
+    const params = new URLSearchParams();
+    
+    if (fromFeatured) {
+      params.set('from', 'featured');
+    } else if (fromCity && fromCountry) {
+      params.set('city', fromCity);
+      params.set('country', fromCountry);
+      if (fromRegion) {
+        params.set('region', fromRegion);
+      }
+    } else if (fromRegion && fromCountry) {
+      params.set('region', fromRegion);
+      params.set('country', fromCountry);
+    } else if (fromCountry) {
+      params.set('country', fromCountry);
     }
-    return url;
+    
+    return params.toString() ? `${url}?${params}` : url;
   };
   
   // Cities are handled in the component directly
