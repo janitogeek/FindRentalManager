@@ -178,9 +178,8 @@ export default function SubmissionProperty() {
                 </span>
               </>
             ) : (
-              
-              {/* FROM COUNTRY/REGION/CITY PAGES */}
               <>
+                {/* FROM COUNTRY/REGION/CITY PAGES */}
                 <Link href="/find-manager" className="hover:underline">
                   Find a Manager
                 </Link>
