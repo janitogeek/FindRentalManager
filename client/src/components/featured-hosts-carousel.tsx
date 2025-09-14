@@ -149,7 +149,7 @@ export default function FeaturedHostsCarousel() {
           <SwiperSlide key={host.id}>
                 <SubmissionPropertyCard 
                   submission={host}
-                  fromCountry="Featured"
+                  fromFeatured={true}
                 />
           </SwiperSlide>
           );

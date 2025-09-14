@@ -23,8 +23,9 @@ export default function SubmissionProperty() {
   // Check navigation context from URL parameters
   const urlParams = new URLSearchParams(window.location.search);
   const fromCity = urlParams.get('city');
+  const fromRegion = urlParams.get('region');
   const fromCountry = urlParams.get('country');
-  const fromFeatured = urlParams.get('from') === 'featured';
+  const fromFeatured = urlParams.get('from') === 'featured';  // Key check
   
   // Get all preloaded submissions and find the specific one (instant if cached)
   const { data: allSubmissions = [], isLoading: isAllSubmissionsLoading } = useQuery({
@@ -111,6 +112,20 @@ export default function SubmissionProperty() {
     );
   }
 
+  if (!submission) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="max-w-4xl mx-auto text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">Company Not Found</h1>
+          <p className="text-gray-600 mb-6">The company you're looking for doesn't exist or has been removed.</p>
+          <Button asChild>
+            <Link href="/find-manager">Find Other Managers</Link>
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   // Parse social media links
   const socialLinks = [];
   if (submission.instagram) {
@@ -125,8 +140,8 @@ export default function SubmissionProperty() {
   if (submission.tiktok) {
     socialLinks.push({ platform: 'TikTok', url: submission.tiktok });
   }
-  if (submission.youtubeVideoTour) {
-    socialLinks.push({ platform: 'YouTube', url: submission.youtubeVideoTour });
+  if ((submission as any).youtubeVideoTour) {
+    socialLinks.push({ platform: 'YouTube', url: (submission as any).youtubeVideoTour });
   }
 
   return (
@@ -134,67 +149,90 @@ export default function SubmissionProperty() {
       {/* Breadcrumb Navigation */}
       <nav className="bg-white border-b border-gray-200 px-4 py-3">
         <div className="container mx-auto">
-                             <div className="bg-blue-600 text-white px-4 py-2 rounded-lg inline-flex items-center gap-2 text-sm">
-                     {fromFeatured ? (
-                       <>
-                         <Link 
-                           href="/" 
-                           className="hover:underline"
-                           onClick={(e) => {
-                             e.preventDefault();
-                             // Navigate to home using wouter
-                             setLocation('/');
-                             // Wait for navigation and DOM update, then scroll to featured hosts
-                             setTimeout(() => {
-                               const element = document.getElementById('our-featured-hosts');
-                               if (element) {
-                                 element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                               }
-                             }, 500); // Increased timeout to ensure page loads
-                           }}
-                         >
-                           Our Featured Property Management Companies
-                         </Link>
-                         <span>›</span>
-                         <span className="flex items-center gap-1">
-                           {submission.brandName}
-                         </span>
-                       </>
-                     ) : (
-                       <>
-                         <Link href="/find-manager" className="hover:underline">
-                           Find a Manager
-                         </Link>
-                         {(fromCountry || (submission.countries && submission.countries.length > 0)) && (
-                           <>
-                             <span>›</span>
-                             <Link
-                               href={`/country/${(fromCountry || submission.countries[0]).toLowerCase().replace(/\s+/g, '-')}`}
-                               className="hover:underline flex items-center gap-1"
-                             >
-                               <span className="text-lg">{getFlagByCountryName(fromCountry || submission.countries[0])}</span>
-                               {fromCountry || submission.countries[0]}
-                             </Link>
-                             {fromCity && (
-                               <>
-                                 <span>›</span>
-                                 <Link
-                                   href={`/country/${(fromCountry || submission.countries[0]).toLowerCase().replace(/\s+/g, '-')}/${fromCity.toLowerCase().replace(/\s+/g, '-')}`}
-                                   className="hover:underline"
-                                 >
-                                   {fromCity}
-                                 </Link>
-                               </>
-                             )}
-                           </>
-                         )}
-                         <span>›</span>
-                         <span className="flex items-center gap-1">
-                           {submission.brandName}
-                         </span>
-                       </>
-                     )}
-                   </div>
+          <div className="bg-blue-600 text-white px-4 py-2 rounded-lg inline-flex items-center gap-2 text-sm">
+            
+            {/* FROM FEATURED HOSTS */}
+            {fromFeatured ? (
+              <>
+                <Link 
+                  href="/" 
+                  className="hover:underline"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setLocation('/');  // Navigate to home
+                    
+                    // Scroll to featured hosts section after navigation
+                    setTimeout(() => {
+                      const element = document.getElementById('our-featured-hosts');
+                      if (element) {
+                        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      }
+                    }, 500);
+                  }}
+                >
+                  Our Featured Property Management Companies
+                </Link>
+                <span>›</span>
+                <span className="flex items-center gap-1">
+                  {submission.brandName}
+                </span>
+              </>
+            ) : (
+              
+              {/* FROM COUNTRY/REGION/CITY PAGES */}
+              <>
+                <Link href="/find-manager" className="hover:underline">
+                  Find a Manager
+                </Link>
+                
+                {/* Country breadcrumb */}
+                {(fromCountry || submission.countries?.[0]) && (
+                  <>
+                    <span>›</span>
+                    <Link
+                      href={`/country/${(fromCountry || submission.countries[0]).toLowerCase().replace(/\s+/g, '-')}`}
+                      className="hover:underline flex items-center gap-1"
+                    >
+                      <span className="text-lg">{getFlagByCountryName(fromCountry || submission.countries[0])}</span>
+                      {fromCountry || submission.countries[0]}
+                    </Link>
+                    
+                    {/* Region breadcrumb (if came from region) */}
+                    {fromRegion && (
+                      <>
+                        <span>›</span>
+                        <Link
+                          href={`/country/${(fromCountry || submission.countries[0]).toLowerCase().replace(/\s+/g, '-')}/region/${fromRegion.toLowerCase().replace(/\s+/g, '-')}`}
+                          className="hover:underline flex items-center gap-1"
+                        >
+                          <span>🏛️</span>
+                          {fromRegion}
+                        </Link>
+                      </>
+                    )}
+                    
+                    {/* City breadcrumb (if came from city) */}
+                    {fromCity && (
+                      <>
+                        <span>›</span>
+                        <Link
+                          href={`/country/${(fromCountry || submission.countries[0]).toLowerCase().replace(/\s+/g, '-')}/${fromCity.toLowerCase().replace(/\s+/g, '-')}`}
+                          className="hover:underline"
+                        >
+                          {fromCity}
+                        </Link>
+                      </>
+                    )}
+                  </>
+                )}
+                
+                <span>›</span>
+                <span className="flex items-center gap-1">
+                  {submission.brandName}
+                </span>
+              </>
+            )}
+          </div>
         </div>
       </nav>
 

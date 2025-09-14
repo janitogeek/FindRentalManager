@@ -53,7 +53,20 @@ export default function SubmissionPropertyCard({
       params.set('country', fromCountry);
     }
     
-    return params.toString() ? `${url}?${params}` : url;
+    const finalUrl = params.toString() ? `${url}?${params}` : url;
+    
+    // Debug log for featured hosts
+    if (fromFeatured) {
+      console.log(`🔗 Featured Host Link Generated:`, {
+        brandName: submission.brandName,
+        uniqueSlug: submission.uniqueSlug,
+        generatedSlug: generateSlug(submission.brandName),
+        finalSlug: slug,
+        finalUrl: finalUrl
+      });
+    }
+    
+    return finalUrl;
   };
   
   // Cities are handled in the component directly
